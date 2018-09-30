@@ -16,10 +16,13 @@ using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Sannel.House.Devices.Data;
+using Sannel.House.Devices.Data.Migrations.MySql;
 
 namespace Sannel.House.Devices
 {
@@ -36,6 +39,24 @@ namespace Sannel.House.Devices
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+			switch (Configuration["Db:Provider"])
+			{
+				case "mysql":
+					services.AddDbContext<DevicesDbContext, Data.Migrations.MySql.MySqlDbContext>(o => {
+						o.UseMySql(Configuration["Db:ConnectionString"]);
+					});
+					break;
+				case "sqlserver":
+					services.AddDbContext<DevicesDbContext, SqlServerDbContext>(o =>
+						o.UseSqlServer(Configuration["Db:ConnectionString"]));
+					break;
+				case "sqlite":
+				default:
+					services.AddDbContext<DevicesDbContext, SqliteDbContext>(o =>
+						o.UseSqlite(Configuration["Db:ConnectionString"]));
+					break;
+			}
 
 
 			services.AddAuthentication("houseapi")
