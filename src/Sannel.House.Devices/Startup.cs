@@ -23,6 +23,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sannel.House.Devices.Data;
 using Sannel.House.Devices.Data.Migrations.MySql;
+using Sannel.House.Devices.Interfaces;
+using Sannel.House.Devices.Repositories;
 
 namespace Sannel.House.Devices
 {
@@ -57,6 +59,8 @@ namespace Sannel.House.Devices
 						o.UseSqlite(Configuration["Db:ConnectionString"]));
 					break;
 			}
+
+			services.AddScoped<IDeviceRepository, DbContextRepository>();
 
 
 			services.AddAuthentication("houseapi")

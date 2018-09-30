@@ -19,4 +19,13 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Migrations\Sannel.House.Devices.Data.Migrations.Sqlite\Sannel.House.Devices.Data.Migrations.Sqlite.csproj" />
+    <ProjectReference Include="..\Sannel.House.Devices.Data\Sannel.House.Devices.Data.csproj" />
+    <ProjectReference Include="..\Sannel.House.Devices.Interfaces\Sannel.House.Devices.Interfaces.csproj" />
+    <ProjectReference Include="..\Sannel.House.Devices.Models\Sannel.House.Devices.Models.csproj" />
+    <ProjectReference Include="..\Sannel.House.Devices.Repositories\Sannel.House.Devices.Repositories.csproj" />
+    <ProjectReference Include="..\Sannel.House.Devices\Sannel.House.Devices.csproj" />
+  </ItemGroup>
+
 </Project>
