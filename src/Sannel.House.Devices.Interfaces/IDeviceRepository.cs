@@ -8,13 +8,16 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.*/
+using Sannel.House.Devices.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Sannel.House.Devices.Interfaces
 {
 	public interface IDeviceRepository
 	{
+		Task<PagedResults<Device>> GetDevicesListAsync(long pageIndex, int pageSize);
 	}
 }

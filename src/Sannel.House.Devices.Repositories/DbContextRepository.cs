@@ -11,9 +11,11 @@
 using JetBrains.Annotations;
 using Sannel.House.Devices.Data;
 using Sannel.House.Devices.Interfaces;
+using Sannel.House.Devices.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Sannel.House.Devices.Repositories
 {
@@ -23,6 +25,11 @@ namespace Sannel.House.Devices.Repositories
 		public DbContextRepository([NotNull]DevicesDbContext context)
 		{
 			this.context = context ?? throw new ArgumentNullException(nameof(context));
+		}
+
+		public Task<PagedResults<Device>> GetDevicesListAsync(long pageIndex, int pageSize)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

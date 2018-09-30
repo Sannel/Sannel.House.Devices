@@ -19,6 +19,6 @@ namespace Sannel.House.Devices.Models
 		public IEnumerable<TDevice> Data { get; set; }
 		public long TotalCount { get; set; }
 		public long Page { get; set; }
-		public long PageSize { get; set; }
+		public int PageSize { get; set; }
 	}
 }

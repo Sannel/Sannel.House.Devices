@@ -12,7 +12,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
 
 namespace Sannel.House.Devices.Controllers
@@ -20,8 +23,19 @@ namespace Sannel.House.Devices.Controllers
 	[Route("api/[controller]")]
 	public class DevicesController : Controller
 	{
+		private IDeviceRepository repo;
+		private ILogger logger;
+		public DevicesController(IDeviceRepository repository, ILogger<DevicesController> logger)
+		{
+			repo = repository ?? throw new ArgumentNullException(nameof(repository));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+		}
+		/*						"DeviceCreate",
+						"DeviceEdit",
+						"DeviceRead",*/
 		// GET: api/<controller>
 		[HttpGet]
+		[Authorize(Roles = "DeviceRead,Admin")]
 		public async Task<PagedResults<Device>> Get()
 		{
 			throw new NotImplementedException();
