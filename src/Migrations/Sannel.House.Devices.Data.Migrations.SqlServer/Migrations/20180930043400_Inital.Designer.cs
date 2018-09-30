@@ -2,14 +2,15 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sannel.House.Devices.Data.Migrations.MySql;
 
-namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
+namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
 {
-    [DbContext(typeof(MySqlDbContext))]
-    [Migration("20180925042821_Inital")]
+    [DbContext(typeof(SqlServerDbContext))]
+    [Migration("20180930043400_Inital")]
     partial class Inital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,12 +18,14 @@ namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Sannel.House.Devices.Models.AlternateDeviceId", b =>
                 {
                     b.Property<int>("AlternateId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateCreated");
 
@@ -40,7 +43,8 @@ namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
             modelBuilder.Entity("Sannel.House.Devices.Models.Device", b =>
                 {
                     b.Property<int>("DeviceId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateCreated");
 

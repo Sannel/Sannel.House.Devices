@@ -14,7 +14,7 @@ namespace Sannel.House.Devices.Data.Migrations.MySql
 			var builder = new DbContextOptionsBuilder<MySqlDbContext>();
 
 
-			builder.UseMySql("Server=myServerAddress;Database=myDataBase;Uid=myUsername;Pwd=myPassword;", o => o.MigrationsAssembly(GetType().Assembly.GetName().FullName));
+			builder.UseMySql("Server=myServerAddress;Database=myDataBase;Uid=myUsername;Pwd=myPassword;");
 
 			return new MySqlDbContext(builder.Options);
 
