@@ -36,10 +36,8 @@ namespace Sannel.House.Devices.Controllers
 		// GET: api/<controller>
 		[HttpGet]
 		[Authorize(Roles = "DeviceRead,Admin")]
-		public async Task<PagedResults<Device>> Get()
-		{
-			throw new NotImplementedException();
-		}
+		public async Task<PagedResults<Device>> Get() 
+			=> await repo.GetDevicesListAsync(0, 25);
 
 		/*// GET api/<controller>/5
 		[HttpGet("{id}")]

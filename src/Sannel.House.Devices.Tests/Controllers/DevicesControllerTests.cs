@@ -31,6 +31,9 @@ namespace Sannel.House.Devices.Tests.Controllers
 				repo.GetDeviceList = (index, size) =>
 				{
 					called = true;
+					Assert.Equal(0, index);
+					Assert.Equal(25, size);
+
 					return new Models.PagedResults<Device>()
 					{
 						Data = new List<Device>(),
