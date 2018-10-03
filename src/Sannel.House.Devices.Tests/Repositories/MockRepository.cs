@@ -9,9 +9,9 @@ namespace Sannel.House.Devices.Tests.Repositories
 {
 	public class MockRepository : IDeviceRepository
 	{
-		public Func<long, int, PagedResults<Device>> GetDeviceList { get; set; }
+		public Func<int, int, PagedResults<Device>> GetDeviceList { get; set; }
 
-		public Task<PagedResults<Device>> GetDevicesListAsync(long pageIndex, int pageSize)
+		public Task<PagedResults<Device>> GetDevicesListAsync(int pageIndex, int pageSize)
 			=> Task.Run(() => GetDeviceList(pageIndex, pageSize));
 
 

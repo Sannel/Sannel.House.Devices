@@ -14,6 +14,7 @@ using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,14 +23,36 @@ namespace Sannel.House.Devices.Repositories
 	public class DbContextRepository : IDeviceRepository
 	{
 		private DevicesDbContext context;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DbContextRepository"/> class.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <exception cref="ArgumentNullException">context</exception>
 		public DbContextRepository([NotNull]DevicesDbContext context)
 		{
 			this.context = context ?? throw new ArgumentNullException(nameof(context));
 		}
 
-		public Task<PagedResults<Device>> GetDevicesListAsync(long pageIndex, int pageSize)
+		/// <summary>
+		/// Gets the devices list asynchronous.
+		/// </summary>
+		/// <param name="pageIndex">Index of the page.</param>
+		/// <param name="pageSize">Size of the page.</param>
+		/// <returns></returns>
+		public async Task<PagedResults<Device>> GetDevicesListAsync(int pageIndex, int pageSize)
 		{
-			throw new NotImplementedException();
+			var result = await Task.Run(() => new PagedResults<Device>
+			{
+				Page = pageIndex,
+				PageSize = pageSize,
+				TotalCount = context.Devices.LongCount(),
+				Data = context.Devices
+							.OrderBy(i => i.DisplayOrder)
+							.Skip((pageIndex - 1) * pageSize)
+							.Take(pageSize)
+			});
+
+			return result;
 		}
 	}
 }

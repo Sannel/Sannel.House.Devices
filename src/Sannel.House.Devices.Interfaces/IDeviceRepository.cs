@@ -18,6 +18,6 @@ namespace Sannel.House.Devices.Interfaces
 {
 	public interface IDeviceRepository
 	{
-		Task<PagedResults<Device>> GetDevicesListAsync(long pageIndex, int pageSize);
+		Task<PagedResults<Device>> GetDevicesListAsync(int pageIndex, int pageSize);
 	}
 }

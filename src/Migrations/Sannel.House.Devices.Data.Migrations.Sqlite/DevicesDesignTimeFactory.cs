@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Sannel.House.Devices.Data.Migrations.MySql
+namespace Sannel.House.Devices.Data.Migrations.Sqlite
 {
 	public class DevicesDesignTimeFactory : IDesignTimeDbContextFactory<SqliteDbContext>
 	{

@@ -21,6 +21,7 @@ using Sannel.House.Devices.Models;
 namespace Sannel.House.Devices.Controllers
 {
 	[Route("api/[controller]")]
+	[ApiController]
 	public class DevicesController : Controller
 	{
 		private IDeviceRepository repo;
@@ -34,6 +35,10 @@ namespace Sannel.House.Devices.Controllers
 						"DeviceEdit",
 						"DeviceRead",*/
 		// GET: api/<controller>
+		/// <summary>
+		/// Gets this instance.
+		/// </summary>
+		/// <returns></returns>
 		[HttpGet]
 		[Authorize(Roles = "DeviceRead,Admin")]
 		public async Task<PagedResults<Device>> Get() 

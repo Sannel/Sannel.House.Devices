@@ -1,7 +1,7 @@
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
-namespace Sannel.House.Devices.Data.Migrations.MySql
+namespace Sannel.House.Devices.Data.Migrations.SqlServer
 {
 	public class SqlServerDbContext : DevicesDbContext
 	{
