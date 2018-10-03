@@ -24,6 +24,7 @@ using Microsoft.Extensions.Options;
 using Sannel.House.Devices.Data;
 using Sannel.House.Devices.Data.Migrations.MySql;
 using Sannel.House.Devices.Data.Migrations.Sqlite;
+using Sannel.House.Devices.Data.Migrations.SqlServer;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Repositories;
 
