@@ -8,6 +8,6 @@ services:
     image: ${DOCKER_REGISTRY}sannelhousedevices:0.9-beta-${SANNEL_ARCH}
     build:
       context: .
-      dockerfile: src\Sannel.House.Devices\Dockerfile
+      dockerfile: src/Sannel.House.Devices/Dockerfile
     depends_on:
       - users
