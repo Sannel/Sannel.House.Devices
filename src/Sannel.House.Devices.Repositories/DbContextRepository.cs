@@ -14,9 +14,7 @@ using Sannel.House.Devices.Data;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Sannel.House.Devices.Repositories
@@ -84,13 +82,58 @@ namespace Sannel.House.Devices.Repositories
 		/// </summary>
 		/// <param name="uuid">The UUID/Guid.</param>
 		/// <returns></returns>
-		/// <exception cref="NotImplementedException"></exception>
 		public async Task<Device> GetDeviceByUuidAsync(Guid uuid)
 		{
 			var alt = await context.AlternateDeviceIds
 				.Include(nameof(AlternateDeviceId.Device))
 				.FirstOrDefaultAsync(i => i.Uuid == uuid);
 			return alt?.Device;
+		}
+
+		/// <summary>
+		/// Creates the device asynchronous.
+		/// </summary>
+		/// <param name="device">The device.</param>
+		/// <returns></returns>
+		/// <exception cref="ArgumentNullException">device</exception>
+		public async Task<Device> AddDeviceAsync(Device device)
+		{
+			if(device == null)
+			{
+				throw new ArgumentNullException(nameof(device));
+			}
+
+			var displayOrder = await context.Devices.MaxAsync(i => i.DisplayOrder);
+			device.DisplayOrder = displayOrder + 1;
+			var result = await context.Devices.AddAsync(device);
+			await context.SaveChangesAsync();
+
+			return result.Entity;
+		}
+
+		public Task<Device> UpdateDeviceAsync(Device device)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Device> AddAlternateMacAddressAsync(int deviceId, long macAddress)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Device> AddAlternateUuidAsync(int deviceId, Guid uuid)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Device> RemoveAlternateMacAddressAsync(long macAddress)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Device> RemoveAlternateUuidAsync(Guid uuid)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

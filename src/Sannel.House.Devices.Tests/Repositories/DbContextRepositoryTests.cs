@@ -288,5 +288,58 @@ namespace Sannel.House.Devices.Tests.Repositories
 				}
 			}
 		}
+
+		[Fact]
+		public async Task CreateDeviceAsyncTest()
+		{
+
+			using (var connection = OpenConnection())
+			{
+				using (var context = GetTestDB(connection))
+				{
+					var device1 = new Device()
+					{
+						DeviceId = 1,
+						Name = "Test Name",
+						IsReadOnly = true,
+						Description = "Dest Description",
+						DateCreated = DateTime.Now,
+						DisplayOrder = 2
+					};
+					await context.Devices.AddAsync(device1);
+					await context.SaveChangesAsync();
+
+					var device2 = new Device()
+					{
+						Name = "Test 2",
+						IsReadOnly = false,
+						Description = "Device Description 2",
+						DateCreated = DateTime.Now,
+					};
+
+					var repo = new DbContextRepository(context);
+					await Assert.ThrowsAsync<ArgumentNullException>("device", () => repo.AddDeviceAsync(null));
+
+					var actualDevice = await repo.AddDeviceAsync(device2);
+					Assert.NotNull(actualDevice);
+					Assert.True(actualDevice.DeviceId > 1);
+					Assert.Equal(device2.Name, actualDevice.Name);
+					Assert.Equal(device2.IsReadOnly, actualDevice.IsReadOnly);
+					Assert.Equal(device2.Description, actualDevice.Description);
+					Assert.Equal(device2.DateCreated, actualDevice.DateCreated);
+					Assert.True(device2.DisplayOrder > device1.DisplayOrder);
+
+
+					actualDevice = await context.Devices.FirstOrDefaultAsync(i => i.DeviceId == actualDevice.DeviceId);
+					Assert.NotNull(actualDevice);
+					Assert.True(actualDevice.DeviceId > 1);
+					Assert.Equal(device2.Name, actualDevice.Name);
+					Assert.Equal(device2.IsReadOnly, actualDevice.IsReadOnly);
+					Assert.Equal(device2.Description, actualDevice.Description);
+					Assert.Equal(device2.DateCreated, actualDevice.DateCreated);
+					Assert.True(device2.DisplayOrder > device1.DisplayOrder);
+				}
+			}
+		}
 	}
 }

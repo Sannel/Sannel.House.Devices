@@ -27,5 +27,40 @@ namespace Sannel.House.Devices.Tests.Repositories
 
 		public Task<Device> GetDeviceByUuidAsync(Guid uuid)
 			=> Task.Run(() => GetDeviceByUuid(uuid));
+
+		public Task<Device> CreateDeviceAsync(Device device)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Device> UpdateDeviceAsync(Device device)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Device> AddAlternateMacAddressAsync(int deviceId, long macAddress)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Device> AddAlternateUuidAsync(int deviceId, Guid uuid)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Device> RemoveAlternateMacAddressAsync(long macAddress)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Device> RemoveAlternateUuidAsync(Guid uuid)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Device> AddDeviceAsync(Device device)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
