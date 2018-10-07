@@ -9,6 +9,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.*/
 using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using Sannel.House.Devices.Data;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
@@ -34,6 +35,29 @@ namespace Sannel.House.Devices.Repositories
 		}
 
 		/// <summary>
+		/// Gets the device by identifier asynchronous.
+		/// </summary>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <returns></returns>
+		public Task<Device> GetDeviceByIdAsync(int deviceId)
+			=> context.Devices.FirstOrDefaultAsync(i => i.DeviceId == deviceId);
+
+		/// <summary>
+		/// Gets the device by mac address asynchronous.
+		/// </summary>
+		/// <param name="macAddress">The mac address.</param>
+		/// <returns></returns>
+		public async Task<Device> GetDeviceByMacAddressAsync(long macAddress)
+		{
+			var alt = await context.AlternateDeviceIds
+				.Include(nameof(AlternateDeviceId.Device))
+				.FirstOrDefaultAsync(i => i.MacAddress == macAddress);
+			return alt?.Device;
+		}
+
+
+
+		/// <summary>
 		/// Gets the devices list asynchronous.
 		/// </summary>
 		/// <param name="pageIndex">Index of the page.</param>
@@ -53,6 +77,20 @@ namespace Sannel.House.Devices.Repositories
 			});
 
 			return result;
+		}
+
+		/// <summary>
+		/// Gets the device by UUID/Guid asynchronous.
+		/// </summary>
+		/// <param name="uuid">The UUID/Guid.</param>
+		/// <returns></returns>
+		/// <exception cref="NotImplementedException"></exception>
+		public async Task<Device> GetDeviceByUuidAsync(Guid uuid)
+		{
+			var alt = await context.AlternateDeviceIds
+				.Include(nameof(AlternateDeviceId.Device))
+				.FirstOrDefaultAsync(i => i.Uuid == uuid);
+			return alt?.Device;
 		}
 	}
 }

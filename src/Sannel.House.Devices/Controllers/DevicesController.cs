@@ -41,8 +41,46 @@ namespace Sannel.House.Devices.Controllers
 		/// <returns></returns>
 		[HttpGet]
 		[Authorize(Roles = "DeviceRead,Admin")]
-		public async Task<PagedResults<Device>> Get() 
-			=> await repo.GetDevicesListAsync(0, 25);
+		public Task<ActionResult<PagedResults<Device>>> GetPaged() 
+			=> GetPaged(1, 25);
+
+		/// <summary>
+		/// Gets the paged.
+		/// </summary>
+		/// <param name="pageIndex">Index of the page.</param>
+		/// <returns></returns>
+		[HttpGet]
+		[Authorize(Roles = "DeviceRead,Admin")]
+		public Task<ActionResult<PagedResults<Device>>> GetPaged(int pageIndex) 
+			=> GetPaged(pageIndex, 25);
+
+		/// <summary>
+		/// Gets the paged.
+		/// </summary>
+		/// <param name="pageIndex">Index of the page.</param>
+		/// <param name="pageSize">Size of the page.</param>
+		/// <returns></returns>
+		[HttpGet]
+		[Authorize(Roles = "DeviceRead,Admin")]
+		public async Task<ActionResult<PagedResults<Device>>> GetPaged(int pageIndex, int pageSize)
+		{
+			if(pageIndex < 1)
+			{
+				return BadRequest("Page Index must be 1 or greater");
+			}
+			if(pageSize < 2)
+			{
+				return BadRequest("Page Size must be greater then 2");
+			}
+			return Ok(await repo.GetDevicesListAsync(pageIndex, pageSize));
+		}
+
+		[HttpGet("{id}")]
+		[Authorize(Roles = "DeviceRead,Admin")]
+		public async Task<ActionResult<Device>> Get(int deviceId)
+		{
+			return BadRequest();
+		}
 
 		/*// GET api/<controller>/5
 		[HttpGet("{id}")]

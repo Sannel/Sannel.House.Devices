@@ -18,6 +18,33 @@ namespace Sannel.House.Devices.Interfaces
 {
 	public interface IDeviceRepository
 	{
+		/// <summary>
+		/// Gets the devices list asynchronous.
+		/// </summary>
+		/// <param name="pageIndex">Index of the page.</param>
+		/// <param name="pageSize">Size of the page.</param>
+		/// <returns></returns>
 		Task<PagedResults<Device>> GetDevicesListAsync(int pageIndex, int pageSize);
+
+		/// <summary>
+		/// Gets the device by identifier asynchronous.
+		/// </summary>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <returns></returns>
+		Task<Device> GetDeviceByIdAsync(int deviceId);
+
+		/// <summary>
+		/// Gets the device by mac address asynchronous.
+		/// </summary>
+		/// <param name="macAddress">The mac address.</param>
+		/// <returns></returns>
+		Task<Device> GetDeviceByMacAddressAsync(long macAddress);
+
+		/// <summary>
+		/// Gets the device by UUID/Guid asynchronous.
+		/// </summary>
+		/// <param name="uuid">The UUID/Guid.</param>
+		/// <returns></returns>
+		Task<Device> GetDeviceByUuidAsync(Guid uuid);
 	}
 }

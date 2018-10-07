@@ -40,6 +40,14 @@ namespace Sannel.House.Devices.Models
 		public int DeviceId { get; set; }
 
 		/// <summary>
+		/// Gets or sets the device.
+		/// </summary>
+		/// <value>
+		/// The device.
+		/// </value>
+		public Device Device { get; set; }
+
+		/// <summary>
 		/// Gets or sets the date created.
 		/// </summary>
 		/// <value>
