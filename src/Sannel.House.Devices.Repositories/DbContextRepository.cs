@@ -14,6 +14,7 @@ using Sannel.House.Devices.Data;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
 using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -108,12 +109,36 @@ namespace Sannel.House.Devices.Repositories
 			var result = await context.Devices.AddAsync(device);
 			await context.SaveChangesAsync();
 
-			return result.Entity;
+			var id = result.Entity.DeviceId;
+
+			return await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == id);
 		}
 
-		public Task<Device> UpdateDeviceAsync(Device device)
+		public async Task<Device> UpdateDeviceAsync(Device device)
 		{
-			throw new NotImplementedException();
+			if(device == null)
+			{
+				throw new ArgumentNullException(nameof(device));
+			}
+
+			var d = await context.Devices.FirstOrDefaultAsync(i => i.DeviceId == device.DeviceId);
+
+			if(d == null)
+			{
+				return null;
+			}
+
+			if(d.IsReadOnly)
+			{
+				throw new ReadOnlyException($"Device {d.DeviceId} is Read Only");
+			}
+
+			d.Name = device.Name;
+			d.Description = device.Description;
+			d.DisplayOrder = device.DisplayOrder;
+			await context.SaveChangesAsync();
+
+			return await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == d.DeviceId);
 		}
 
 		public Task<Device> AddAlternateMacAddressAsync(int deviceId, long macAddress)

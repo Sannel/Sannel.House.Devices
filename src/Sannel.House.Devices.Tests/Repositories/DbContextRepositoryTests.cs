@@ -13,6 +13,7 @@ using Sannel.House.Devices.Models;
 using Sannel.House.Devices.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -338,6 +339,59 @@ namespace Sannel.House.Devices.Tests.Repositories
 					Assert.Equal(device2.Description, actualDevice.Description);
 					Assert.Equal(device2.DateCreated, actualDevice.DateCreated);
 					Assert.True(device2.DisplayOrder > device1.DisplayOrder);
+				}
+			}
+		}
+		
+		[Fact]
+		public async Task UpdateDeviceAsyncTest()
+		{
+
+			using (var connection = OpenConnection())
+			{
+				using (var context = GetTestDB(connection))
+				{
+					var device1 = new Device()
+					{
+						DeviceId = 1,
+						Name = "Test Name",
+						IsReadOnly = true,
+						Description = "Dest Description",
+						DateCreated = DateTime.Now,
+						DisplayOrder = 2
+					};
+					var device2 = new Device()
+					{
+						DeviceId = 2,
+						Name = "Test 2 Name",
+						IsReadOnly = false,
+						Description = "Test 2 Description",
+						DateCreated = DateTime.Now.AddDays(-2),
+						DisplayOrder = 1
+					};
+					await context.Devices.AddRangeAsync(device1, device2);
+					await context.SaveChangesAsync();
+					context.Entry(device2).State = EntityState.Detached;
+
+
+					var repo = new DbContextRepository(context);
+					await Assert.ThrowsAsync<ArgumentNullException>("device", 
+						() => repo.UpdateDeviceAsync(null));
+
+					await Assert.ThrowsAsync<ReadOnlyException>(() => repo.UpdateDeviceAsync(device1));
+
+					var orginialDT = device2.DateCreated;
+					device2.Name = "Updated Device 2 Name";
+					device2.Description = "Updated Description";
+					device2.DisplayOrder = 3;
+					device2.DateCreated = DateTime.MinValue.AddDays(10);
+
+					var actual = await repo.UpdateDeviceAsync(device2);
+					Assert.NotNull(actual);
+					Assert.Equal(orginialDT, actual.DateCreated);
+					device2.DateCreated = orginialDT;
+					AssertEqual(device2, actual);
+
 				}
 			}
 		}
