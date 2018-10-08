@@ -392,6 +392,11 @@ namespace Sannel.House.Devices.Tests.Repositories
 					device2.DateCreated = orginialDT;
 					AssertEqual(device2, actual);
 
+					// an unknown device attempt to update.
+					Assert.Null(await repo.UpdateDeviceAsync(new Device
+					{
+						DeviceId = 500000
+					}));
 				}
 			}
 		}

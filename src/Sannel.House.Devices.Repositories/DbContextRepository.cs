@@ -114,6 +114,13 @@ namespace Sannel.House.Devices.Repositories
 			return await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == id);
 		}
 
+		/// <summary>
+		/// Updates the device asynchronous.
+		/// </summary>
+		/// <param name="device">The device.</param>
+		/// <returns></returns>
+		/// <exception cref="ArgumentNullException">device is null</exception>
+		/// <exception cref="ReadOnlyException">The device is marked read only</exception>
 		public async Task<Device> UpdateDeviceAsync(Device device)
 		{
 			if(device == null)
