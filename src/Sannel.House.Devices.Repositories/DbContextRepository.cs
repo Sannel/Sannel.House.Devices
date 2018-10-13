@@ -148,24 +148,120 @@ namespace Sannel.House.Devices.Repositories
 			return await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == d.DeviceId);
 		}
 
-		public Task<Device> AddAlternateMacAddressAsync(int deviceId, long macAddress)
+		/// <summary>
+		/// Adds the alternate mac address asynchronous.
+		/// </summary>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <param name="macAddress">The mac address.</param>
+		/// <returns>
+		/// The device or null if there is no device with <paramref name="deviceId" />
+		/// </returns>
+		/// <exception cref="AlternateDeviceIdException">If the macAddress is already connected to another device</exception>
+		public async Task<Device> AddAlternateMacAddressAsync(int deviceId, long macAddress)
 		{
-			throw new NotImplementedException();
+			var device = await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == deviceId);
+			if (device == null)
+			{
+				return null;
+			}
+
+			var altId = await context.AlternateDeviceIds.AsNoTracking().FirstOrDefaultAsync(i => i.MacAddress == macAddress);
+			if (altId != null)
+			{
+				throw new AlternateDeviceIdException($"The macAddress {macAddress} is already associated with a device {altId.DeviceId}");
+			}
+
+			altId = new AlternateDeviceId()
+			{
+				DeviceId = device.DeviceId,
+				DateCreated = DateTime.UtcNow,
+				MacAddress = macAddress
+			};
+
+			await context.AlternateDeviceIds.AddAsync(altId);
+			await context.SaveChangesAsync();
+
+			return device;
 		}
 
-		public Task<Device> AddAlternateUuidAsync(int deviceId, Guid uuid)
+		/// <summary>
+		/// Adds the alternate UUID asynchronous.
+		/// </summary>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <param name="uuid">The UUID.</param>
+		/// <returns>
+		/// The device or null if there is no device with <paramref name="deviceId" />
+		/// </returns>
+		/// <exception cref="AlternateDeviceIdException">If the Uuid is already associated with a device</exception>
+		public async Task<Device> AddAlternateUuidAsync(int deviceId, Guid uuid)
 		{
-			throw new NotImplementedException();
+			var device = await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == deviceId);
+			if (device == null)
+			{
+				return null;
+			}
+
+			var altId = await context.AlternateDeviceIds.AsNoTracking().FirstOrDefaultAsync(i => i.Uuid == uuid);
+			if (altId != null)
+			{
+				throw new AlternateDeviceIdException($"The Uuid {uuid} is already associated with a device {altId.DeviceId}");
+			}
+
+			altId = new AlternateDeviceId()
+			{
+				DeviceId = device.DeviceId,
+				DateCreated = DateTime.UtcNow,
+				Uuid = uuid
+			};
+
+			await context.AlternateDeviceIds.AddAsync(altId);
+			await context.SaveChangesAsync();
+
+			return device;
 		}
 
-		public Task<Device> RemoveAlternateMacAddressAsync(long macAddress)
+		/// <summary>
+		/// Removes the alternate mac address asynchronous.
+		/// </summary>
+		/// <param name="macAddress">The mac address.</param>
+		/// <returns>
+		/// The device or null if the macAddress is not found
+		/// </returns>
+		public async Task<Device> RemoveAlternateMacAddressAsync(long macAddress)
 		{
-			throw new NotImplementedException();
+			var altId = await context.AlternateDeviceIds.Include(i => i.Device)
+				.AsNoTracking().FirstOrDefaultAsync(i => i.MacAddress == macAddress);
+			if (altId == null)
+			{
+				return null;
+			}
+
+			context.AlternateDeviceIds.Remove(altId);
+			await context.SaveChangesAsync();
+
+			return altId.Device;
 		}
 
-		public Task<Device> RemoveAlternateUuidAsync(Guid uuid)
+		/// <summary>
+		/// Removes the alternate UUID asynchronous.
+		/// </summary>
+		/// <param name="uuid">The UUID.</param>
+		/// <returns>
+		/// The device or null if the uuid is not found
+		/// </returns>
+		public async Task<Device> RemoveAlternateUuidAsync(Guid uuid)
 		{
-			throw new NotImplementedException();
+			var altId = await context.AlternateDeviceIds.Include(i => i.Device)
+				.AsNoTracking().FirstOrDefaultAsync(i => i.Uuid == uuid);
+			if (altId == null)
+			{
+				return null;
+			}
+
+			context.AlternateDeviceIds.Remove(altId);
+			await context.SaveChangesAsync();
+
+			return altId.Device;
 		}
 	}
 }

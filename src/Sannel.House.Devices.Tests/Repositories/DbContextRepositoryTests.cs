@@ -45,7 +45,7 @@ namespace Sannel.House.Devices.Tests.Repositories
 						Name = "Test Name",
 						IsReadOnly = true,
 						Description = "Dest Description",
-						DateCreated = DateTime.Now,
+						DateCreated = DateTime.UtcNow,
 						DisplayOrder = 2
 					};
 					var device2 = new Device()
@@ -54,7 +54,7 @@ namespace Sannel.House.Devices.Tests.Repositories
 						Name = "Test 2 Name",
 						IsReadOnly = true,
 						Description = "Test 2 Description",
-						DateCreated = DateTime.Now.AddDays(-2),
+						DateCreated = DateTime.UtcNow.AddDays(-2),
 						DisplayOrder = 1
 					};
 					var device3 = new Device()
@@ -63,7 +63,7 @@ namespace Sannel.House.Devices.Tests.Repositories
 						Name = "Test 3 Name",
 						IsReadOnly = true,
 						Description = "Test 3 Description",
-						DateCreated = DateTime.Now.AddDays(-1),
+						DateCreated = DateTime.UtcNow.AddDays(-1),
 						DisplayOrder = 3
 					};
 					await context.AddRangeAsync(device1, device2, device3);
@@ -125,7 +125,7 @@ namespace Sannel.House.Devices.Tests.Repositories
 						Name = "Test Name",
 						IsReadOnly = true,
 						Description = "Dest Description",
-						DateCreated = DateTime.Now,
+						DateCreated = DateTime.UtcNow,
 						DisplayOrder = 2
 					};
 					var device2 = new Device()
@@ -134,7 +134,7 @@ namespace Sannel.House.Devices.Tests.Repositories
 						Name = "Test 2 Name",
 						IsReadOnly = true,
 						Description = "Test 2 Description",
-						DateCreated = DateTime.Now.AddDays(-2),
+						DateCreated = DateTime.UtcNow.AddDays(-2),
 						DisplayOrder = 1
 					};
 
@@ -165,7 +165,7 @@ namespace Sannel.House.Devices.Tests.Repositories
 						Name = "Test Name",
 						IsReadOnly = true,
 						Description = "Dest Description",
-						DateCreated = DateTime.Now,
+						DateCreated = DateTime.UtcNow,
 						DisplayOrder = 2
 					};
 					var device2 = new Device()
@@ -174,7 +174,7 @@ namespace Sannel.House.Devices.Tests.Repositories
 						Name = "Test 2 Name",
 						IsReadOnly = true,
 						Description = "Test 2 Description",
-						DateCreated = DateTime.Now.AddDays(-2),
+						DateCreated = DateTime.UtcNow.AddDays(-2),
 						DisplayOrder = 1
 					};
 
@@ -183,19 +183,19 @@ namespace Sannel.House.Devices.Tests.Repositories
 					var altId1 = new AlternateDeviceId()
 					{
 						DeviceId = device1.DeviceId,
-						DateCreated = DateTime.Now,
+						DateCreated = DateTime.UtcNow,
 						MacAddress = 0x3223C00DF70D
 					};
 					var altId2 = new AlternateDeviceId()
 					{
 						DeviceId = device1.DeviceId,
-						DateCreated = DateTime.Now,
+						DateCreated = DateTime.UtcNow,
 						MacAddress = 0x18CCB5BC7ACD
 					};
 					var altId3 = new AlternateDeviceId()
 					{
 						DeviceId = device2.DeviceId,
-						DateCreated = DateTime.Now,
+						DateCreated = DateTime.UtcNow,
 						MacAddress = 0xC5275F245FA3
 					};
 
@@ -234,7 +234,7 @@ namespace Sannel.House.Devices.Tests.Repositories
 						Name = "Test Name",
 						IsReadOnly = true,
 						Description = "Dest Description",
-						DateCreated = DateTime.Now,
+						DateCreated = DateTime.UtcNow,
 						DisplayOrder = 2
 					};
 					var device2 = new Device()
@@ -243,7 +243,7 @@ namespace Sannel.House.Devices.Tests.Repositories
 						Name = "Test 2 Name",
 						IsReadOnly = true,
 						Description = "Test 2 Description",
-						DateCreated = DateTime.Now.AddDays(-2),
+						DateCreated = DateTime.UtcNow.AddDays(-2),
 						DisplayOrder = 1
 					};
 
@@ -252,19 +252,19 @@ namespace Sannel.House.Devices.Tests.Repositories
 					var altId1 = new AlternateDeviceId()
 					{
 						DeviceId = device1.DeviceId,
-						DateCreated = DateTime.Now,
+						DateCreated = DateTime.UtcNow,
 						Uuid = Guid.NewGuid()
 					};
 					var altId2 = new AlternateDeviceId()
 					{
 						DeviceId = device1.DeviceId,
-						DateCreated = DateTime.Now,
+						DateCreated = DateTime.UtcNow,
 						Uuid = Guid.NewGuid()
 					};
 					var altId3 = new AlternateDeviceId()
 					{
 						DeviceId = device2.DeviceId,
-						DateCreated = DateTime.Now,
+						DateCreated = DateTime.UtcNow,
 						Uuid = Guid.NewGuid()
 					};
 
@@ -304,7 +304,7 @@ namespace Sannel.House.Devices.Tests.Repositories
 						Name = "Test Name",
 						IsReadOnly = true,
 						Description = "Dest Description",
-						DateCreated = DateTime.Now,
+						DateCreated = DateTime.UtcNow,
 						DisplayOrder = 2
 					};
 					await context.Devices.AddAsync(device1);
@@ -315,7 +315,7 @@ namespace Sannel.House.Devices.Tests.Repositories
 						Name = "Test 2",
 						IsReadOnly = false,
 						Description = "Device Description 2",
-						DateCreated = DateTime.Now,
+						DateCreated = DateTime.UtcNow,
 					};
 
 					var repo = new DbContextRepository(context);
@@ -357,7 +357,7 @@ namespace Sannel.House.Devices.Tests.Repositories
 						Name = "Test Name",
 						IsReadOnly = true,
 						Description = "Dest Description",
-						DateCreated = DateTime.Now,
+						DateCreated = DateTime.UtcNow,
 						DisplayOrder = 2
 					};
 					var device2 = new Device()
@@ -366,7 +366,7 @@ namespace Sannel.House.Devices.Tests.Repositories
 						Name = "Test 2 Name",
 						IsReadOnly = false,
 						Description = "Test 2 Description",
-						DateCreated = DateTime.Now.AddDays(-2),
+						DateCreated = DateTime.UtcNow.AddDays(-2),
 						DisplayOrder = 1
 					};
 					await context.Devices.AddRangeAsync(device1, device2);
@@ -397,6 +397,237 @@ namespace Sannel.House.Devices.Tests.Repositories
 					{
 						DeviceId = 500000
 					}));
+				}
+			}
+		}
+		[Fact]
+		public async Task AddAlternateMacAddressAsyncTest()
+		{
+
+			using (var connection = OpenConnection())
+			{
+				using (var context = GetTestDB(connection))
+				{
+					var device1 = new Device()
+					{
+						DeviceId = 1,
+						Name = "Test Name",
+						IsReadOnly = true,
+						Description = "Dest Description",
+						DateCreated = DateTime.UtcNow,
+						DisplayOrder = 2
+					};
+					var device2 = new Device()
+					{
+						DeviceId = 2,
+						Name = "Test 2 Name",
+						IsReadOnly = false,
+						Description = "Test 2 Description",
+						DateCreated = DateTime.UtcNow.AddDays(-2),
+						DisplayOrder = 1
+					};
+					await context.Devices.AddRangeAsync(device1, device2);
+					await context.SaveChangesAsync();
+
+					var id1 = 0x3223C00DF70D;
+
+					var repo = new DbContextRepository(context);
+
+					var actual = await repo.AddAlternateMacAddressAsync(-1, id1);
+					Assert.Null(actual); // No device with -1 id
+
+					actual = await repo.AddAlternateMacAddressAsync(device1.DeviceId, id1);
+					Assert.NotNull(actual);
+					AssertEqual(device1, actual);
+
+					var actualAltId = await context.AlternateDeviceIds.FirstOrDefaultAsync(i =>
+										i.DeviceId == device1.DeviceId
+										&& i.MacAddress == id1);
+					Assert.NotNull(actualAltId);
+					Assert.True(actualAltId.DateCreated > default(DateTime) 
+						&& actualAltId.DateCreated < DateTime.UtcNow, "Suspect Date time was not set correctly");
+
+					await Assert.ThrowsAsync<AlternateDeviceIdException>(() => repo.AddAlternateMacAddressAsync(device1.DeviceId, id1));
+
+				}
+			}
+		}
+
+		[Fact]
+		public async Task AddAlternateUuidAsyncTest()
+		{
+
+			using (var connection = OpenConnection())
+			{
+				using (var context = GetTestDB(connection))
+				{
+					var device1 = new Device()
+					{
+						DeviceId = 1,
+						Name = "Test Name",
+						IsReadOnly = true,
+						Description = "Dest Description",
+						DateCreated = DateTime.UtcNow,
+						DisplayOrder = 2
+					};
+					var device2 = new Device()
+					{
+						DeviceId = 2,
+						Name = "Test 2 Name",
+						IsReadOnly = false,
+						Description = "Test 2 Description",
+						DateCreated = DateTime.UtcNow.AddDays(-2),
+						DisplayOrder = 1
+					};
+					await context.Devices.AddRangeAsync(device1, device2);
+					await context.SaveChangesAsync();
+
+					var id1 = Guid.NewGuid();
+
+					var repo = new DbContextRepository(context);
+
+					var actual = await repo.AddAlternateUuidAsync(-1, id1);
+					Assert.Null(actual); // No device with -1 id
+
+					actual = await repo.AddAlternateUuidAsync(device1.DeviceId, id1);
+					Assert.NotNull(actual);
+					AssertEqual(device1, actual);
+
+					var actualAltId = await context.AlternateDeviceIds.FirstOrDefaultAsync(i =>
+										i.DeviceId == device1.DeviceId
+										&& i.Uuid == id1);
+					Assert.NotNull(actualAltId);
+					Assert.True(actualAltId.DateCreated > default(DateTime) 
+						&& actualAltId.DateCreated < DateTime.UtcNow, "Suspect Date time was not set correctly");
+
+					await Assert.ThrowsAsync<AlternateDeviceIdException>(() => repo.AddAlternateUuidAsync(device1.DeviceId, id1));
+
+				}
+			}
+		}
+
+		[Fact]
+		public async Task RemoveAlternateMacAddressAsyncTest()
+		{
+
+			using (var connection = OpenConnection())
+			{
+				using (var context = GetTestDB(connection))
+				{
+					var device1 = new Device()
+					{
+						DeviceId = 1,
+						Name = "Test Name",
+						IsReadOnly = true,
+						Description = "Dest Description",
+						DateCreated = DateTime.UtcNow,
+						DisplayOrder = 2
+					};
+					var device2 = new Device()
+					{
+						DeviceId = 2,
+						Name = "Test 2 Name",
+						IsReadOnly = false,
+						Description = "Test 2 Description",
+						DateCreated = DateTime.UtcNow.AddDays(-2),
+						DisplayOrder = 1
+					};
+
+					await context.Devices.AddRangeAsync(device1, device2);
+					await context.SaveChangesAsync();
+
+					var altId1 = new AlternateDeviceId()
+					{
+						DeviceId = device1.DeviceId,
+						MacAddress = 0x3223C00DF70D,
+						DateCreated = DateTime.UtcNow
+					};
+					var altId2 = new AlternateDeviceId
+					{
+						DeviceId = device1.DeviceId,
+						MacAddress = 0x3223C00DF71D,
+						DateCreated = DateTime.UtcNow
+					};
+
+					await context.AlternateDeviceIds.AddRangeAsync(altId1, altId2);
+					await context.SaveChangesAsync();
+					context.Entry(altId1).State = EntityState.Detached;
+					context.Entry(altId2).State = EntityState.Detached;
+
+					var repo = new DbContextRepository(context);
+
+					var actual = await repo.RemoveAlternateMacAddressAsync(0x000023300);
+					Assert.Null(actual);
+
+					actual = await repo.RemoveAlternateMacAddressAsync(altId1.MacAddress.Value);
+					Assert.NotNull(actual);
+					AssertEqual(device1, actual);
+
+					Assert.Null(context.AlternateDeviceIds.FirstOrDefault(i => i.MacAddress == altId1.MacAddress));
+					Assert.NotNull(context.AlternateDeviceIds.FirstOrDefault(i => i.MacAddress == altId2.MacAddress));
+				}
+			}
+		}
+		
+		[Fact]
+		public async Task RemoveAlternateUuidAsyncTest()
+		{
+
+			using (var connection = OpenConnection())
+			{
+				using (var context = GetTestDB(connection))
+				{
+					var device1 = new Device()
+					{
+						DeviceId = 1,
+						Name = "Test Name",
+						IsReadOnly = true,
+						Description = "Dest Description",
+						DateCreated = DateTime.UtcNow,
+						DisplayOrder = 2
+					};
+					var device2 = new Device()
+					{
+						DeviceId = 2,
+						Name = "Test 2 Name",
+						IsReadOnly = false,
+						Description = "Test 2 Description",
+						DateCreated = DateTime.UtcNow.AddDays(-2),
+						DisplayOrder = 1
+					};
+
+					await context.Devices.AddRangeAsync(device1, device2);
+					await context.SaveChangesAsync();
+
+					var altId1 = new AlternateDeviceId()
+					{
+						DeviceId = device1.DeviceId,
+						Uuid = Guid.NewGuid(),
+						DateCreated = DateTime.UtcNow
+					};
+					var altId2 = new AlternateDeviceId
+					{
+						DeviceId = device1.DeviceId,
+						Uuid = Guid.NewGuid(),
+						DateCreated = DateTime.UtcNow
+					};
+
+					await context.AlternateDeviceIds.AddRangeAsync(altId1, altId2);
+					await context.SaveChangesAsync();
+					context.Entry(altId1).State = EntityState.Detached;
+					context.Entry(altId2).State = EntityState.Detached;
+
+					var repo = new DbContextRepository(context);
+
+					var actual = await repo.RemoveAlternateUuidAsync(Guid.NewGuid());
+					Assert.Null(actual);
+
+					actual = await repo.RemoveAlternateUuidAsync(altId1.Uuid.Value);
+					Assert.NotNull(actual);
+					AssertEqual(device1, actual);
+
+					Assert.Null(context.AlternateDeviceIds.FirstOrDefault(i => i.Uuid == altId1.Uuid));
+					Assert.NotNull(context.AlternateDeviceIds.FirstOrDefault(i => i.Uuid == altId2.Uuid));
 				}
 			}
 		}
