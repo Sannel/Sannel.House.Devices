@@ -36,7 +36,7 @@ namespace Sannel.House.Devices.Controllers
 						"DeviceRead",*/
 		// GET: api/<controller>
 		/// <summary>
-		/// Gets this instance.
+		/// Gets the first 25 devices
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
@@ -45,7 +45,7 @@ namespace Sannel.House.Devices.Controllers
 			=> GetPaged(1, 25);
 
 		/// <summary>
-		/// Gets the paged.
+		/// Gets a list of 25 devices based on the index passed in by <paramref name="pageIndex"/>
 		/// </summary>
 		/// <param name="pageIndex">Index of the page.</param>
 		/// <returns></returns>
@@ -55,7 +55,7 @@ namespace Sannel.House.Devices.Controllers
 			=> GetPaged(pageIndex, 25);
 
 		/// <summary>
-		/// Gets the paged.
+		/// Gets a list of <paramref name="pageSize"/> devices based on the index passed in by <paramref name="pageIndex"/>
 		/// </summary>
 		/// <param name="pageIndex">Index of the page.</param>
 		/// <param name="pageSize">Size of the page.</param>
@@ -66,11 +66,11 @@ namespace Sannel.House.Devices.Controllers
 		{
 			if(pageIndex < 1)
 			{
-				return BadRequest("Page Index must be 1 or greater");
+				return BadRequest(new ErrorModel(nameof(pageIndex), "Page Index must be 1 or greater"));
 			}
 			if(pageSize < 2)
 			{
-				return BadRequest("Page Size must be greater then 2");
+				return BadRequest(new ErrorModel(nameof(pageSize), "Page Size must be greater then 2"));
 			}
 			return Ok(await repo.GetDevicesListAsync(pageIndex, pageSize));
 		}
@@ -79,16 +79,42 @@ namespace Sannel.House.Devices.Controllers
 		[Authorize(Roles = "DeviceRead,Admin")]
 		public async Task<ActionResult<Device>> Get(int deviceId)
 		{
-			return BadRequest();
+			if(deviceId < 0)
+			{
+				return BadRequest(new ErrorModel(nameof(deviceId), "Device Id must be geater then or equal to 0"));
+			}
+
+			var device = await repo.GetDeviceByIdAsync(deviceId);
+			if(device == null)
+			{
+				return NotFound(new ErrorModel("device", "Device Not Found"));
+			}
+
+			return Ok(device);
 		}
 
-		/*// GET api/<controller>/5
-		[HttpGet("{id}")]
-		public string Get(int id)
+		[HttpPost]
+		[Authorize(Roles = "DeviceWrite,Admin")]
+		public async Task<ActionResult<int>> Post([FromBody]Device device)
 		{
-			return "value";
+			if(device == null)
+			{
+				return BadRequest(new ErrorModel(nameof(device), "No device info provided"));
+			}
+
+			if(ModelState.IsValid)
+			{
+				device.DeviceId = 0;
+				var d = await repo.AddDeviceAsync(device);
+				return Ok(d.DeviceId);
+			}
+			else
+			{
+				return BadRequest(new ErrorModel(ModelState));
+			}
 		}
 
+		/*
 		// POST api/<controller>
 		[HttpPost]
 		public void Post([FromBody]string value)

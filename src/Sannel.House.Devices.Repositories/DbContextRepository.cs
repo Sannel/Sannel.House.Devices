@@ -39,7 +39,7 @@ namespace Sannel.House.Devices.Repositories
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
 		public Task<Device> GetDeviceByIdAsync(int deviceId)
-			=> context.Devices.FirstOrDefaultAsync(i => i.DeviceId == deviceId);
+			=> context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == deviceId);
 
 		/// <summary>
 		/// Gets the device by mac address asynchronous.
@@ -49,7 +49,7 @@ namespace Sannel.House.Devices.Repositories
 		public async Task<Device> GetDeviceByMacAddressAsync(long macAddress)
 		{
 			var alt = await context.AlternateDeviceIds
-				.Include(nameof(AlternateDeviceId.Device))
+				.Include(nameof(AlternateDeviceId.Device)).AsNoTracking()
 				.FirstOrDefaultAsync(i => i.MacAddress == macAddress);
 			return alt?.Device;
 		}
@@ -69,7 +69,7 @@ namespace Sannel.House.Devices.Repositories
 				Page = pageIndex,
 				PageSize = pageSize,
 				TotalCount = context.Devices.LongCount(),
-				Data = context.Devices
+				Data = context.Devices.AsNoTracking()
 							.OrderBy(i => i.DisplayOrder)
 							.Skip((pageIndex - 1) * pageSize)
 							.Take(pageSize)
@@ -87,6 +87,7 @@ namespace Sannel.House.Devices.Repositories
 		{
 			var alt = await context.AlternateDeviceIds
 				.Include(nameof(AlternateDeviceId.Device))
+				.AsNoTracking()
 				.FirstOrDefaultAsync(i => i.Uuid == uuid);
 			return alt?.Device;
 		}

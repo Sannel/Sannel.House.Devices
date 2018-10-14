@@ -1,5 +1,17 @@
+/* Copyright 2018 Sannel Software, L.L.C.
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.*/
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using Sannel.House.Devices.Controllers;
+using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
 using Sannel.House.Devices.Tests.Repositories;
 using System;
@@ -19,38 +31,27 @@ namespace Sannel.House.Devices.Tests.Controllers
 			Assert.Throws<ArgumentNullException>("repository",
 				() => new DevicesController(null, null));
 			Assert.Throws<ArgumentNullException>("logger",
-				() => new DevicesController(new MockRepository(), null));
+				() => new DevicesController(new Mock<IDeviceRepository>().Object, null));
 		}
 		
 		[Fact]
 		public async Task GetPageTest()
 		{
-			var repo = new MockRepository();
-			using (var controller = new DevicesController(repo, CreateLogger<DevicesController>()))
+			var repo = new Mock<IDeviceRepository>();
+			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
 			{
-				var called = false;
-				repo.GetDeviceList = (index, size) =>
+				repo.Setup(i => i.GetDevicesListAsync(1, 25))
+					.ReturnsAsync(new PagedResults<Device>()
 				{
-					called = true;
-					Assert.Equal(1, index);
-					Assert.Equal(25, size);
-
-					return new Models.PagedResults<Device>()
-					{
-						Data = new List<Device>(),
-						Page = -1,
-						PageSize = -2
-					};
-				};
+					Data = new List<Device>(),
+					Page = -1,
+					PageSize = -2
+				});
 
 				var result = await controller.GetPaged();
-				Assert.True(called, "Repository Not called");
-				Assert.IsType<OkObjectResult>(result.Result);
-				var scr = (ObjectResult)result.Result;
+				var scr = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
 				Assert.Equal(200, scr.StatusCode);
-
-				Assert.IsType<PagedResults<Device>>(scr.Value);
-				var v = (PagedResults<Device>)scr.Value;
+				var v = Assert.IsAssignableFrom<PagedResults<Device>>(scr.Value);
 				Assert.NotNull(v);
 				Assert.NotNull(v.Data);
 				Assert.Empty(v.Data);
@@ -62,38 +63,32 @@ namespace Sannel.House.Devices.Tests.Controllers
 		[Fact]
 		public async Task GetPagedTest2()
 		{
-			var repo = new MockRepository();
-			using (var controller = new DevicesController(repo, CreateLogger<DevicesController>()))
+			var repo = new Mock<IDeviceRepository>();
+			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
 			{
-				var called = false;
-				repo.GetDeviceList = (index, size) =>
-				{
-					called = true;
-					Assert.Equal(5, index);
-					Assert.Equal(25, size);
 
-					return new Models.PagedResults<Device>()
+				repo.Setup(i => i.GetDevicesListAsync(5, 25))
+					.ReturnsAsync(new PagedResults<Device>()
 					{
 						Data = new List<Device>(),
 						Page = -1,
 						PageSize = -2
-					};
-				};
+					});
+
 
 				var result = await controller.GetPaged(0);
-				Assert.IsType<BadRequestObjectResult>(result.Result);
-				var bror = (BadRequestObjectResult)result.Result;
-				Assert.Equal("Page Index must be 1 or greater", bror.Value);
+				var bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				var em = Assert.IsAssignableFrom<ErrorModel>(bror.Value);
+				Assert.Single(em.Errors);
+				var first = em.Errors.First();
+				Assert.Equal("pageIndex", first.Key);
+				Assert.Equal("Page Index must be 1 or greater", first.Value);
 
-				called = false;
 				result = await controller.GetPaged(5);
-				Assert.True(called, "Repository Not called");
-				Assert.IsType<OkObjectResult>(result.Result);
-				var scr = (ObjectResult)result.Result;
+				var scr = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
 				Assert.Equal(200, scr.StatusCode);
 
-				Assert.IsType<PagedResults<Device>>(scr.Value);
-				var v = (PagedResults<Device>)scr.Value;
+				var v = Assert.IsAssignableFrom<PagedResults<Device>>(scr.Value);
 				Assert.NotNull(v);
 				Assert.NotNull(v.Data);
 				Assert.Empty(v.Data);
@@ -105,48 +100,136 @@ namespace Sannel.House.Devices.Tests.Controllers
 		[Fact]
 		public async Task GetPagedTest3()
 		{
-			var repo = new MockRepository();
-			using (var controller = new DevicesController(repo, CreateLogger<DevicesController>()))
+			var repo = new Mock<IDeviceRepository>();
+			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
 			{
-				var called = false;
-				repo.GetDeviceList = (index, size) =>
-				{
-					called = true;
-					Assert.Equal(5, index);
-					Assert.Equal(3, size);
-
-					return new Models.PagedResults<Device>()
+				repo.Setup(i => i.GetDevicesListAsync(5, 3))
+					.ReturnsAsync(new PagedResults<Device>()
 					{
 						Data = new List<Device>(),
 						Page = -1,
 						PageSize = -2
-					};
-				};
+					});
 
 				var result = await controller.GetPaged(0, 3);
-				Assert.IsType<BadRequestObjectResult>(result.Result);
-				var bror = (BadRequestObjectResult)result.Result;
-				Assert.Equal("Page Index must be 1 or greater", bror.Value);
+				var bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				var em = Assert.IsAssignableFrom<ErrorModel>(bror.Value);
+				Assert.Single(em.Errors);
+				var first = em.Errors.First();
+				Assert.Equal("pageIndex", first.Key);
+				Assert.Equal("Page Index must be 1 or greater", first.Value);
 
 				result = await controller.GetPaged(5, 1);
-				Assert.IsType<BadRequestObjectResult>(result.Result);
-				bror = (BadRequestObjectResult)result.Result;
-				Assert.Equal("Page Size must be greater then 2", bror.Value);
+				bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				em = Assert.IsAssignableFrom<ErrorModel>(bror.Value);
+				Assert.Single(em.Errors);
+				first = em.Errors.First();
+				Assert.Equal("pageSize", first.Key);
+				Assert.Equal("Page Size must be greater then 2", first.Value);
 
-				called = false;
 				result = await controller.GetPaged(5, 3);
-				Assert.True(called, "Repository Not called");
-				Assert.IsType<OkObjectResult>(result.Result);
-				var scr = (ObjectResult)result.Result;
+				var scr = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
 				Assert.Equal(200, scr.StatusCode);
 
-				Assert.IsType<PagedResults<Device>>(scr.Value);
-				var v = (PagedResults<Device>)scr.Value;
+				var v = Assert.IsAssignableFrom<PagedResults<Device>>(scr.Value);
 				Assert.NotNull(v);
 				Assert.NotNull(v.Data);
 				Assert.Empty(v.Data);
 				Assert.Equal(-1, v.Page);
 				Assert.Equal(-2, v.PageSize);
+			}
+		}
+
+		[Fact]
+		public async Task GetDeviceByIdAsynctest()
+		{
+			var repo = new Mock<IDeviceRepository>();
+			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
+			{
+
+
+				var result = await controller.Get(-1);
+				var bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				var em = Assert.IsAssignableFrom<ErrorModel>(bror.Value);
+				Assert.Single(em.Errors);
+				var first = em.Errors.First();
+				Assert.Equal("deviceId", first.Key);
+				Assert.Equal("Device Id must be geater then or equal to 0", first.Value);
+
+				repo.Setup(i => i.GetDeviceByIdAsync(0)).ReturnsAsync((Device)null);
+
+				result = await controller.Get(0);
+				var nfor = Assert.IsAssignableFrom<NotFoundObjectResult>(result.Result);
+				em = Assert.IsAssignableFrom<ErrorModel>(nfor.Value);
+				first = em.Errors.First();
+				Assert.Equal("device", first.Key);
+				Assert.Equal("Device Not Found", first.Value);
+
+				var device = new Device()
+				{
+					DeviceId = 1,
+					Name = "Test Device",
+					Description = "Test Description",
+					DisplayOrder = 9,
+					IsReadOnly = true,
+					DateCreated = DateTime.Now
+				};
+
+				repo.Setup(i => i.GetDeviceByIdAsync(device.DeviceId))
+					.ReturnsAsync(device);
+
+				result = await controller.Get(device.DeviceId);
+				var oor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
+				Assert.NotNull(oor.Value);
+				var actual = Assert.IsAssignableFrom<Device>(oor.Value);
+				AssertEqual(device, actual);
+			}
+		}
+
+		[Fact]
+		public async Task PostTest()
+		{
+			var repo = new Mock<IDeviceRepository>();
+			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
+			{
+
+				controller.ViewData.ModelState.Clear();
+
+				var result = await controller.Post(null);
+				var bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				var me = Assert.IsAssignableFrom<ErrorModel>(bror.Value);
+				Assert.Single(me.Errors);
+				var first = me.Errors.First();
+				Assert.Equal("device", first.Key);
+				Assert.Equal("No device info provided", first.Value);
+
+				var device = new Device()
+				{
+					DeviceId = 200,
+					Name = "Test Name",
+					Description = "20",
+					DisplayOrder = 22,
+					IsReadOnly = true,
+					DateCreated = DateTime.Now
+				};
+
+				controller.ViewData.ModelState.Clear();
+				controller.ModelState.AddModelError("validationError", "Error Validating");
+				result = await controller.Post(device);
+				bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				me = Assert.IsAssignableFrom<ErrorModel>(bror.Value);
+				Assert.Single(me.Errors);
+				first = me.Errors.First();
+				Assert.Equal("validationError", first.Key);
+				Assert.Equal("Error Validating", first.Value);
+
+				repo.Setup(i => i.AddDeviceAsync(device)).ReturnsAsync(device);
+
+				controller.ModelState.Clear();
+				result = await controller.Post(device);
+				var okor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
+				var d = Assert.IsAssignableFrom<int>(okor.Value);
+				Assert.Equal(device.DeviceId, d);
 			}
 		}
 	}
