@@ -10,6 +10,7 @@
    limitations under the License.*/
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -75,6 +76,11 @@ namespace Sannel.House.Devices.Controllers
 			return Ok(await repo.GetDevicesListAsync(pageIndex, pageSize));
 		}
 
+		/// <summary>
+		/// Gets the device by its device identifier.
+		/// </summary>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <returns></returns>
 		[HttpGet("{id}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
 		public async Task<ActionResult<Device>> Get(int deviceId)
@@ -93,6 +99,11 @@ namespace Sannel.House.Devices.Controllers
 			return Ok(device);
 		}
 
+		/// <summary>
+		/// Creates a new device with the data provided.
+		/// </summary>
+		/// <param name="device">The device.</param>
+		/// <returns></returns>
 		[HttpPost]
 		[Authorize(Roles = "DeviceWrite,Admin")]
 		public async Task<ActionResult<int>> Post([FromBody]Device device)
@@ -114,12 +125,44 @@ namespace Sannel.House.Devices.Controllers
 			}
 		}
 
-		/*
-		// POST api/<controller>
-		[HttpPost]
-		public void Post([FromBody]string value)
+		[HttpPut("{id}")]
+		public async Task<ActionResult<int>> Put([FromBody]Device device)
 		{
+			if(device == null)
+			{
+				return BadRequest(new ErrorModel(nameof(device), "No device info provided"));
+			}
+
+			if(device.DeviceId < 0)
+			{
+				return BadRequest(new ErrorModel(nameof(device.DeviceId), "Device Id must be 0 or greater"));
+			}
+
+			if(ModelState.IsValid)
+			{
+				try
+				{
+					var d = await repo.UpdateDeviceAsync(device); 
+
+					if(d == null)
+					{
+						return NotFound(new ErrorModel("notfound", "Device not found to update"));
+					}
+
+					return Ok(d.DeviceId);
+				}
+				catch(ReadOnlyException)
+				{
+					return BadRequest(new ErrorModel("readonly", "Device is readonly and cannot be updated."));
+				}
+			}
+			else
+			{
+				return BadRequest(new ErrorModel(ModelState));
+			}
 		}
+
+		/*
 
 		// PUT api/<controller>/5
 		[HttpPut("{id}")]
@@ -127,11 +170,6 @@ namespace Sannel.House.Devices.Controllers
 		{
 		}
 
-		// DELETE api/<controller>/5
-		[HttpDelete("{id}")]
-		public void Delete(int id)
-		{
-		}
 		*/
 	}
 }

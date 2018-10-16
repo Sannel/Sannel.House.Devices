@@ -16,6 +16,7 @@ using Sannel.House.Devices.Models;
 using Sannel.House.Devices.Tests.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -227,6 +228,75 @@ namespace Sannel.House.Devices.Tests.Controllers
 
 				controller.ModelState.Clear();
 				result = await controller.Post(device);
+				var okor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
+				var d = Assert.IsAssignableFrom<int>(okor.Value);
+				Assert.Equal(device.DeviceId, d);
+			}
+		}
+
+		[Fact]
+		public async Task PutTest()
+		{
+			var repo = new Mock<IDeviceRepository>();
+			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
+			{
+
+				controller.ViewData.ModelState.Clear();
+
+				var result = await controller.Put(null);
+				var bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				var me = Assert.IsAssignableFrom<ErrorModel>(bror.Value);
+				Assert.Single(me.Errors);
+				var first = me.Errors.First();
+				Assert.Equal("device", first.Key);
+				Assert.Equal("No device info provided", first.Value);
+
+				var device = new Device()
+				{
+					DeviceId = 200,
+					Name = "Test Name",
+					Description = "20",
+					DisplayOrder = 22,
+					IsReadOnly = true,
+					DateCreated = DateTime.Now
+				};
+
+				controller.ViewData.ModelState.Clear();
+				controller.ModelState.AddModelError("validationError", "Error Validating");
+				result = await controller.Put(device);
+				bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				me = Assert.IsAssignableFrom<ErrorModel>(bror.Value);
+				Assert.Single(me.Errors);
+				first = me.Errors.First();
+				Assert.Equal("validationError", first.Key);
+				Assert.Equal("Error Validating", first.Value);
+
+				repo.Setup(i => i.UpdateDeviceAsync(device)).ThrowsAsync(new ReadOnlyException($"Device {device.DeviceId} is Read Only"));
+
+				controller.ModelState.Clear();
+
+				result = await controller.Put(device);
+				bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				me = Assert.IsAssignableFrom<ErrorModel>(bror.Value);
+				Assert.Single(me.Errors);
+				first = me.Errors.First();
+				Assert.Equal("readonly", first.Key);
+				Assert.Equal("Device is readonly and cannot be updated.", first.Value);
+
+				repo.Setup(i => i.UpdateDeviceAsync(device)).ReturnsAsync((Device)null);
+
+
+				result = await controller.Put(device);
+				var nfor = Assert.IsAssignableFrom<NotFoundObjectResult>(result.Result);
+				me = Assert.IsAssignableFrom<ErrorModel>(nfor.Value);
+				Assert.Single(me.Errors);
+				first = me.Errors.First();
+				Assert.Equal("notfound", first.Key);
+				Assert.Equal("Device not found to update", first.Value);
+
+				repo.Setup(i => i.UpdateDeviceAsync(device)).ReturnsAsync(device);
+
+				result = await controller.Put(device);
 				var okor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
 				var d = Assert.IsAssignableFrom<int>(okor.Value);
 				Assert.Equal(device.DeviceId, d);
