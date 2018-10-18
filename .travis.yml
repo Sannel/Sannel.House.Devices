@@ -1,15 +1,18 @@
 sudo: required
 
+language: csharp
+
 services:
   - docker
 
 before_install:
-  - docker pull microsoft/dotnet:2.1-aspnetcore-runtime
-  - docker pull microsoft/dotnet:2.1-sdk
-  - wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
-  - sudo dpkg -i packages-microsoft-prod.deb
-  - sudo apt-get update
-  - sudo apt-get install -y powershell
+  - lsb_release -a
+#  - docker pull microsoft/dotnet:2.1-aspnetcore-runtime
+#  - docker pull microsoft/dotnet:2.1-sdk
+#  - wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+#  - sudo dpkg -i packages-microsoft-prod.deb
+#  - sudo apt-get update
+#  - sudo apt-get install -y powershell
 
 script:
   - pwsh ./build.ps1
