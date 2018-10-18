@@ -125,6 +125,11 @@ namespace Sannel.House.Devices.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Updateds the provided device.
+		/// </summary>
+		/// <param name="device">The device.</param>
+		/// <returns></returns>
 		[HttpPut("{id}")]
 		public async Task<ActionResult<int>> Put([FromBody]Device device)
 		{
@@ -162,14 +167,5 @@ namespace Sannel.House.Devices.Controllers
 			}
 		}
 
-		/*
-
-		// PUT api/<controller>/5
-		[HttpPut("{id}")]
-		public void Put(int id, [FromBody]string value)
-		{
-		}
-
-		*/
 	}
 }
