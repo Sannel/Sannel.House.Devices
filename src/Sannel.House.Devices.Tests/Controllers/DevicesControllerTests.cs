@@ -188,6 +188,102 @@ namespace Sannel.House.Devices.Tests.Controllers
 		}
 
 		[Fact]
+		public async Task GetDeviceByAlternateIdMacAddressAsynctest()
+		{
+			var repo = new Mock<IDeviceRepository>();
+			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
+			{
+
+
+				var result = await controller.GetByAltId(-1);
+				var bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				var em = Assert.IsAssignableFrom<ErrorModel>(bror.Value);
+				Assert.Single(em.Errors);
+				var first = em.Errors.First();
+				Assert.Equal("macAddress", first.Key);
+				Assert.Equal("Mac Address must be geater then or equal to 0", first.Value);
+
+				repo.Setup(i => i.GetDeviceByMacAddressAsync(0)).ReturnsAsync((Device)null);
+
+				result = await controller.GetByAltId(0);
+				var nfor = Assert.IsAssignableFrom<NotFoundObjectResult>(result.Result);
+				em = Assert.IsAssignableFrom<ErrorModel>(nfor.Value);
+				first = em.Errors.First();
+				Assert.Equal("device", first.Key);
+				Assert.Equal("Device Not Found", first.Value);
+
+				var device = new Device()
+				{
+					DeviceId = 1,
+					Name = "Test Device",
+					Description = "Test Description",
+					DisplayOrder = 9,
+					IsReadOnly = true,
+					DateCreated = DateTime.Now
+				};
+
+				repo.Setup(i => i.GetDeviceByMacAddressAsync(20))
+					.ReturnsAsync(device);
+
+				result = await controller.GetByAltId(20);
+				var oor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
+				Assert.NotNull(oor.Value);
+				var actual = Assert.IsAssignableFrom<Device>(oor.Value);
+				AssertEqual(device, actual);
+			}
+		}
+
+		[Fact]
+		public async Task GetDeviceByAlternateIdUuidAsynctest()
+		{
+			var repo = new Mock<IDeviceRepository>();
+			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
+			{
+
+
+				var result = await controller.GetByAltId(Guid.Empty);
+				var bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				var em = Assert.IsAssignableFrom<ErrorModel>(bror.Value);
+				Assert.Single(em.Errors);
+				var first = em.Errors.First();
+				Assert.Equal("uuid", first.Key);
+				Assert.Equal($"Uuid cannot be Empty {Guid.Empty}", first.Value);
+
+				var guid1 = Guid.NewGuid();
+
+				repo.Setup(i => i.GetDeviceByUuidAsync(guid1)).ReturnsAsync((Device)null);
+
+				result = await controller.GetByAltId(guid1);
+				var nfor = Assert.IsAssignableFrom<NotFoundObjectResult>(result.Result);
+				em = Assert.IsAssignableFrom<ErrorModel>(nfor.Value);
+				first = em.Errors.First();
+				Assert.Equal("device", first.Key);
+				Assert.Equal("Device Not Found", first.Value);
+
+				var device = new Device()
+				{
+					DeviceId = 1,
+					Name = "Test Device",
+					Description = "Test Description",
+					DisplayOrder = 9,
+					IsReadOnly = true,
+					DateCreated = DateTime.Now
+				};
+
+				guid1 = Guid.NewGuid();
+
+				repo.Setup(i => i.GetDeviceByUuidAsync(guid1))
+					.ReturnsAsync(device);
+
+				result = await controller.GetByAltId(guid1);
+				var oor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
+				Assert.NotNull(oor.Value);
+				var actual = Assert.IsAssignableFrom<Device>(oor.Value);
+				AssertEqual(device, actual);
+			}
+		}
+
+		[Fact]
 		public async Task PostTest()
 		{
 			var repo = new Mock<IDeviceRepository>();

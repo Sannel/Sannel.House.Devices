@@ -67,12 +67,17 @@ namespace Sannel.House.Devices.Controllers
 		{
 			if(pageIndex < 1)
 			{
+				logger.LogError("GetPaged pageIndex invalid {0}", pageIndex);
 				return BadRequest(new ErrorModel(nameof(pageIndex), "Page Index must be 1 or greater"));
 			}
 			if(pageSize < 2)
 			{
+				logger.LogError("GetPaged pageSize invalid {0}", pageSize);
 				return BadRequest(new ErrorModel(nameof(pageSize), "Page Size must be greater then 2"));
 			}
+
+			logger.LogDebug("GetPaged pageIndex: {0} pageSize {1}", pageIndex, pageSize);
+
 			return Ok(await repo.GetDevicesListAsync(pageIndex, pageSize));
 		}
 
@@ -87,14 +92,72 @@ namespace Sannel.House.Devices.Controllers
 		{
 			if(deviceId < 0)
 			{
+				logger.LogError("Get: Invalid deviceId {0}", deviceId);
 				return BadRequest(new ErrorModel(nameof(deviceId), "Device Id must be geater then or equal to 0"));
 			}
 
 			var device = await repo.GetDeviceByIdAsync(deviceId);
 			if(device == null)
 			{
+				logger.LogDebug("Device with id {0} not found", deviceId);
 				return NotFound(new ErrorModel("device", "Device Not Found"));
 			}
+
+			logger.LogDebug("Device with id {0} was found", deviceId);
+
+			return Ok(device);
+		}
+
+		/// <summary>
+		/// Gets the device by alt identifier.
+		/// </summary>
+		/// <param name="macAddress">The mac address.</param>
+		/// <returns></returns>
+		[HttpGet("{macAddress}")]
+		[Authorize(Roles = "DeviceRead,Admin")]
+		public async Task<ActionResult<Device>> GetByAltId(long macAddress)
+		{
+			if(macAddress < 0)
+			{
+				logger.LogError("Get: Invalid macAddress {0}", macAddress);
+				return BadRequest(new ErrorModel(nameof(macAddress), "Mac Address must be geater then or equal to 0"));
+			}
+
+			var device = await repo.GetDeviceByMacAddressAsync(macAddress);
+			if(device == null)
+			{
+				logger.LogDebug("Device with macAddress {0} not found", macAddress);
+				return NotFound(new ErrorModel("device", "Device Not Found"));
+			}
+
+			logger.LogDebug("Device with macAddress {0} was found", macAddress);
+
+			return Ok(device);
+		}
+
+		/// <summary>
+		/// Gets the device by alt identifier.
+		/// </summary>
+		/// <param name="uuid">The UUID.</param>
+		/// <returns></returns>
+		[HttpGet("{uuid}")]
+		[Authorize(Roles = "DeviceRead,Admin")]
+		public async Task<ActionResult<Device>> GetByAltId(Guid uuid)
+		{
+			if(Guid.Empty == uuid)
+			{
+				logger.LogError("Get: Invalid Uuid {0}", uuid);
+				return BadRequest(new ErrorModel(nameof(uuid), $"Uuid cannot be Empty {Guid.Empty}"));
+			}
+
+			var device = await repo.GetDeviceByUuidAsync(uuid);
+			if(device == null)
+			{
+				logger.LogDebug("Device with Uuid {0} not found", uuid);
+				return NotFound(new ErrorModel("device", "Device Not Found"));
+			}
+
+			logger.LogDebug("Device with Uuid {0} was found", uuid);
 
 			return Ok(device);
 		}
@@ -110,17 +173,20 @@ namespace Sannel.House.Devices.Controllers
 		{
 			if(device == null)
 			{
+				logger.LogError("Post: device is null");
 				return BadRequest(new ErrorModel(nameof(device), "No device info provided"));
 			}
 
 			if(ModelState.IsValid)
 			{
+				logger.LogDebug("Post: adding new device '{0}'", device.Name);
 				device.DeviceId = 0;
 				var d = await repo.AddDeviceAsync(device);
 				return Ok(d.DeviceId);
 			}
 			else
 			{
+				logger.LogInformation("Post: Invalid Model");
 				return BadRequest(new ErrorModel(ModelState));
 			}
 		}
@@ -131,15 +197,18 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="device">The device.</param>
 		/// <returns></returns>
 		[HttpPut("{id}")]
+		[Authorize(Roles = "DeviceWrite,Admin")]
 		public async Task<ActionResult<int>> Put([FromBody]Device device)
 		{
 			if(device == null)
 			{
+				logger.LogError("Put: No device passed");
 				return BadRequest(new ErrorModel(nameof(device), "No device info provided"));
 			}
 
 			if(device.DeviceId < 0)
 			{
+				logger.LogError("Put: Invalid deviceId {0}", device.DeviceId);
 				return BadRequest(new ErrorModel(nameof(device.DeviceId), "Device Id must be 0 or greater"));
 			}
 
@@ -151,18 +220,22 @@ namespace Sannel.House.Devices.Controllers
 
 					if(d == null)
 					{
+						logger.LogDebug("Put: Device {0} was not found", device.DeviceId);
 						return NotFound(new ErrorModel("notfound", "Device not found to update"));
 					}
 
+					logger.LogDebug("Put: Updated device {0}", device.DeviceId);
 					return Ok(d.DeviceId);
 				}
-				catch(ReadOnlyException)
+				catch(ReadOnlyException roe)
 				{
+					logger.LogError(roe, "Put: Device {0} is readonly", device.DeviceId);
 					return BadRequest(new ErrorModel("readonly", "Device is readonly and cannot be updated."));
 				}
 			}
 			else
 			{
+				logger.LogInformation("Put: Invalid device passed");
 				return BadRequest(new ErrorModel(ModelState));
 			}
 		}
