@@ -3,11 +3,22 @@ version: '2.4'
 services:
   users:
     image: ${DOCKER_REGISTRY}sannelhouseusers
+    networks: 
+      - housenet
+    ports:
+      - "444:443"
 
   devices:
     image: ${DOCKER_REGISTRY}sannelhousedevices:0.9-beta-${SANNEL_ARCH}
     build:
       context: .
       dockerfile: src/Sannel.House.Devices/Dockerfile
+    networks:
+      - housenet
+    ports:
+      - "443:443"
     depends_on:
       - users
+
+networks:
+  housenet:

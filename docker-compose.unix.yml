@@ -5,22 +5,8 @@ services:
     volumes:
       - "./RunData/users/app_config:/app/app_config"
       - "./RunData/users/app_data:/app/app_data"
-    networks:
-      housenet:
-        ipv4_address: "10.10.201.3"
+
   devices:
     volumes:
       - "./src/Sannel.House.Devices/app_config:/app/app_config"
       - "./src/Sannel.House.Devices/app_data:/app/app_data"
-    networks:
-      housenet:
-        ipv4_address: "10.10.201.4"
-
-
-networks:
-  housenet:
-    ipam:
-      config:
-        - subnet: 10.10.201.0/24
-          gateway: 10.10.201.1
-
