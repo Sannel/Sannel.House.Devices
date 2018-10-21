@@ -4,9 +4,11 @@ services:
   users:
     image: ${DOCKER_REGISTRY}sannelhouseusers
     networks: 
-      - housenet
+      housenet:
+        aliases:
+          - "users.house.dev.local"
     ports:
-      - "444:443"
+      - "443:443"
 
   devices:
     image: ${DOCKER_REGISTRY}sannelhousedevices:0.9-beta-${SANNEL_ARCH}
@@ -16,7 +18,7 @@ services:
     networks:
       - housenet
     ports:
-      - "443:443"
+      - "8443:443"
     depends_on:
       - users
 

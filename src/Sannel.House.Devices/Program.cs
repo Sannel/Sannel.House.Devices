@@ -30,7 +30,7 @@ namespace Sannel.House.Devices
 		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
 				.ConfigureAppConfiguration(c =>
-				{
+				{ 
 					c.AddJsonFile(Path.Combine("app_config", "appsettings.json"), false, false);
 				})
 				.UseStartup<Startup>();

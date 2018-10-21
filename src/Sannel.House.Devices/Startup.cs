@@ -10,7 +10,9 @@
    limitations under the License.*/
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
@@ -18,7 +20,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sannel.House.Devices.Data;
@@ -34,6 +38,16 @@ namespace Sannel.House.Devices
 	{
 		public Startup(IConfiguration configuration)
 		{
+			var root = (ConfigurationRoot)configuration;
+
+			foreach(var p in root.Providers)
+			{
+				if(p is JsonConfigurationProvider j)
+				{
+					Console.WriteLine(Path.Combine(((PhysicalFileProvider)j.Source.FileProvider).Root, j.Source.Path));
+				}
+			}
+
 			Configuration = configuration;
 		}
 
@@ -42,6 +56,23 @@ namespace Sannel.House.Devices
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			if(File.Exists(Configuration["Startup:VerifyCertTrust"] ?? ""))
+			{
+				using (var cert = new X509Certificate2(Configuration["Startup:VerifyCertTrust"]))
+				{
+					Console.WriteLine($"Installing cert {cert.FriendlyName}");
+					using (var store = new X509Store(StoreName.AuthRoot, StoreLocation.LocalMachine))
+					{
+						store.Open(OpenFlags.ReadWrite);
+						if(!store.Certificates.Contains(cert))
+						{
+							store.Add(cert);
+						}
+						store.Close();
+					}
+				}
+			}
+
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
 			switch (Configuration["Db:Provider"])
@@ -76,8 +107,10 @@ namespace Sannel.House.Devices
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env,IServiceProvider provider)
 		{
+			var db = provider.GetService<DevicesDbContext>();
+			db.Database.Migrate();
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();

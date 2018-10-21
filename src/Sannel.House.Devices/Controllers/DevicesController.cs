@@ -40,7 +40,7 @@ namespace Sannel.House.Devices.Controllers
 		/// Gets the first 25 devices
 		/// </summary>
 		/// <returns></returns>
-		[HttpGet]
+		[HttpGet("GetPaged")]
 		[Authorize(Roles = "DeviceRead,Admin")]
 		public Task<ActionResult<PagedResults<Device>>> GetPaged() 
 			=> GetPaged(1, 25);
@@ -50,7 +50,7 @@ namespace Sannel.House.Devices.Controllers
 		/// </summary>
 		/// <param name="pageIndex">Index of the page.</param>
 		/// <returns></returns>
-		[HttpGet]
+		[HttpGet("GetPaged/{pageIndex}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
 		public Task<ActionResult<PagedResults<Device>>> GetPaged(int pageIndex) 
 			=> GetPaged(pageIndex, 25);
@@ -61,7 +61,7 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="pageIndex">Index of the page.</param>
 		/// <param name="pageSize">Size of the page.</param>
 		/// <returns></returns>
-		[HttpGet]
+		[HttpGet("GetPaged/{pageIndex}/{pageSize}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
 		public async Task<ActionResult<PagedResults<Device>>> GetPaged(int pageIndex, int pageSize)
 		{
@@ -86,7 +86,7 @@ namespace Sannel.House.Devices.Controllers
 		/// </summary>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		[HttpGet("{id}")]
+		[HttpGet("{deviceId}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
 		public async Task<ActionResult<Device>> Get(int deviceId)
 		{
@@ -196,7 +196,7 @@ namespace Sannel.House.Devices.Controllers
 		/// </summary>
 		/// <param name="device">The device.</param>
 		/// <returns></returns>
-		[HttpPut("{id}")]
+		[HttpPut]
 		[Authorize(Roles = "DeviceWrite,Admin")]
 		public async Task<ActionResult<int>> Put([FromBody]Device device)
 		{

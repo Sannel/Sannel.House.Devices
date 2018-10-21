@@ -21,6 +21,8 @@ RUN dotnet restore "src/Sannel.House.Devices/Sannel.House.Devices.csproj"
 COPY . .
 WORKDIR "/src/src/Sannel.House.Devices"
 RUN dotnet build "Sannel.House.Devices.csproj" -c Release
+WORKDIR "/src/src/Sannel.House.BuildHelper"
+RUN dotnet build "Sannel.House.BuildHelper.csproj" -c Release
 
 #test the software
 FROM build as Test
@@ -32,6 +34,11 @@ RUN dotnet test "Sannel.House.Devices.Tests.csproj"
 FROM build AS publish
 WORKDIR "/src/src/Sannel.House.Devices"
 RUN dotnet publish "Sannel.House.Devices.csproj" -c Release -o /app
+WORKDIR "/src/src/Sannel.House.BuildHelper"
+RUN dotnet publish "Sannel.House.BuildHelper.csproj" -c Release -o /helpers
+WORKDIR "/helpers"
+RUN dotnet "Sannel.House.BuildHelper.dll" --prepareDirectory=/app/app_config
+RUN dotnet "Sannel.House.BuildHelper.dll" --prepareDirectory=/app/app_data
 
 #prepare the image
 FROM base AS final
