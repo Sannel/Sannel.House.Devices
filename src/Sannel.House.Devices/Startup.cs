@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using IdentityServer4.AccessTokenValidation;
@@ -58,18 +59,30 @@ namespace Sannel.House.Devices
 		{
 			if(File.Exists(Configuration["Startup:VerifyCertTrust"] ?? ""))
 			{
-				using (var cert = new X509Certificate2(Configuration["Startup:VerifyCertTrust"]))
+				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || 
+					RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 				{
-					Console.WriteLine($"Installing cert {cert.FriendlyName}");
-					using (var store = new X509Store(StoreName.AuthRoot, StoreLocation.LocalMachine))
+					using (var cert = new X509Certificate2(Configuration["Startup:VerifyCertTrust"]))
 					{
-						store.Open(OpenFlags.ReadWrite);
-						if(!store.Certificates.Contains(cert))
+						using (var store = new X509Store(StoreName.AuthRoot, StoreLocation.LocalMachine))
 						{
-							store.Add(cert);
+							store.Open(OpenFlags.ReadWrite);
+							if (!store.Certificates.Contains(cert))
+							{
+								Console.WriteLine($"Installing cert {cert.SubjectName}");
+								store.Add(cert);
+							}
+							else
+							{
+								Console.WriteLine("Cert already installed");
+							}
+							store.Close();
 						}
-						store.Close();
 					}
+				}
+				else
+				{
+					Console.WriteLine("Unable to add certificates on Unix platforms please manually add it or map the host certificate store to the container.");
 				}
 			}
 

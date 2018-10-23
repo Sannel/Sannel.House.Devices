@@ -298,17 +298,26 @@ namespace Sannel.House.Devices.Tests.Repositories
 			{
 				using (var context = GetTestDB(connection))
 				{
+					var repo = new DbContextRepository(context);
+					await Assert.ThrowsAsync<ArgumentNullException>("device", () => repo.AddDeviceAsync(null));
+
 					var device1 = new Device()
 					{
 						DeviceId = 1,
 						Name = "Test Name",
 						IsReadOnly = true,
 						Description = "Dest Description",
-						DateCreated = DateTime.UtcNow,
-						DisplayOrder = 2
+						DateCreated = DateTime.UtcNow
 					};
-					await context.Devices.AddAsync(device1);
-					await context.SaveChangesAsync();
+
+					var actualDevice = await repo.AddDeviceAsync(device1);
+					Assert.NotNull(actualDevice);
+					Assert.True(actualDevice.DeviceId > 0);
+					Assert.Equal(device1.Name, actualDevice.Name);
+					Assert.Equal(device1.IsReadOnly, actualDevice.IsReadOnly);
+					Assert.Equal(device1.Description, actualDevice.Description);
+					Assert.Equal(device1.DateCreated, actualDevice.DateCreated);
+					Assert.Equal(1, device1.DisplayOrder);
 
 					var device2 = new Device()
 					{
@@ -318,10 +327,8 @@ namespace Sannel.House.Devices.Tests.Repositories
 						DateCreated = DateTime.UtcNow,
 					};
 
-					var repo = new DbContextRepository(context);
-					await Assert.ThrowsAsync<ArgumentNullException>("device", () => repo.AddDeviceAsync(null));
 
-					var actualDevice = await repo.AddDeviceAsync(device2);
+					actualDevice = await repo.AddDeviceAsync(device2);
 					Assert.NotNull(actualDevice);
 					Assert.True(actualDevice.DeviceId > 1);
 					Assert.Equal(device2.Name, actualDevice.Name);
