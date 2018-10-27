@@ -10,6 +10,16 @@ services:
     ports:
       - "443:443"
 
+  tests:
+    image: ${DOCKER_REGISTRY}sannelhousedevices:tests-${SANNEL_ARCH}
+    ports:
+      - "8080:80"
+    build:
+      context: .
+      dockerfile: src/Sannel.House.Devices.Tests/Dockerfile
+    networks:
+      - housenet
+
   devices:
     image: ${DOCKER_REGISTRY}sannelhousedevices:0.9-beta-${SANNEL_ARCH}
     build:

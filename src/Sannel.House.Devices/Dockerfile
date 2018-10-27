@@ -24,11 +24,6 @@ RUN dotnet build "Sannel.House.Devices.csproj" -c Release
 WORKDIR "/src/src/Sannel.House.BuildHelper"
 RUN dotnet build "Sannel.House.BuildHelper.csproj" -c Release
 
-#test the software
-FROM build as Test
-WORKDIR "/src/src/Sannel.House.Devices.Tests"
-RUN dotnet build "Sannel.House.Devices.Tests.csproj" -c Debug
-RUN dotnet test "Sannel.House.Devices.Tests.csproj"
 
 #publish the software
 FROM build AS publish

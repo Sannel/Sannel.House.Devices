@@ -18,10 +18,6 @@ namespace Sannel.House.Devices.Models
 {
 	public class ErrorModel
 	{
-		public ErrorModel()
-		{
-		}
-
 		public ErrorModel(string key, string value) 
 			=> Errors.Add(key, value);
 
