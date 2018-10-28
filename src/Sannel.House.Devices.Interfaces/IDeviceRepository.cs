@@ -99,5 +99,11 @@ namespace Sannel.House.Devices.Interfaces
 		/// </returns>
 		Task<Device> RemoveAlternateUuidAsync(Guid uuid);
 
+		/// <summary>
+		/// Gets the alternate ids for device asynchronous.
+		/// </summary>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <returns></returns>
+		Task<IEnumerable<AlternateDeviceId>> GetAlternateIdsForDeviceAsync(int deviceId);
 	}
 }

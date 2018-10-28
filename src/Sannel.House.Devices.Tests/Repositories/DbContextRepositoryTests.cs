@@ -579,7 +579,6 @@ namespace Sannel.House.Devices.Tests.Repositories
 		[Fact]
 		public async Task RemoveAlternateUuidAsyncTest()
 		{
-
 			using (var connection = OpenConnection())
 			{
 				using (var context = GetTestDB(connection))
@@ -635,6 +634,73 @@ namespace Sannel.House.Devices.Tests.Repositories
 
 					Assert.Null(context.AlternateDeviceIds.FirstOrDefault(i => i.Uuid == altId1.Uuid));
 					Assert.NotNull(context.AlternateDeviceIds.FirstOrDefault(i => i.Uuid == altId2.Uuid));
+				}
+			}
+		}
+
+		[Fact]
+		public async Task GetAlternateIdsForDeviceAsyncTest()
+		{
+			using (var connection = OpenConnection())
+			{
+				using (var context = GetTestDB(connection))
+				{
+					var repo = new DbContextRepository(context);
+					var result = await repo.GetAlternateIdsForDeviceAsync(30);
+					Assert.Null(result);
+
+					var device1 = new Device()
+					{
+						DeviceId = 1,
+						Name = "Test Name",
+						IsReadOnly = true,
+						Description = "Dest Description",
+						DateCreated = DateTime.UtcNow,
+						DisplayOrder = 2
+					};
+					await context.Devices.AddAsync(device1);
+					await context.SaveChangesAsync();
+
+					result = await repo.GetAlternateIdsForDeviceAsync(device1.DeviceId);
+					Assert.NotNull(result);
+					Assert.Empty(result);
+
+					var altId1 = new AlternateDeviceId()
+					{
+						DeviceId = device1.DeviceId,
+						Uuid = Guid.NewGuid(),
+						MacAddress = 2,
+						DateCreated = DateTime.UtcNow
+					};
+					var altId2 = new AlternateDeviceId
+					{
+						DeviceId = device1.DeviceId,
+						Uuid = Guid.NewGuid(),
+						MacAddress = 3,
+						DateCreated = DateTime.UtcNow
+					};
+
+					await context.AlternateDeviceIds.AddRangeAsync(altId1, altId2);
+					await context.SaveChangesAsync();
+					context.Entry(altId1).State = EntityState.Detached;
+					context.Entry(altId2).State = EntityState.Detached;
+
+					result = await repo.GetAlternateIdsForDeviceAsync(device1.DeviceId);
+					Assert.NotNull(result);
+					var l = result.ToList();
+					Assert.Equal(2, l.Count);
+					var a = l[0];
+					Assert.NotNull(a);
+					Assert.Equal(altId1.DeviceId, a.DeviceId);
+					Assert.Equal(altId1.Uuid, a.Uuid);
+					Assert.Equal(altId1.MacAddress, a.MacAddress);
+					Assert.Equal(altId1.DateCreated, a.DateCreated);
+					a = l[1];
+					Assert.NotNull(a);
+					Assert.Equal(altId2.DeviceId, a.DeviceId);
+					Assert.Equal(altId2.Uuid, a.Uuid);
+					Assert.Equal(altId2.MacAddress, a.MacAddress);
+					Assert.Equal(altId2.DateCreated, a.DateCreated);
 				}
 			}
 		}

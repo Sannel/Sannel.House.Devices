@@ -43,39 +43,160 @@ namespace Sannel.House.Devices.Controllers
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
+		/// <summary>
+		/// Gets the specified device identifier.
+		/// </summary>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <returns></returns>
 		[HttpGet("{id}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
-		public IEnumerable<AlternateDeviceId> Get(int deviceId)
+		public async Task<ActionResult<IEnumerable<AlternateDeviceId>>> Get(int deviceId)
 		{
-			return null;
+			if(deviceId < 0)
+			{
+				logger.LogError("Invalid device id({0}) passed in.", deviceId);
+				return BadRequest(new ErrorModel("deviceId", "Device Id must be greater then or equal to 0"));
+			}
+
+			var list = await repo.GetAlternateIdsForDeviceAsync(deviceId);
+
+			if(list == null)
+			{
+				logger.LogDebug("Device with Id {0} not found", deviceId);
+				return NotFound(new ErrorModel("device", "Device not found"));
+			}
+
+			return Ok(list);
 		}
 
+		/// <summary>
+		/// Posts the specified mac address.
+		/// </summary>
+		/// <param name="macAddress">The mac address.</param>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <returns></returns>
 		[HttpPost("{macAddress}/{deviceId}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
-		public void Post(long macAddress, int deviceId)
+		public async Task<ActionResult<Device>> Post(long macAddress, int deviceId)
 		{
+			if(macAddress < 0)
+			{
+				logger.LogError("Invalid macAddress passed {0}", macAddress);
+				return BadRequest(new ErrorModel("macAddress", "Invalid MacAddress it must be greater then or equal to 0"));
+			}
 
+			if(deviceId < 0)
+			{
+				logger.LogError("Invalid device id({0}) passed in.", deviceId);
+				return BadRequest(new ErrorModel("deviceId", "Device Id must be greater then or equal to 0"));
+			}
+
+			try
+			{
+				var device = await repo.AddAlternateMacAddressAsync(deviceId, macAddress);
+				if(device == null)
+				{
+					logger.LogDebug("No device found with id {0}", deviceId);
+					return NotFound(new ErrorModel("notFound", "No device found with that id"));
+				}
+
+				return Ok(device);
+			}
+			catch(AlternateDeviceIdException aIdException)
+			{
+				logger.LogError(aIdException, "Alternate Device Id Exception");
+				return BadRequest(new ErrorModel("macAddress", "That mac address is already connected to a device"));
+			}
 		}
 
+		/// <summary>
+		/// Posts the specified UUID.
+		/// </summary>
+		/// <param name="uuid">The UUID.</param>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <returns></returns>
 		[HttpPost("{uuid}/{deviceId}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
-		public void Post(Guid uuid, int deviceId)
+		public async Task<ActionResult<Device>> Post(Guid uuid, int deviceId)
 		{
+			if(uuid == Guid.Empty)
+			{
+				logger.LogError("Empty Guid passed in for Uuid");
+				return BadRequest(new ErrorModel("uuid", "Uuid must be a valid Guid and not Guid.Empty"));
+			}
 
+			if(deviceId < 0)
+			{
+				logger.LogError("Invalid device id({0}) passed in.", deviceId);
+				return BadRequest(new ErrorModel("deviceId", "Device Id must be greater then or equal to 0"));
+			}
+
+			try
+			{
+				var device = await repo.AddAlternateUuidAsync(deviceId, uuid);
+				if(device == null)
+				{
+					logger.LogDebug("No device found with id {0}", deviceId);
+					return NotFound(new ErrorModel("notFound", "No device found with that id"));
+				}
+
+				return Ok(device);
+			}
+			catch(AlternateDeviceIdException aIdException)
+			{
+				logger.LogError(aIdException, "Alternate Device Id Exception");
+				return BadRequest(new ErrorModel("uuid", "That Uuid is already connected to a device"));
+			}
 		}
 
-		[HttpDelete("{macAddress}/{deviceId}")]
+		/// <summary>
+		/// Deletes the specified mac address.
+		/// </summary>
+		/// <param name="macAddress">The mac address.</param>
+		/// <returns></returns>
+		[HttpDelete("{macAddress}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
-		public void Delete(long macAddress, int deviceId)
+		public async Task<ActionResult<Device>> Delete(long macAddress)
 		{
+			if(macAddress < 0)
+			{
+				logger.LogError("Invalid macAddress passed {0}", macAddress);
+				return BadRequest(new ErrorModel("macAddress", "Invalid MacAddress it must be greater then or equal to 0"));
+			}
 
+			var device = await repo.RemoveAlternateMacAddressAsync(macAddress);
+			if(device == null)
+			{
+				logger.LogDebug("No Mac Address found with id {0}", macAddress);
+				return NotFound(new ErrorModel("macAddress", "Mac Address not found"));
+			}
+
+			return Ok(device);
 		}
 
-		[HttpDelete("{uuid}/{deviceId}")]
+		/// <summary>
+		/// Deletes the specified UUID.
+		/// </summary>
+		/// <param name="uuid">The UUID.</param>
+		/// <returns></returns>
+		[HttpDelete("{uuid}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
-		public void Delete(Guid uuid, int deviceId)
+		public async Task<ActionResult<Device>> Delete(Guid uuid)
 		{
+			if(uuid == Guid.Empty)
+			{
+				logger.LogError("Empty Guid passed in for Uuid");
+				return BadRequest(new ErrorModel("uuid", "Uuid must be a valid Guid and not Guid.Empty"));
+			}
 
+			var device = await repo.RemoveAlternateUuidAsync(uuid);
+			if(device == null)
+			{
+				logger.LogDebug("Uuid not found {0}", uuid);
+				return NotFound(new ErrorModel("uuid", "Uuid not found"));
+			}
+
+			return Ok(device);
 		}
 
 	}

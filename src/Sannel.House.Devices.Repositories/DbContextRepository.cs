@@ -14,6 +14,8 @@ using Sannel.House.Devices.Data;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -266,6 +268,27 @@ namespace Sannel.House.Devices.Repositories
 			await context.SaveChangesAsync();
 
 			return altId.Device;
+		}
+
+		/// <summary>
+		/// Gets the alternate ids for the device asynchronous.
+		/// </summary>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <returns></returns>
+		public async Task<IEnumerable<AlternateDeviceId>> GetAlternateIdsForDeviceAsync(int deviceId)
+		{
+			if(await context.Devices.CountAsync() == 0)
+			{
+				return null;
+			}
+
+			return await Task.Run(() =>
+			{
+				var alternateIds = context.AlternateDeviceIds.Include(i => i.Device)
+					.AsNoTracking().Where(i => i.DeviceId == deviceId);
+
+				return alternateIds;
+			});
 		}
 	}
 }
