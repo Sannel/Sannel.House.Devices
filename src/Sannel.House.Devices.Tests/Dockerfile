@@ -9,7 +9,7 @@ WORKDIR /src
 COPY . .
 WORKDIR "/src/src/Sannel.House.Devices.Tests"
 RUN dotnet build "Sannel.House.Devices.Tests.csproj" -c Debug
-RUN dotnet test /p:AltCover=true /p:AltCoverAssemblyExcludeFilter="Tests`|Migrations" "Sannel.House.Devices.Tests.csproj"
+RUN dotnet test /p:AltCover=true /p:AltCoverAssemblyExcludeFilter="Tests`|Migrations" /p:AltCoverTypeFilter="Startup`|Program" "Sannel.House.Devices.Tests.csproj"
 RUN dotnet tool install --global dotnet-reportgenerator-globaltool
 RUN reportgenerator "-reports:coverage.xml" "-targetdir:/coveragereport"
 
