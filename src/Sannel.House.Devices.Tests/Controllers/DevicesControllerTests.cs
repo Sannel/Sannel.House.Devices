@@ -349,13 +349,25 @@ namespace Sannel.House.Devices.Tests.Controllers
 
 				var device = new Device()
 				{
-					DeviceId = 200,
+					DeviceId = -1,
 					Name = "Test Name",
 					Description = "20",
 					DisplayOrder = 22,
 					IsReadOnly = true,
 					DateCreated = DateTime.Now
 				};
+
+				controller.ViewData.ModelState.Clear();
+				result = await controller.Put(device);
+				bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				me = Assert.IsAssignableFrom<ErrorModel>(bror.Value);
+				Assert.Single(me.Errors);
+				first = me.Errors.First();
+				Assert.Equal("DeviceId", first.Key);
+				Assert.Equal("Device Id must be 0 or greater", first.Value);
+
+				device.DeviceId = 200;
+
 
 				controller.ViewData.ModelState.Clear();
 				controller.ModelState.AddModelError("validationError", "Error Validating");
