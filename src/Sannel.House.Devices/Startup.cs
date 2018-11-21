@@ -10,6 +10,7 @@
    limitations under the License.*/
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -66,17 +67,24 @@ namespace Sannel.House.Devices
 					{
 						using (var store = new X509Store(StoreName.AuthRoot, StoreLocation.LocalMachine))
 						{
-							store.Open(OpenFlags.ReadWrite);
-							if (!store.Certificates.Contains(cert))
+							try
 							{
-								Console.WriteLine($"Installing cert {cert.SubjectName}");
-								store.Add(cert);
+								store.Open(OpenFlags.ReadWrite);
+								if (!store.Certificates.Contains(cert))
+								{
+									Console.WriteLine($"Installing cert {cert.SubjectName}");
+									store.Add(cert);
+								}
+								else
+								{
+									Console.WriteLine("Cert already installed");
+								}
+								store.Close();
 							}
-							else
+							catch(Exception ex)
 							{
-								Console.WriteLine("Cert already installed");
+								Console.Error.WriteLine($"Exception installing Cert {ex}");
 							}
-							store.Close();
 						}
 					}
 				}
@@ -120,9 +128,36 @@ namespace Sannel.House.Devices
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env,IServiceProvider provider)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env,IServiceProvider provider,ILogger<Startup> logger)
 		{
+			var p = Configuration["Db:Provider"];
 			var db = provider.GetService<DevicesDbContext>();
+
+			if (string.Compare(p, "mysql", true) == 0
+					|| string.Compare(p, "sqlserver", true) == 0)
+				{
+					var retryCount = 0;
+					var connection = db.Database.GetDbConnection();
+					while (connection.State == System.Data.ConnectionState.Closed && retryCount <= 100)
+					{
+						try
+						{
+							connection.Open();
+						}
+						catch (DbException ex)
+						{
+							logger.LogError(ex, "Exception connecting to server Delaying and trying again");
+							retryCount++;
+							Task.Delay(1000).Wait();
+}
+					}
+					if (retryCount >= 100)
+					{
+						logger.LogCritical("Unable to initialize connection to db shutting down.");
+						throw new Exception("Shutting down");
+					}
+				}
+
 			db.Database.Migrate();
 			if (env.IsDevelopment())
 			{
