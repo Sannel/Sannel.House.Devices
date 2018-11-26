@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
+using Sannel.House.Data;
+using Sannel.House.Web;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -58,42 +60,6 @@ namespace Sannel.House.Devices
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			if(File.Exists(Configuration["Startup:VerifyCertTrust"] ?? ""))
-			{
-				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || 
-					RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-				{
-					using (var cert = new X509Certificate2(Configuration["Startup:VerifyCertTrust"]))
-					{
-						using (var store = new X509Store(StoreName.AuthRoot, StoreLocation.LocalMachine))
-						{
-							try
-							{
-								store.Open(OpenFlags.ReadWrite);
-								if (!store.Certificates.Contains(cert))
-								{
-									Console.WriteLine($"Installing cert {cert.SubjectName}");
-									store.Add(cert);
-								}
-								else
-								{
-									Console.WriteLine("Cert already installed");
-								}
-								store.Close();
-							}
-							catch(Exception ex)
-							{
-								Console.Error.WriteLine($"Exception installing Cert {ex}");
-							}
-						}
-					}
-				}
-				else
-				{
-					Console.WriteLine("Unable to add certificates on Unix platforms please manually add it or map the host certificate store to the container.");
-				}
-			}
-
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
 			switch (Configuration["Db:Provider"])
@@ -130,33 +96,19 @@ namespace Sannel.House.Devices
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env,IServiceProvider provider,ILogger<Startup> logger)
 		{
+			provider.CheckAndInstallTrustedCertificate();
+
 			var p = Configuration["Db:Provider"];
 			var db = provider.GetService<DevicesDbContext>();
 
 			if (string.Compare(p, "mysql", true) == 0
 					|| string.Compare(p, "sqlserver", true) == 0)
+			{
+				if(!db.WaitForServer(logger))
 				{
-					var retryCount = 0;
-					var connection = db.Database.GetDbConnection();
-					while (connection.State == System.Data.ConnectionState.Closed && retryCount <= 100)
-					{
-						try
-						{
-							connection.Open();
-						}
-						catch (DbException ex)
-						{
-							logger.LogError(ex, "Exception connecting to server Delaying and trying again");
-							retryCount++;
-							Task.Delay(1000).Wait();
-}
-					}
-					if (retryCount >= 100)
-					{
-						logger.LogCritical("Unable to initialize connection to db shutting down.");
-						throw new Exception("Shutting down");
-					}
+					throw new Exception("Shutting down");
 				}
+			}
 
 			db.Database.Migrate();
 			if (env.IsDevelopment())
