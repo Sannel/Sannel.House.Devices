@@ -35,6 +35,9 @@ using Sannel.House.Devices.Data.Migrations.Sqlite;
 using Sannel.House.Devices.Data.Migrations.SqlServer;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Repositories;
+using System.Net;
+using System.Net.Security;
+using System.Net.Http;
 
 namespace Sannel.House.Devices
 {
@@ -119,6 +122,7 @@ namespace Sannel.House.Devices
 			app.UseAuthentication();
 			app.UseHttpsRedirection();
 			app.UseMvc();
+
 		}
 	}
 }

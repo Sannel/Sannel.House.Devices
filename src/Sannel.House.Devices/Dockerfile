@@ -39,4 +39,6 @@ RUN dotnet "Sannel.House.BuildHelper.dll" --prepareDirectory=/app/app_data
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+ARG USER=root
+USER ${USER}
 ENTRYPOINT ["dotnet", "Sannel.House.Devices.dll"]
