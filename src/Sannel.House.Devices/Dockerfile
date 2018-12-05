@@ -1,11 +1,11 @@
 
 # base
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
 WORKDIR /app
 EXPOSE 443
 
 #build the software
-FROM microsoft/dotnet:2.1-sdk AS build
+FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
 COPY ["Directory.Build.props", "./"]
 COPY ["src/Sannel.House.Devices/Sannel.House.Devices.csproj", "src/Sannel.House.Devices/"]
@@ -21,17 +21,14 @@ RUN dotnet restore "src/Sannel.House.Devices/Sannel.House.Devices.csproj"
 COPY . .
 WORKDIR "/src/src/Sannel.House.Devices"
 RUN dotnet build "Sannel.House.Devices.csproj" -c Release
-WORKDIR "/src/src/Sannel.House.BuildHelper"
-RUN dotnet build "Sannel.House.BuildHelper.csproj" -c Release
 
 
 #publish the software
 FROM build AS publish
 WORKDIR "/src/src/Sannel.House.Devices"
 RUN dotnet publish "Sannel.House.Devices.csproj" -c Release -o /app
-WORKDIR "/src/src/Sannel.House.BuildHelper"
-RUN dotnet publish "Sannel.House.BuildHelper.csproj" -c Release -o /helpers
-WORKDIR "/helpers"
+COPY ["Sannel.House.BuildHelpers/Release/*", "/Release/"]
+WORKDIR "/Release"
 RUN dotnet "Sannel.House.BuildHelper.dll" --prepareDirectory=/app/app_config
 RUN dotnet "Sannel.House.BuildHelper.dll" --prepareDirectory=/app/app_data
 
