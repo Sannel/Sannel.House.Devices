@@ -62,26 +62,25 @@ namespace Sannel.House.Devices
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
-		{
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+		{ 
+			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-			switch (Configuration["Db:Provider"])
+			services.AddDbContextPool<DevicesDbContext>(o =>
 			{
-				case "mysql":
-					services.AddDbContext<DevicesDbContext, Data.Migrations.MySql.MySqlDbContext>(o => {
-						o.UseMySql(Configuration["Db:ConnectionString"]);
-					});
-					break;
-				case "sqlserver":
-					services.AddDbContext<DevicesDbContext, SqlServerDbContext>(o =>
-						o.UseSqlServer(Configuration["Db:ConnectionString"]));
-					break;
-				case "sqlite":
-				default:
-					services.AddDbContext<DevicesDbContext, SqliteDbContext>(o =>
-						o.UseSqlite(Configuration["Db:ConnectionString"]));
-					break;
-			}
+				switch (Configuration["Db:Provider"])
+				{
+					case "mysql":
+						o.ConfigureMySql(Configuration["Db:ConnectionString"]);
+						break;
+					case "sqlserver":
+						o.ConfigureSqlServer(Configuration["Db:ConnectionString"]);
+						break;
+					case "sqlite":
+					default:
+						o.ConfigureSqlite(Configuration["Db:ConnectionString"]);
+						break;
+				}
+			});
 
 			services.AddScoped<IDeviceRepository, DbContextRepository>();
 
@@ -94,6 +93,11 @@ namespace Sannel.House.Devices
 							o.SupportedTokens = SupportedTokens.Both;
 						});
 
+			services.AddHealthChecks()
+				.AddDbHealthCheck<DevicesDbContext>("DbHealthCheck", async (context) =>
+				{
+					await context.Devices.Take(1).CountAsync();
+				});
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -113,11 +117,13 @@ namespace Sannel.House.Devices
 				}
 			}
 
-			db.Database.Migrate();
+			//db.Database.Migrate();
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 			}
+
+			app.UseHealthChecks("/health");
 
 			app.UseAuthentication();
 			app.UseHttpsRedirection();

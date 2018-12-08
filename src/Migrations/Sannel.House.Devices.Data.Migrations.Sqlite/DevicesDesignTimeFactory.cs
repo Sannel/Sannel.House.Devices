@@ -6,16 +6,16 @@ using System.Text;
 
 namespace Sannel.House.Devices.Data.Migrations.Sqlite
 {
-	public class DevicesDesignTimeFactory : IDesignTimeDbContextFactory<SqliteDbContext>
+	public class DevicesDesignTimeFactory : IDesignTimeDbContextFactory<DevicesDbContext>
 	{
-		public SqliteDbContext CreateDbContext(string[] args)
+		public DevicesDbContext CreateDbContext(string[] args)
 		{
-			var builder = new DbContextOptionsBuilder<SqliteDbContext>();
+			var builder = new DbContextOptionsBuilder<DevicesDbContext>();
 
 
-			builder.UseSqlite("data source=db.db");
+			builder.UseSqlite("data source=db.db", o => o.MigrationsAssembly(GetType().Assembly.GetName().FullName));
 
-			return new SqliteDbContext(builder.Options);
+			return new DevicesDbContext(builder.Options);
 
 		}
 	}

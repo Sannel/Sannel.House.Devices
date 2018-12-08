@@ -6,16 +6,16 @@ using System.Text;
 
 namespace Sannel.House.Devices.Data.Migrations.SqlServer
 {
-	public class DevicesDesignTimeFactory : IDesignTimeDbContextFactory<SqlServerDbContext>
+	public class DevicesDesignTimeFactory : IDesignTimeDbContextFactory<DevicesDbContext>
 	{
-		public SqlServerDbContext CreateDbContext(string[] args)
+		public DevicesDbContext CreateDbContext(string[] args)
 		{
-			var builder = new DbContextOptionsBuilder<SqlServerDbContext>();
+			var builder = new DbContextOptionsBuilder<DevicesDbContext>();
 
 
-			builder.UseSqlServer("server=localhost");
+			builder.UseSqlServer("server=localhost", o => o.MigrationsAssembly(GetType().Assembly.GetName().FullName));
 
-			return new SqlServerDbContext(builder.Options);
+			return new DevicesDbContext(builder.Options);
 
 		}
 	}

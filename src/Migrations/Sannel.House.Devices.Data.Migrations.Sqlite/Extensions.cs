@@ -9,27 +9,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.*/
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Pomelo.EntityFrameworkCore.MySql;
-using Sannel.House.Devices.Data;
 
-namespace Sannel.House.Devices.Data.Migrations.MySql
+namespace Sannel.House.Devices.Data
 {
-	public class DevicesDesignTimeFactory : IDesignTimeDbContextFactory<DevicesDbContext>
+	public static class Extensions
 	{
-		public DevicesDbContext CreateDbContext(string[] args)
-		{
-			var builder = new DbContextOptionsBuilder<DevicesDbContext>();
-
-
-			builder.UseMySql("Server=myServerAddress;Database=myDataBase;Uid=myUsername;Pwd=myPassword;",
-				o=> o.MigrationsAssembly(GetType().Assembly.GetName().FullName));
-
-			return new DevicesDbContext(builder.Options);
-
-		}
+		public static DbContextOptionsBuilder ConfigureSqlite(this DbContextOptionsBuilder option, string connectionString)
+		=> option.UseSqlite(connectionString, i => i.MigrationsAssembly(typeof(Extensions).Assembly.GetName().FullName));
 	}
 }
