@@ -8,6 +8,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.*/
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,5 +20,8 @@ namespace Sannel.House.Devices.Data
 	{
 		public static DbContextOptionsBuilder ConfigureSqlite(this DbContextOptionsBuilder option, string connectionString)
 		=> option.UseSqlite(connectionString, i => i.MigrationsAssembly(typeof(Extensions).Assembly.GetName().FullName));
+
+		public static DbContextOptionsBuilder ConfigureSqlite(this DbContextOptionsBuilder option, SqliteConnection connection)
+			=> option.UseSqlite(connection, i => i.MigrationsAssembly(typeof(Extensions).Assembly.GetName().FullName));
 	}
 }

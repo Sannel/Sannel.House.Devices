@@ -69,9 +69,9 @@ namespace Sannel.House.Devices.Tests
 		public DevicesDbContext GetTestDB(SqliteConnection connection)
 		{
 			var d = new DbContextOptionsBuilder();
-			d.UseSqlite(connection);
+			d.ConfigureSqlite(connection);
 
-			var context = new SqliteDbContext(d.Options);
+			var context = new DevicesDbContext(d.Options);
 			context.Database.Migrate();
 			return context;
 		}
