@@ -8,7 +8,10 @@ services:
         aliases:
           - "users.house.dev.local"
     ports:
-      - "443:443"
+      - "80:80"
+    volumes:
+      - "./RunData/users/app_config:c:/app/app_config"
+      - "./RunData/users/app_data:c:/app/app_data"
 
   tests:
     image: ${DOCKER_REGISTRY}sannelhousedevices:tests-${SANNEL_ARCH}
@@ -31,6 +34,9 @@ services:
       - housenet
     ports:
       - "8443:443"
+    volumes:
+      - "./src/Sannel.House.Devices/app_config:c:/app/app_config"
+      - "./src/Sannel.House.Devices/app_data:c:/app/app_data"
     depends_on:
       - users
 

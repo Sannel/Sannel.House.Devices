@@ -48,7 +48,7 @@ namespace Sannel.House.Devices.Controllers
 		/// </summary>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		[HttpGet("{id}")]
+		[HttpGet("{deviceId}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
 		public async Task<ActionResult<IEnumerable<AlternateDeviceId>>> Get(int deviceId)
 		{
@@ -75,7 +75,7 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="macAddress">The mac address.</param>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		[HttpPost("{macAddress}/{deviceId}")]
+		[HttpPost("mac/{macAddress}/{deviceId}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
 		public async Task<ActionResult<Device>> Post(long macAddress, int deviceId)
 		{
@@ -115,7 +115,7 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="uuid">The UUID.</param>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		[HttpPost("{uuid}/{deviceId}")]
+		[HttpPost("uuid/{uuid}/{deviceId}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
 		public async Task<ActionResult<Device>> Post(Guid uuid, int deviceId)
 		{

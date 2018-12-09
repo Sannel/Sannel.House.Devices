@@ -113,7 +113,7 @@ namespace Sannel.House.Devices.Controllers
 		/// </summary>
 		/// <param name="macAddress">The mac address.</param>
 		/// <returns></returns>
-		[HttpGet("{macAddress}")]
+		[HttpGet("GetByMac/{macAddress}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
 		public async Task<ActionResult<Device>> GetByAltId(long macAddress)
 		{
@@ -140,7 +140,7 @@ namespace Sannel.House.Devices.Controllers
 		/// </summary>
 		/// <param name="uuid">The UUID.</param>
 		/// <returns></returns>
-		[HttpGet("{uuid}")]
+		[HttpGet("GetByUuid/{uuid}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
 		public async Task<ActionResult<Device>> GetByAltId(Guid uuid)
 		{

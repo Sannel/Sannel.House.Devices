@@ -282,13 +282,8 @@ namespace Sannel.House.Devices.Repositories
 				return null;
 			}
 
-			return await Task.Run(() =>
-			{
-				var alternateIds = context.AlternateDeviceIds.Include(i => i.Device)
-					.AsNoTracking().Where(i => i.DeviceId == deviceId);
-
-				return alternateIds;
-			});
+			return await Task.Run(() => context.AlternateDeviceIds
+					.AsNoTracking().Where(i => i.DeviceId == deviceId));
 		}
 	}
 }
