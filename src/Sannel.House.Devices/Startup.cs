@@ -123,7 +123,7 @@ namespace Sannel.House.Devices
 				}
 			}
 
-			//db.Database.Migrate();
+			db.Database.Migrate();
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
