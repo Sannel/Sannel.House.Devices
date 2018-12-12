@@ -47,14 +47,6 @@ namespace Sannel.House.Devices
 		{
 			var root = (ConfigurationRoot)configuration;
 
-			foreach(var p in root.Providers)
-			{
-				if(p is JsonConfigurationProvider j)
-				{
-					Console.WriteLine(Path.Combine(((PhysicalFileProvider)j.Source.FileProvider).Root, j.Source.Path));
-				}
-			}
-
 			Configuration = configuration;
 		}
 
