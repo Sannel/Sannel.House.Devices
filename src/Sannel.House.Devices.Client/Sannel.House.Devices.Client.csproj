@@ -3,6 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Sannel.House.Devices</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Sannel.House.Devices.Client</PackageId>
+    <AssemblyVersion>$(Major).$(Minor).$(Patch).0</AssemblyVersion>
+    <FileVersion>$(Major).$(Minor).$(Patch).0</FileVersion>
+	<Version>$(Major).$(Minor).$(Patch)</Version>
+	<Authors>Adam Holt</Authors>
+	<Company>Sannel Software, L.L.C.</Company>
+	<Copyright></Copyright>
+	<PackageLicenseUrl>https://github.com/Sannel/Sannel.House.Devices/blob/develop/LICENSE</PackageLicenseUrl>
+	<PackageProjectUrl>https://github.com/Sannel/Sannel.House.Devices</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/Sannel/Sannel.House.Devices</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

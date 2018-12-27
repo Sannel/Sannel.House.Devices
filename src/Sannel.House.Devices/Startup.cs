@@ -38,6 +38,7 @@ using Sannel.House.Devices.Repositories;
 using System.Net;
 using System.Net.Security;
 using System.Net.Http;
+using NSwag.AspNetCore;
 
 namespace Sannel.House.Devices
 {
@@ -91,6 +92,8 @@ namespace Sannel.House.Devices
 #endif
 						});
 
+			services.AddSwaggerDocument();
+
 			services.AddHealthChecks()
 				.AddDbHealthCheck<DevicesDbContext>("DbHealthCheck", async (context) =>
 				{
@@ -125,6 +128,10 @@ namespace Sannel.House.Devices
 
 			app.UseAuthentication();
 			app.UseHttpsRedirection();
+
+			app.UseSwagger();
+			app.UseSwaggerUi3();
+
 			app.UseMvc();
 
 		}
