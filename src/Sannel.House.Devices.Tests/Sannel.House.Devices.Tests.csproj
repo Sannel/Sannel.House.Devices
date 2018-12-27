@@ -7,11 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Client\**" />
+    <EmbeddedResource Remove="Client\**" />
+    <None Remove="Client\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="coverage.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="altcover" Version="4.0.659" />
+    <PackageReference Include="altcover" Version="4.0.661" />
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.0" />
@@ -19,6 +25,9 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="Moq" Version="4.10.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.4" />
+    <PackageReference Include="Sannel.House.Client" Version="1812.24.0-beta" />
+    <PackageReference Include="Sannel.House.Models" Version="1812.24.0-beta" />
+    <PackageReference Include="Sannel.House.Web" Version="1812.24.0-beta" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
@@ -28,6 +37,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Migrations\Sannel.House.Devices.Data.Migrations.Sqlite\Sannel.House.Devices.Data.Migrations.Sqlite.csproj" />
+    <ProjectReference Include="..\Sannel.House.Devices.Client\Sannel.House.Devices.Client.csproj" />
     <ProjectReference Include="..\Sannel.House.Devices.Data\Sannel.House.Devices.Data.csproj" />
     <ProjectReference Include="..\Sannel.House.Devices.Interfaces\Sannel.House.Devices.Interfaces.csproj" />
     <ProjectReference Include="..\Sannel.House.Devices.Models\Sannel.House.Devices.Models.csproj" />

@@ -12,12 +12,15 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
+using Sannel.House.Models;
+using Sannel.House.Web;
 
 namespace Sannel.House.Devices.Controllers
 {
@@ -42,7 +45,9 @@ namespace Sannel.House.Devices.Controllers
 		/// <returns></returns>
 		[HttpGet("GetPaged")]
 		[Authorize(Roles = "DeviceRead,Admin")]
-		public Task<ActionResult<PagedResults<Device>>> GetPaged() 
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		public Task<ActionResult<PagedResponseModel<Device>>> GetPaged() 
 			=> GetPaged(1, 25);
 
 		/// <summary>
@@ -52,7 +57,9 @@ namespace Sannel.House.Devices.Controllers
 		/// <returns></returns>
 		[HttpGet("GetPaged/{pageIndex}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
-		public Task<ActionResult<PagedResults<Device>>> GetPaged(int pageIndex) 
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		public Task<ActionResult<PagedResponseModel<Device>>> GetPaged(int pageIndex) 
 			=> GetPaged(pageIndex, 25);
 
 		/// <summary>
@@ -63,22 +70,24 @@ namespace Sannel.House.Devices.Controllers
 		/// <returns></returns>
 		[HttpGet("GetPaged/{pageIndex}/{pageSize}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
-		public async Task<ActionResult<PagedResults<Device>>> GetPaged(int pageIndex, int pageSize)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		public async Task<ActionResult<PagedResponseModel<Device>>> GetPaged(int pageIndex, int pageSize)
 		{
-			if(pageIndex < 1)
+			if(pageIndex < 0)
 			{
 				logger.LogError("GetPaged pageIndex invalid {0}", pageIndex);
-				return BadRequest(new ErrorModel(nameof(pageIndex), "Page Index must be 1 or greater"));
+				return BadRequest(new ErrorResponseModel("Invalid Page Index", nameof(pageIndex), "Page Index must be 0 or greater"));
 			}
 			if(pageSize < 2)
 			{
 				logger.LogError("GetPaged pageSize invalid {0}", pageSize);
-				return BadRequest(new ErrorModel(nameof(pageSize), "Page Size must be greater then 2"));
+				return BadRequest(new ErrorResponseModel("Invalid Page Size", nameof(pageSize), "Page Size must be greater then 2"));
 			}
 
 			logger.LogDebug("GetPaged pageIndex: {0} pageSize {1}", pageIndex, pageSize);
 
-			return Ok(await repo.GetDevicesListAsync(pageIndex, pageSize));
+			return Ok(new PagedResponseModel<Device>("Paged Results", await repo.GetDevicesListAsync(pageIndex, pageSize)));
 		}
 
 		/// <summary>
@@ -88,24 +97,27 @@ namespace Sannel.House.Devices.Controllers
 		/// <returns></returns>
 		[HttpGet("{deviceId}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
-		public async Task<ActionResult<Device>> Get(int deviceId)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<ResponseModel<Device>>> Get(int deviceId)
 		{
 			if(deviceId < 0)
 			{
 				logger.LogError("Get: Invalid deviceId {0}", deviceId);
-				return BadRequest(new ErrorModel(nameof(deviceId), "Device Id must be geater then or equal to 0"));
+				return BadRequest(new ErrorResponseModel("Invalid Device Id", nameof(deviceId), "Device Id must be greater then or equal to 0"));
 			}
 
 			var device = await repo.GetDeviceByIdAsync(deviceId);
 			if(device == null)
 			{
 				logger.LogDebug("Device with id {0} not found", deviceId);
-				return NotFound(new ErrorModel("device", "Device Not Found"));
+				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "device", "Device Not Found"));
 			}
 
 			logger.LogDebug("Device with id {0} was found", deviceId);
 
-			return Ok(device);
+			return Ok(new ResponseModel<Device>("The Device", device));
 		}
 
 		/// <summary>
@@ -115,24 +127,27 @@ namespace Sannel.House.Devices.Controllers
 		/// <returns></returns>
 		[HttpGet("GetByMac/{macAddress}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
-		public async Task<ActionResult<Device>> GetByAltId(long macAddress)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<ResponseModel<Device>>> GetByAltId(long macAddress)
 		{
 			if(macAddress < 0)
 			{
 				logger.LogError("Get: Invalid macAddress {0}", macAddress);
-				return BadRequest(new ErrorModel(nameof(macAddress), "Mac Address must be geater then or equal to 0"));
+				return BadRequest(new ErrorResponseModel("Invalid Mac Address", nameof(macAddress), "Mac Address must be greater then or equal to 0"));
 			}
 
 			var device = await repo.GetDeviceByMacAddressAsync(macAddress);
 			if(device == null)
 			{
 				logger.LogDebug("Device with macAddress {0} not found", macAddress);
-				return NotFound(new ErrorModel("device", "Device Not Found"));
+				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "device", "Device Not Found"));
 			}
 
 			logger.LogDebug("Device with macAddress {0} was found", macAddress);
 
-			return Ok(device);
+			return Ok(new ResponseModel<Device>("The Device", device));
 		}
 
 		/// <summary>
@@ -142,24 +157,27 @@ namespace Sannel.House.Devices.Controllers
 		/// <returns></returns>
 		[HttpGet("GetByUuid/{uuid}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
-		public async Task<ActionResult<Device>> GetByAltId(Guid uuid)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<ResponseModel<Device>>> GetByAltId(Guid uuid)
 		{
 			if(Guid.Empty == uuid)
 			{
 				logger.LogError("Get: Invalid Uuid {0}", uuid);
-				return BadRequest(new ErrorModel(nameof(uuid), $"Uuid cannot be Empty {Guid.Empty}"));
+				return BadRequest(new ErrorResponseModel("Invalid Uuid", nameof(uuid), $"Uuid cannot be Empty {Guid.Empty}"));
 			}
 
 			var device = await repo.GetDeviceByUuidAsync(uuid);
 			if(device == null)
 			{
 				logger.LogDebug("Device with Uuid {0} not found", uuid);
-				return NotFound(new ErrorModel("device", "Device Not Found"));
+				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "device", "Device Not Found"));
 			}
 
 			logger.LogDebug("Device with Uuid {0} was found", uuid);
 
-			return Ok(device);
+			return Ok(new ResponseModel<Device>("The Device", device));
 		}
 
 		/// <summary>
@@ -169,12 +187,14 @@ namespace Sannel.House.Devices.Controllers
 		/// <returns></returns>
 		[HttpPost]
 		[Authorize(Roles = "DeviceWrite,Admin")]
-		public async Task<ActionResult<int>> Post([FromBody]Device device)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		public async Task<ActionResult<ResponseModel<int>>> Post([FromBody]Device device)
 		{
 			if(device == null)
 			{
 				logger.LogError("Post: device is null");
-				return BadRequest(new ErrorModel(nameof(device), "No device info provided"));
+				return BadRequest(new ErrorResponseModel("Invalid Device Object", nameof(device), "No device info provided"));
 			}
 
 			if(ModelState.IsValid)
@@ -182,34 +202,37 @@ namespace Sannel.House.Devices.Controllers
 				logger.LogDebug("Post: adding new device '{0}'", device.Name);
 				device.DeviceId = 0;
 				var d = await repo.AddDeviceAsync(device);
-				return Ok(d.DeviceId);
+				return Ok(new ResponseModel<int>("The Device Id", d.DeviceId));
 			}
 			else
 			{
 				logger.LogInformation("Post: Invalid Model");
-				return BadRequest(new ErrorModel(ModelState));
+				return BadRequest(new ErrorResponseModel(HttpStatusCode.BadRequest, "Invalid Model").FillWithStateDictionary( ModelState));
 			}
 		}
 
 		/// <summary>
-		/// Updateds the provided device.
+		/// Updates the provided device.
 		/// </summary>
 		/// <param name="device">The device.</param>
 		/// <returns></returns>
 		[HttpPut]
 		[Authorize(Roles = "DeviceWrite,Admin")]
-		public async Task<ActionResult<int>> Put([FromBody]Device device)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<ResponseModel<int>>> Put([FromBody]Device device)
 		{
 			if(device == null)
 			{
 				logger.LogError("Put: No device passed");
-				return BadRequest(new ErrorModel(nameof(device), "No device info provided"));
+				return BadRequest(new ErrorResponseModel("Invalid Device Object", nameof(device), "No device info provided"));
 			}
 
 			if(device.DeviceId < 0)
 			{
 				logger.LogError("Put: Invalid deviceId {0}", device.DeviceId);
-				return BadRequest(new ErrorModel(nameof(device.DeviceId), "Device Id must be 0 or greater"));
+				return BadRequest(new ErrorResponseModel("Invalid Device Id", nameof(device.DeviceId), "Device Id must be 0 or greater"));
 			}
 
 			if(ModelState.IsValid)
@@ -221,22 +244,22 @@ namespace Sannel.House.Devices.Controllers
 					if(d == null)
 					{
 						logger.LogDebug("Put: Device {0} was not found", device.DeviceId);
-						return NotFound(new ErrorModel("notfound", "Device not found to update"));
+						return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "notfound", "Device not found to update"));
 					}
 
 					logger.LogDebug("Put: Updated device {0}", device.DeviceId);
-					return Ok(d.DeviceId);
+					return Ok(new ResponseModel<int>("Device Id",d.DeviceId));
 				}
 				catch(ReadOnlyException roe)
 				{
-					logger.LogError(roe, "Put: Device {0} is readonly", device.DeviceId);
-					return BadRequest(new ErrorModel("readonly", "Device is readonly and cannot be updated."));
+					logger.LogError(roe, "Put: Device {0} is read-only", device.DeviceId);
+					return BadRequest(new ErrorResponseModel("Device is Read-only", "readonly", "Device is read-only and cannot be updated."));
 				}
 			}
 			else
 			{
 				logger.LogInformation("Put: Invalid device passed");
-				return BadRequest(new ErrorModel(ModelState));
+				return BadRequest(new ErrorResponseModel(HttpStatusCode.BadRequest, "Invalid Device Object").FillWithStateDictionary(ModelState));
 			}
 		}
 

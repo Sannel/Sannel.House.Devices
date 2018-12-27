@@ -17,6 +17,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sannel.House.Web;
+using Sannel.House.Models;
+using System.Net;
 
 namespace Sannel.House.Devices.Controllers
 {
@@ -50,12 +53,15 @@ namespace Sannel.House.Devices.Controllers
 		/// <returns></returns>
 		[HttpGet("{deviceId}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
-		public async Task<ActionResult<IEnumerable<AlternateDeviceId>>> Get(int deviceId)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<ResponseModel<IEnumerable<AlternateDeviceId>>>> Get(int deviceId)
 		{
 			if(deviceId < 0)
 			{
 				logger.LogError("Invalid device id({0}) passed in.", deviceId);
-				return BadRequest(new ErrorModel("deviceId", "Device Id must be greater then or equal to 0"));
+				return BadRequest(new ErrorResponseModel("Invalid DeviceId", "deviceId", "Device Id must be greater then or equal to 0"));
 			}
 
 			var list = await repo.GetAlternateIdsForDeviceAsync(deviceId);
@@ -63,10 +69,10 @@ namespace Sannel.House.Devices.Controllers
 			if(list == null)
 			{
 				logger.LogDebug("Device with Id {0} not found", deviceId);
-				return NotFound(new ErrorModel("device", "Device not found"));
+				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "device", "Device not found"));
 			}
 
-			return Ok(list);
+			return Ok(new ResponseModel<IEnumerable<AlternateDeviceId>>("Alternate Ids", list));
 		}
 
 		/// <summary>
@@ -77,18 +83,21 @@ namespace Sannel.House.Devices.Controllers
 		/// <returns></returns>
 		[HttpPost("mac/{macAddress}/{deviceId}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
-		public async Task<ActionResult<Device>> Post(long macAddress, int deviceId)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<ResponseModel<Device>>> Post(long macAddress, int deviceId)
 		{
 			if(macAddress < 0)
 			{
 				logger.LogError("Invalid macAddress passed {0}", macAddress);
-				return BadRequest(new ErrorModel("macAddress", "Invalid MacAddress it must be greater then or equal to 0"));
+				return BadRequest(new ErrorResponseModel("Invalid Mac Address", "macAddress", "Invalid MacAddress it must be greater then or equal to 0"));
 			}
 
 			if(deviceId < 0)
 			{
 				logger.LogError("Invalid device id({0}) passed in.", deviceId);
-				return BadRequest(new ErrorModel("deviceId", "Device Id must be greater then or equal to 0"));
+				return BadRequest(new ErrorResponseModel("Invalid Device Id", "deviceId", "Device Id must be greater then or equal to 0"));
 			}
 
 			try
@@ -97,15 +106,15 @@ namespace Sannel.House.Devices.Controllers
 				if(device == null)
 				{
 					logger.LogDebug("No device found with id {0}", deviceId);
-					return NotFound(new ErrorModel("notFound", "No device found with that id"));
+					return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "notFound", "No device found with that id"));
 				}
 
-				return Ok(device);
+				return Ok(new ResponseModel<Device>("Device", device));
 			}
 			catch(AlternateDeviceIdException aIdException)
 			{
 				logger.LogError(aIdException, "Alternate Device Id Exception");
-				return BadRequest(new ErrorModel("macAddress", "That mac address is already connected to a device"));
+				return BadRequest(new ErrorResponseModel("Mac Address Already Connected", "macAddress", "That mac address is already connected to a device"));
 			}
 		}
 
@@ -117,18 +126,21 @@ namespace Sannel.House.Devices.Controllers
 		/// <returns></returns>
 		[HttpPost("uuid/{uuid}/{deviceId}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
-		public async Task<ActionResult<Device>> Post(Guid uuid, int deviceId)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<ResponseModel<Device>>> Post(Guid uuid, int deviceId)
 		{
 			if(uuid == Guid.Empty)
 			{
 				logger.LogError("Empty Guid passed in for Uuid");
-				return BadRequest(new ErrorModel("uuid", "Uuid must be a valid Guid and not Guid.Empty"));
+				return BadRequest(new ErrorResponseModel("Guid is Empty","uuid", "Uuid must be a valid Guid and not Guid.Empty"));
 			}
 
 			if(deviceId < 0)
 			{
 				logger.LogError("Invalid device id({0}) passed in.", deviceId);
-				return BadRequest(new ErrorModel("deviceId", "Device Id must be greater then or equal to 0"));
+				return BadRequest(new ErrorResponseModel("Invalid Device Id", "deviceId", "Device Id must be greater then or equal to 0"));
 			}
 
 			try
@@ -137,15 +149,15 @@ namespace Sannel.House.Devices.Controllers
 				if(device == null)
 				{
 					logger.LogDebug("No device found with id {0}", deviceId);
-					return NotFound(new ErrorModel("notFound", "No device found with that id"));
+					return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "notFound", "No device found with that id"));
 				}
 
-				return Ok(device);
+				return Ok(new ResponseModel<Device>("Device", device));
 			}
 			catch(AlternateDeviceIdException aIdException)
 			{
 				logger.LogError(aIdException, "Alternate Device Id Exception");
-				return BadRequest(new ErrorModel("uuid", "That Uuid is already connected to a device"));
+				return BadRequest(new ErrorResponseModel("Uuid Already Connected", "uuid", "That Uuid is already connected to a device"));
 			}
 		}
 
@@ -156,22 +168,25 @@ namespace Sannel.House.Devices.Controllers
 		/// <returns></returns>
 		[HttpDelete("{macAddress}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
-		public async Task<ActionResult<Device>> Delete(long macAddress)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<ResponseModel<Device>>> Delete(long macAddress)
 		{
 			if(macAddress < 0)
 			{
 				logger.LogError("Invalid macAddress passed {0}", macAddress);
-				return BadRequest(new ErrorModel("macAddress", "Invalid MacAddress it must be greater then or equal to 0"));
+				return BadRequest(new ErrorResponseModel("Invalid Mac Address","macAddress", "Invalid MacAddress it must be greater then or equal to 0"));
 			}
 
 			var device = await repo.RemoveAlternateMacAddressAsync(macAddress);
 			if(device == null)
 			{
 				logger.LogDebug("No Mac Address found with id {0}", macAddress);
-				return NotFound(new ErrorModel("macAddress", "Mac Address not found"));
+				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound,"Mac Address Not Found","macAddress", "Mac Address not found"));
 			}
 
-			return Ok(device);
+			return Ok(new ResponseModel<Device>("Device",device));
 		}
 
 		/// <summary>
@@ -181,22 +196,25 @@ namespace Sannel.House.Devices.Controllers
 		/// <returns></returns>
 		[HttpDelete("{uuid}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
-		public async Task<ActionResult<Device>> Delete(Guid uuid)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<ResponseModel<Device>>> Delete(Guid uuid)
 		{
 			if(uuid == Guid.Empty)
 			{
 				logger.LogError("Empty Guid passed in for Uuid");
-				return BadRequest(new ErrorModel("uuid", "Uuid must be a valid Guid and not Guid.Empty"));
+				return BadRequest(new ErrorResponseModel("Uuid is Empty","uuid", "Uuid must be a valid Guid and not Guid.Empty"));
 			}
 
 			var device = await repo.RemoveAlternateUuidAsync(uuid);
 			if(device == null)
 			{
 				logger.LogDebug("Uuid not found {0}", uuid);
-				return NotFound(new ErrorModel("uuid", "Uuid not found"));
+				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound,"Uuid Not Found","uuid", "Uuid not found"));
 			}
 
-			return Ok(device);
+			return Ok(new ResponseModel<Device>("Device", device));
 		}
 
 	}

@@ -73,7 +73,7 @@ namespace Sannel.House.Devices.Repositories
 				TotalCount = context.Devices.LongCount(),
 				Data = context.Devices.AsNoTracking()
 							.OrderBy(i => i.DisplayOrder)
-							.Skip((pageIndex - 1) * pageSize)
+							.Skip(pageIndex * pageSize)
 							.Take(pageSize)
 			});
 

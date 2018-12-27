@@ -70,11 +70,11 @@ namespace Sannel.House.Devices.Tests.Repositories
 					await context.SaveChangesAsync();
 
 					var repository = new DbContextRepository(context);
-					var result = await repository.GetDevicesListAsync(1, 3);
+					var result = await repository.GetDevicesListAsync(0, 3);
 					Assert.NotNull(result);
 					Assert.NotEmpty(result.Data);
 					Assert.Equal(3, result.TotalCount);
-					Assert.Equal(1, result.Page);
+					Assert.Equal(0, result.Page);
 					Assert.Equal(3, result.PageSize);
 					var list = result.Data.ToList();
 					var device = list[0];
@@ -84,12 +84,12 @@ namespace Sannel.House.Devices.Tests.Repositories
 					device = list[2];
 					AssertEqual(device3, device);
 
-					result = await repository.GetDevicesListAsync(1, 2);
+					result = await repository.GetDevicesListAsync(0, 2);
 					Assert.NotNull(result);
 					Assert.NotEmpty(result.Data);
 					Assert.Equal(2, result.Data.Count());
 					Assert.Equal(3, result.TotalCount);
-					Assert.Equal(1, result.Page);
+					Assert.Equal(0, result.Page);
 					Assert.Equal(2, result.PageSize);
 					list = result.Data.ToList();
 					device = list[0];
@@ -97,12 +97,12 @@ namespace Sannel.House.Devices.Tests.Repositories
 					device = list[1];
 					AssertEqual(device1, device);
 
-					result = await repository.GetDevicesListAsync(2, 2);
+					result = await repository.GetDevicesListAsync(1, 2);
 					Assert.NotNull(result);
 					Assert.NotEmpty(result.Data);
 					Assert.Single(result.Data);
 					Assert.Equal(3, result.TotalCount);
-					Assert.Equal(2, result.Page);
+					Assert.Equal(1, result.Page);
 					Assert.Equal(2, result.PageSize);
 					list = result.Data.ToList();
 					device = list[0];

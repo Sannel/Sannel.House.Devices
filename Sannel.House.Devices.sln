@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.Devices.Data.M
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1B3AE4C4-80B2-408B-A13A-1AD3D9210BC1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Devices.Client", "src\Sannel.House.Devices.Client\Sannel.House.Devices.Client.csproj", "{23871C57-D344-4A5A-B8DF-49DC628EC006}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{1B3AE4C4-80B2-408B-A13A-1AD3D9210BC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B3AE4C4-80B2-408B-A13A-1AD3D9210BC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B3AE4C4-80B2-408B-A13A-1AD3D9210BC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23871C57-D344-4A5A-B8DF-49DC628EC006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23871C57-D344-4A5A-B8DF-49DC628EC006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23871C57-D344-4A5A-B8DF-49DC628EC006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23871C57-D344-4A5A-B8DF-49DC628EC006}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
