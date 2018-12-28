@@ -42,7 +42,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 			var repo = new Mock<IDeviceRepository>();
 			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
 			{
-				repo.Setup(i => i.GetDevicesListAsync(1, 25))
+				repo.Setup(i => i.GetDevicesListAsync(0, 25))
 					.ReturnsAsync(new PagedResults<Device>()
 				{
 					Data = new List<Device>(),

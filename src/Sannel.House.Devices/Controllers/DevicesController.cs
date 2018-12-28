@@ -48,7 +48,7 @@ namespace Sannel.House.Devices.Controllers
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		public Task<ActionResult<PagedResponseModel<Device>>> GetPaged() 
-			=> GetPaged(1, 25);
+			=> GetPaged(0, 25);
 
 		/// <summary>
 		/// Gets a list of 25 devices based on the index passed in by <paramref name="pageIndex"/>
