@@ -14,7 +14,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
+#if CLIENT
+namespace Sannel.House.Devices.Client
+#else
 namespace Sannel.House.Devices.Models
+#endif
 {
 	public class Device
 	{

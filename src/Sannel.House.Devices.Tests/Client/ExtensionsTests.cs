@@ -17,6 +17,7 @@ using Xunit;
 using Moq;
 using Microsoft.AspNetCore.Http;
 using Sannel.House.Client;
+using Sannel.House.Devices.Client;
 
 namespace Sannel.House.Devices.Tests.Client
 {
@@ -44,7 +45,7 @@ namespace Sannel.House.Devices.Tests.Client
 			if(httpClient.DefaultRequestHeaders.TryGetValues("User-Agent", out var h))
 			{
 				var cs = string.Join(' ', h);
-				Assert.Equal("Devices Client Library", cs);
+				Assert.Equal("DevicesClient/1.0", cs);
 			}
 			else
 			{
@@ -52,7 +53,7 @@ namespace Sannel.House.Devices.Tests.Client
 			}
 		}
 
-		[Fact]
+		/*[Fact]
 		public void AddDevicesSDKRegistrationTest()
 		{
 			var service = new ServiceCollection();
@@ -82,6 +83,6 @@ namespace Sannel.House.Devices.Tests.Client
 			m.Invoke(client, new[] { args });
 			Assert.True(args.CacheToken);
 			Assert.Equal("test", args.Token);
-		}
+		}*/
 	}
 }

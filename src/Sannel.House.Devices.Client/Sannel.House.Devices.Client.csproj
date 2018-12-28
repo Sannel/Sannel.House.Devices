@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Sannel.House.Devices</RootNamespace>
+    <RootNamespace>Sannel.House.Devices.Client</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Sannel.House.Devices.Client</PackageId>
     <AssemblyVersion>$(Major).$(Minor).$(Patch).0</AssemblyVersion>
@@ -16,8 +16,23 @@
 	<RepositoryUrl>https://github.com/Sannel/Sannel.House.Devices</RepositoryUrl>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;CLIENT</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;CLIENT</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
+    <Compile Include="..\Sannel.House.Devices.Models\AlternateDeviceId.cs" Link="AlternateDeviceId.cs" />
+    <Compile Include="..\Sannel.House.Devices.Models\Device.cs" Link="Device.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="Sannel.House.Client" Version="1812.27.0-beta" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
 
