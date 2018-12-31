@@ -166,7 +166,7 @@ namespace Sannel.House.Devices.Controllers
 		/// </summary>
 		/// <param name="macAddress">The mac address.</param>
 		/// <returns></returns>
-		[HttpDelete("{macAddress}")]
+		[HttpDelete("mac/{macAddress}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
@@ -194,7 +194,7 @@ namespace Sannel.House.Devices.Controllers
 		/// </summary>
 		/// <param name="uuid">The UUID.</param>
 		/// <returns></returns>
-		[HttpDelete("{uuid}")]
+		[HttpDelete("uuid/{uuid}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]

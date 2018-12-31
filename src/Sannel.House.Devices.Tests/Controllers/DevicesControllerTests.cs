@@ -209,7 +209,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 			{
 
 
-				var result = await controller.GetByAltId(-1);
+				var result = await controller.GetByMacAddress(-1);
 				var bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
 				var em = Assert.IsAssignableFrom<ErrorResponseModel>(bror.Value);
 				Assert.Single(em.Errors);
@@ -221,7 +221,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 
 				repo.Setup(i => i.GetDeviceByMacAddressAsync(0)).ReturnsAsync((Device)null);
 
-				result = await controller.GetByAltId(0);
+				result = await controller.GetByMacAddress(0);
 				var nfor = Assert.IsAssignableFrom<NotFoundObjectResult>(result.Result);
 				em = Assert.IsAssignableFrom<ErrorResponseModel>(nfor.Value);
 				first = em.Errors.First();
@@ -243,7 +243,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 				repo.Setup(i => i.GetDeviceByMacAddressAsync(20))
 					.ReturnsAsync(device);
 
-				result = await controller.GetByAltId(20);
+				result = await controller.GetByMacAddress(20);
 				var oor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
 				Assert.NotNull(oor.Value);
 				var actual = Assert.IsAssignableFrom<ResponseModel<Device>>(oor.Value);
@@ -261,7 +261,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 			{
 
 
-				var result = await controller.GetByAltId(Guid.Empty);
+				var result = await controller.GetByUuid(Guid.Empty);
 				var bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
 				var em = Assert.IsAssignableFrom<ErrorResponseModel>(bror.Value);
 				Assert.Single(em.Errors);
@@ -275,7 +275,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 
 				repo.Setup(i => i.GetDeviceByUuidAsync(guid1)).ReturnsAsync((Device)null);
 
-				result = await controller.GetByAltId(guid1);
+				result = await controller.GetByUuid(guid1);
 				var nfor = Assert.IsAssignableFrom<NotFoundObjectResult>(result.Result);
 				em = Assert.IsAssignableFrom<ErrorResponseModel>(nfor.Value);
 				first = em.Errors.First();
@@ -299,7 +299,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 				repo.Setup(i => i.GetDeviceByUuidAsync(guid1))
 					.ReturnsAsync(device);
 
-				result = await controller.GetByAltId(guid1);
+				result = await controller.GetByUuid(guid1);
 				var oor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
 				Assert.NotNull(oor.Value);
 				var actual = Assert.IsAssignableFrom<ResponseModel<Device>>(oor.Value);

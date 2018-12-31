@@ -130,7 +130,7 @@ namespace Sannel.House.Devices.Controllers
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
-		public async Task<ActionResult<ResponseModel<Device>>> GetByAltId(long macAddress)
+		public async Task<ActionResult<ResponseModel<Device>>> GetByMacAddress(long macAddress)
 		{
 			if(macAddress < 0)
 			{
@@ -160,7 +160,7 @@ namespace Sannel.House.Devices.Controllers
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
-		public async Task<ActionResult<ResponseModel<Device>>> GetByAltId(Guid uuid)
+		public async Task<ActionResult<ResponseModel<Device>>> GetByUuid(Guid uuid)
 		{
 			if(Guid.Empty == uuid)
 			{
