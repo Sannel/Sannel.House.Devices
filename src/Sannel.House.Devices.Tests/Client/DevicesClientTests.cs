@@ -1,4 +1,4 @@
-/* Copyright 2018 Sannel Software, L.L.C.
+/* Copyright 2019 Sannel Software, L.L.C.
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -65,7 +65,7 @@ namespace Sannel.House.Devices.Tests.Client
 			""name"": ""Default Device"",
 			""description"": ""Default Device used for unknown devices"",
 			""displayOrder"": 1,
-			""dateCreated"": ""2018-12-09T21:15:00"",
+			""dateCreated"": ""2019-12-09T21:15:00"",
 			""isReadOnly"": true
 		},
 		{
@@ -73,7 +73,7 @@ namespace Sannel.House.Devices.Tests.Client
 			""name"": ""Default Device 2"",
 			""description"": ""Default Device used for unknown devices"",
 			""displayOrder"": 2,
-			""dateCreated"": ""2018-12-09T21:15:00"",
+			""dateCreated"": ""2019-12-09T21:15:00"",
 			""isReadOnly"": true
 		}
 	],
@@ -173,7 +173,7 @@ namespace Sannel.House.Devices.Tests.Client
 			""name"": ""Default Device"",
 			""description"": ""Default Device used for unknown devices"",
 			""displayOrder"": 1,
-			""dateCreated"": ""2018-12-09T21:15:00"",
+			""dateCreated"": ""2019-12-09T21:15:00"",
 			""isReadOnly"": true
 		},
 		{
@@ -181,7 +181,7 @@ namespace Sannel.House.Devices.Tests.Client
 			""name"": ""Default Device 2"",
 			""description"": ""Default Device used for unknown devices"",
 			""displayOrder"": 2,
-			""dateCreated"": ""2018-12-09T21:15:00"",
+			""dateCreated"": ""2019-12-09T21:15:00"",
 			""isReadOnly"": true
 		}
 	],
@@ -237,7 +237,7 @@ namespace Sannel.House.Devices.Tests.Client
 		""name"": ""Default Device"",
 		""description"": ""Default Device used for unknown devices"",
 		""displayOrder"": 1,
-		""dateCreated"": ""2018-12-09T21:15:00"",
+		""dateCreated"": ""2019-12-09T21:15:00"",
 		""isReadOnly"": true
 
 	},
@@ -256,7 +256,7 @@ namespace Sannel.House.Devices.Tests.Client
 			Assert.Equal("Default Device", result.Data.Name);
 			Assert.Equal("Default Device used for unknown devices", result.Data.Description);
 			Assert.Equal(1, result.Data.DisplayOrder);
-			Assert.Equal(new DateTime(2018, 12, 09, 21, 15, 0, DateTimeKind.Utc), result.Data.DateCreated);
+			Assert.Equal(new DateTime(2019, 12, 09, 21, 15, 0, DateTimeKind.Utc), result.Data.DateCreated);
 			Assert.True(result.Data.IsReadOnly, "Device is not makred read only");
 
 		}
@@ -299,7 +299,7 @@ namespace Sannel.House.Devices.Tests.Client
 		""name"": ""Default Device"",
 		""description"": ""Default Device used for unknown devices"",
 		""displayOrder"": 1,
-		""dateCreated"": ""2018-12-09T21:15:00"",
+		""dateCreated"": ""2019-12-09T21:15:00"",
 		""isReadOnly"": true
 
 	},
@@ -356,7 +356,7 @@ namespace Sannel.House.Devices.Tests.Client
 		""name"": ""Default Device"",
 		""description"": ""Default Device used for unknown devices"",
 		""displayOrder"": 1,
-		""dateCreated"": ""2018-12-09T21:15:00"",
+		""dateCreated"": ""2019-12-09T21:15:00"",
 		""isReadOnly"": true
 
 	},
@@ -375,7 +375,7 @@ namespace Sannel.House.Devices.Tests.Client
 			Assert.Equal("Default Device", result.Data.Name);
 			Assert.Equal("Default Device used for unknown devices", result.Data.Description);
 			Assert.Equal(1, result.Data.DisplayOrder);
-			Assert.Equal(new DateTime(2018, 12, 09, 21, 15, 0, DateTimeKind.Utc), result.Data.DateCreated);
+			Assert.Equal(new DateTime(2019, 12, 09, 21, 15, 0, DateTimeKind.Utc), result.Data.DateCreated);
 			Assert.True(result.Data.IsReadOnly, "Device is not makred read only");
 
 		}
@@ -418,7 +418,7 @@ namespace Sannel.House.Devices.Tests.Client
 		""name"": ""Default Device"",
 		""description"": ""Default Device used for unknown devices"",
 		""displayOrder"": 1,
-		""dateCreated"": ""2018-12-09T21:15:00"",
+		""dateCreated"": ""2019-12-09T21:15:00"",
 		""isReadOnly"": true
 
 	},
@@ -475,7 +475,7 @@ namespace Sannel.House.Devices.Tests.Client
 		""name"": ""Default Device"",
 		""description"": ""Default Device used for unknown devices"",
 		""displayOrder"": 1,
-		""dateCreated"": ""2018-12-09T21:15:00"",
+		""dateCreated"": ""2019-12-09T21:15:00"",
 		""isReadOnly"": true
 
 	},
@@ -494,7 +494,7 @@ namespace Sannel.House.Devices.Tests.Client
 			Assert.Equal("Default Device", result.Data.Name);
 			Assert.Equal("Default Device used for unknown devices", result.Data.Description);
 			Assert.Equal(1, result.Data.DisplayOrder);
-			Assert.Equal(new DateTime(2018, 12, 09, 21, 15, 0, DateTimeKind.Utc), result.Data.DateCreated);
+			Assert.Equal(new DateTime(2019, 12, 09, 21, 15, 0, DateTimeKind.Utc), result.Data.DateCreated);
 			Assert.True(result.Data.IsReadOnly, "Device is not makred read only");
 
 		}
@@ -537,7 +537,7 @@ namespace Sannel.House.Devices.Tests.Client
 		""name"": ""Default Device"",
 		""description"": ""Default Device used for unknown devices"",
 		""displayOrder"": 1,
-		""dateCreated"": ""2018-12-09T21:15:00"",
+		""dateCreated"": ""2019-12-09T21:15:00"",
 		""isReadOnly"": true
 
 	},
@@ -821,14 +821,14 @@ namespace Sannel.House.Devices.Tests.Client
 
 		""alternateId"": 1,
 		""deviceId"": 20,
-		""dateCreated"": ""2018-12-09T21:15:00"",
+		""dateCreated"": ""2019-12-09T21:15:00"",
 		""macAddress"": 123456780,
 ""device"":{
 		""deviceId"": 20,
 		""name"": ""Default Device"",
 		""description"": ""Default Device used for unknown devices"",
 		""displayOrder"": 1,
-		""dateCreated"": ""2018-12-09T21:15:00"",
+		""dateCreated"": ""2019-12-09T21:15:00"",
 		""isReadOnly"": true
 }
 	}],
@@ -852,7 +852,7 @@ namespace Sannel.House.Devices.Tests.Client
 			Assert.Equal("Default Device", d.Name);
 			Assert.Equal("Default Device used for unknown devices", d.Description);
 			Assert.Equal(1, d.DisplayOrder);
-			Assert.Equal(new DateTime(2018, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
+			Assert.Equal(new DateTime(2019, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
 			Assert.True(d.IsReadOnly, "Device is not makred read only");
 
 		}
@@ -896,7 +896,7 @@ namespace Sannel.House.Devices.Tests.Client
 		""name"": ""Default Device"",
 		""description"": ""Default Device used for unknown devices"",
 		""displayOrder"": 1,
-		""dateCreated"": ""2018-12-09T21:15:00"",
+		""dateCreated"": ""2019-12-09T21:15:00"",
 		""isReadOnly"": true
 
 	},
@@ -983,7 +983,7 @@ namespace Sannel.House.Devices.Tests.Client
 		""name"": ""Default Device"",
 		""description"": ""Default Device used for unknown devices"",
 		""displayOrder"": 2,
-		""dateCreated"": ""2018-12-09T21:15:00"",
+		""dateCreated"": ""2019-12-09T21:15:00"",
 		""isReadOnly"": true
 }}")
 				};
@@ -998,7 +998,7 @@ namespace Sannel.House.Devices.Tests.Client
 			Assert.Equal("Default Device", d.Name);
 			Assert.Equal("Default Device used for unknown devices", d.Description);
 			Assert.Equal(2, d.DisplayOrder);
-			Assert.Equal(new DateTime(2018, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
+			Assert.Equal(new DateTime(2019, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
 			Assert.True(d.IsReadOnly, "Device is not marked read only");
 
 			result = await devicesClient.AddAlternateIdAsync(macAddressFixed, 20);
@@ -1010,7 +1010,7 @@ namespace Sannel.House.Devices.Tests.Client
 			Assert.Equal("Default Device", d.Name);
 			Assert.Equal("Default Device used for unknown devices", d.Description);
 			Assert.Equal(2, d.DisplayOrder);
-			Assert.Equal(new DateTime(2018, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
+			Assert.Equal(new DateTime(2019, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
 			Assert.True(d.IsReadOnly, "Device is not marked read only");
 		}
 
@@ -1153,7 +1153,7 @@ namespace Sannel.House.Devices.Tests.Client
 		""name"": ""Default Device"",
 		""description"": ""Default Device used for unknown devices"",
 		""displayOrder"": 2,
-		""dateCreated"": ""2018-12-09T21:15:00"",
+		""dateCreated"": ""2019-12-09T21:15:00"",
 		""isReadOnly"": true
 }}")
 				};
@@ -1168,7 +1168,7 @@ namespace Sannel.House.Devices.Tests.Client
 			Assert.Equal("Default Device", d.Name);
 			Assert.Equal("Default Device used for unknown devices", d.Description);
 			Assert.Equal(2, d.DisplayOrder);
-			Assert.Equal(new DateTime(2018, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
+			Assert.Equal(new DateTime(2019, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
 			Assert.True(d.IsReadOnly, "Device is not marked read only");
 
 		}
@@ -1295,7 +1295,7 @@ namespace Sannel.House.Devices.Tests.Client
 		""name"": ""Default Device"",
 		""description"": ""Default Device used for unknown devices"",
 		""displayOrder"": 2,
-		""dateCreated"": ""2018-12-09T21:15:00"",
+		""dateCreated"": ""2019-12-09T21:15:00"",
 		""isReadOnly"": true
 }}")
 				};
@@ -1310,7 +1310,7 @@ namespace Sannel.House.Devices.Tests.Client
 			Assert.Equal("Default Device", d.Name);
 			Assert.Equal("Default Device used for unknown devices", d.Description);
 			Assert.Equal(2, d.DisplayOrder);
-			Assert.Equal(new DateTime(2018, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
+			Assert.Equal(new DateTime(2019, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
 			Assert.True(d.IsReadOnly, "Device is not marked read only");
 
 			result = await devicesClient.DeleteAlternateIdAsync(macAddressFixed);
@@ -1322,7 +1322,7 @@ namespace Sannel.House.Devices.Tests.Client
 			Assert.Equal("Default Device", d.Name);
 			Assert.Equal("Default Device used for unknown devices", d.Description);
 			Assert.Equal(2, d.DisplayOrder);
-			Assert.Equal(new DateTime(2018, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
+			Assert.Equal(new DateTime(2019, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
 			Assert.True(d.IsReadOnly, "Device is not marked read only");
 		}
 
@@ -1463,7 +1463,7 @@ namespace Sannel.House.Devices.Tests.Client
 		""name"": ""Default Device"",
 		""description"": ""Default Device used for unknown devices"",
 		""displayOrder"": 2,
-		""dateCreated"": ""2018-12-09T21:15:00"",
+		""dateCreated"": ""2019-12-09T21:15:00"",
 		""isReadOnly"": true
 }}")
 				};
@@ -1478,7 +1478,7 @@ namespace Sannel.House.Devices.Tests.Client
 			Assert.Equal("Default Device", d.Name);
 			Assert.Equal("Default Device used for unknown devices", d.Description);
 			Assert.Equal(2, d.DisplayOrder);
-			Assert.Equal(new DateTime(2018, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
+			Assert.Equal(new DateTime(2019, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
 			Assert.True(d.IsReadOnly, "Device is not marked read only");
 
 		}

@@ -1,4 +1,4 @@
-/* Copyright 2018 Sannel Software, L.L.C.
+/* Copyright 2019 Sannel Software, L.L.C.
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -15,7 +15,7 @@ using System.Text;
 
 namespace Sannel.House.Devices.Models
 {
-	public class PagedResults<TDevice> : IPagedResults<TDevice>
+	public class PagedResults<TDevice> : IPagedResponse<TDevice>
 	{
 		/// <summary>
 		/// Gets or sets the data.
