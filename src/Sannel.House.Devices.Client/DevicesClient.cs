@@ -45,6 +45,39 @@ namespace Sannel.House.Devices.Client
 			=> GetPagedAsync(page, 25);
 
 		/// <summary>
+		/// Deserializes if supported code asynchronous.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="message">The message.</param>
+		/// <returns></returns>
+		protected async Task<T> DeserializeIfSupportedCodeAsync<T>(HttpResponseMessage message)
+			where T : IResults, new()
+		{
+			switch (message.StatusCode)
+			{
+				case System.Net.HttpStatusCode.OK:
+				case System.Net.HttpStatusCode.NotFound:
+				case System.Net.HttpStatusCode.BadRequest:
+					var data = await message.Content.ReadAsStringAsync();
+					var obj = await Task.Run(() => JsonConvert.DeserializeObject<T>(data));
+					obj.Success = message.StatusCode == System.Net.HttpStatusCode.OK;
+					return obj;
+
+				default:
+					var err = new T
+					{
+						Success = false,
+						Status = (int)message.StatusCode,
+					};
+					if(message.Content != null && message.Content.Headers.ContentLength > 0)
+					{
+						err.Title = await message.Content.ReadAsStringAsync();
+					}
+					return err;
+			};
+		}
+
+		/// <summary>
 		/// Gets a paged list of Devices asynchronous.
 		/// </summary>
 		/// <param name="page">The page.</param>
@@ -57,9 +90,7 @@ namespace Sannel.House.Devices.Client
 			try
 			{
 				var response = await client.GetAsync($"Devices/GetPaged/{page}/{pageSize}");
-				var data = await response.Content.ReadAsStringAsync();
-				var obj = await Task.Run(() => JsonConvert.DeserializeObject<PagedResults<Device>>(data));
-				obj.Success = response.StatusCode == System.Net.HttpStatusCode.OK;
+				var obj = await DeserializeIfSupportedCodeAsync<PagedResults<Device>>(response);
 				return obj;
 			}
 			catch(Exception ex)
@@ -94,10 +125,7 @@ namespace Sannel.House.Devices.Client
 			try
 			{
 				var response = await client.GetAsync(url);
-				var data = await response.Content.ReadAsStringAsync();
-				var obj = await Task.Run(() => JsonConvert.DeserializeObject<Results<Device>>(data));
-				obj.Success = response.StatusCode == System.Net.HttpStatusCode.OK;
-				return obj;
+				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
 			}
 			catch(Exception ex)
 			{
@@ -143,10 +171,7 @@ namespace Sannel.House.Devices.Client
 						await Task.Run(() =>JsonConvert.SerializeObject(device)),
 						System.Text.Encoding.UTF8,
 						"application/json"));
-				var data = await response.Content.ReadAsStringAsync();
-				var obj = await Task.Run(() => JsonConvert.DeserializeObject<Results<int>>(data));
-				obj.Success = response.StatusCode == System.Net.HttpStatusCode.OK;
-				return obj;
+				return await DeserializeIfSupportedCodeAsync<Results<int>>(response);
 			}
 			catch(Exception ex)
 			{
@@ -176,10 +201,7 @@ namespace Sannel.House.Devices.Client
 						await Task.Run(() =>JsonConvert.SerializeObject(device)),
 						System.Text.Encoding.UTF8,
 						"application/json"));
-				var data = await response.Content.ReadAsStringAsync();
-				var obj = await Task.Run(() => JsonConvert.DeserializeObject<Results<int>>(data));
-				obj.Success = response.StatusCode == System.Net.HttpStatusCode.OK;
-				return obj;
+				return await DeserializeIfSupportedCodeAsync<Results<int>>(response);
 			}
 			catch(Exception ex)
 			{
@@ -205,10 +227,7 @@ namespace Sannel.House.Devices.Client
 			try
 			{
 				var response = await client.GetAsync($"AlternateId/{deviceId}");
-				var data = await response.Content.ReadAsStringAsync();
-				var obj = await Task.Run(() => JsonConvert.DeserializeObject<Results<List<AlternateDeviceId>>>(data));
-				obj.Success = response.StatusCode == System.Net.HttpStatusCode.OK;
-				return obj;
+				return await DeserializeIfSupportedCodeAsync<Results<List<AlternateDeviceId>>>(response);
 			}
 			catch(Exception ex)
 			{
@@ -281,10 +300,7 @@ namespace Sannel.House.Devices.Client
 			try
 			{
 				var response = await client.PostAsync($"AlternateId/mac/{macAddress}/{deviceId}", new StringContent(string.Empty));
-				var data = await response.Content.ReadAsStringAsync();
-				var obj = await Task.Run(() => JsonConvert.DeserializeObject<Results<Device>>(data));
-				obj.Success = response.StatusCode == System.Net.HttpStatusCode.OK;
-				return obj;
+				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
 			}
 			catch(Exception ex)
 			{
@@ -311,10 +327,7 @@ namespace Sannel.House.Devices.Client
 			try
 			{
 				var response = await client.PostAsync($"AlternateId/uuid/{uuid}/{deviceId}", new StringContent(string.Empty));
-				var data = await response.Content.ReadAsStringAsync();
-				var obj = await Task.Run(() => JsonConvert.DeserializeObject<Results<Device>>(data));
-				obj.Success = response.StatusCode == System.Net.HttpStatusCode.OK;
-				return obj;
+				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
 			}
 			catch(Exception ex)
 			{
@@ -386,10 +399,7 @@ namespace Sannel.House.Devices.Client
 			try
 			{
 				var response = await client.DeleteAsync($"AlternateId/mac/{macAddress}");
-				var data = await response.Content.ReadAsStringAsync();
-				var obj = await Task.Run(() => JsonConvert.DeserializeObject<Results<Device>>(data));
-				obj.Success = response.StatusCode == System.Net.HttpStatusCode.OK;
-				return obj;
+				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
 			}
 			catch(Exception ex)
 			{
@@ -415,10 +425,7 @@ namespace Sannel.House.Devices.Client
 			try
 			{
 				var response = await client.DeleteAsync($"AlternateId/uuid/{uuid}");
-				var data = await response.Content.ReadAsStringAsync();
-				var obj = await Task.Run(() => JsonConvert.DeserializeObject<Results<Device>>(data));
-				obj.Success = response.StatusCode == System.Net.HttpStatusCode.OK;
-				return obj;
+				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
 			}
 			catch(Exception ex)
 			{

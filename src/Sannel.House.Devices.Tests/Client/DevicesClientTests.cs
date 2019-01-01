@@ -93,6 +93,48 @@ namespace Sannel.House.Devices.Tests.Client
 		}
 
 		[Fact]
+		public async Task GetPagedAsyncBadGatewayTest()
+		{
+			var clientFactory = new Mock<IHttpClientFactory>();
+			var client = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+			var httpClient = new HttpClient(client.Object);
+			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
+			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
+
+			var devicesClient = new DevicesClient(clientFactory.Object);
+			var token = "test123";
+			devicesClient.GetAuthenticationToken += (s, args) =>
+			{
+				Assert.NotNull(args);
+				args.CacheToken = true;
+				args.Token = token;
+			};
+
+			client.Protected().Setup<Task<HttpResponseMessage>>(
+				"SendAsync",
+				ItExpr.IsAny<HttpRequestMessage>(),
+				ItExpr.IsAny<CancellationToken>()
+			).ReturnsAsync((HttpRequestMessage r,CancellationToken c) =>
+			{
+				Assert.Equal(new Uri("https://gateway.dev.local/api/v1/Devices/GetPaged/0/25"), r.RequestUri);
+				Assert.NotNull(r.Headers.Authorization);
+				Assert.Equal("Bearer", r.Headers.Authorization.Scheme);
+				Assert.Equal(token, r.Headers.Authorization.Parameter);
+				return new HttpResponseMessage()
+				{
+					StatusCode = System.Net.HttpStatusCode.BadGateway,
+					Content = new StringContent("Bad Gateway")
+				};
+			}).Verifiable();
+
+			var result = await devicesClient.GetPagedAsync();
+			Assert.NotNull(result);
+			Assert.False(result.Success);
+			Assert.Equal(HttpStatusCode.BadGateway, result.StatusCode);
+			Assert.Equal("Bad Gateway", result.Title);
+		}
+
+		[Fact]
 		public async Task GetPagedAsyncExceptionTest()
 		{
 			var clientFactory = new Mock<IHttpClientFactory>();
