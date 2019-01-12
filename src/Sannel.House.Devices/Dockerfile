@@ -29,13 +29,13 @@ WORKDIR "/src/src/Sannel.House.Devices"
 RUN dotnet publish "Sannel.House.Devices.csproj" -c Release -o /app
 COPY ["Sannel.House.BuildHelpers/Release/*", "/Release/"]
 WORKDIR "/Release"
-RUN dotnet "Sannel.House.BuildHelper.dll" --prepareDirectory=/app/app_config
-RUN dotnet "Sannel.House.BuildHelper.dll" --prepareDirectory=/app/app_data
 
 #prepare the image
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+COPY --from=build /src/src/Sannel.House.Devices/app_config /app/app_config
+COPY --from=build /src/src/Sannel.House.Devices/app_data /app/app_data
 ARG USER=root
 USER ${USER}
 ENTRYPOINT ["dotnet", "Sannel.House.Devices.dll"]

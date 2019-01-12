@@ -7,6 +7,6 @@ services:
       - "./RunData/users/app_data:/app/app_data"
 
   devices:
-    volumes:
-      - "./src/Sannel.House.Devices/app_config:/app/app_config"
-      - "./src/Sannel.House.Devices/app_data:/app/app_data"
+#    volumes:
+#      - "./src/Sannel.House.Devices/app_config:/app/app_config"
+#      - "./src/Sannel.House.Devices/app_data:/app/app_data"
