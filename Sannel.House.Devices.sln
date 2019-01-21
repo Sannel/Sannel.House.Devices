@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
+		readme.md = readme.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.Devices", "src\Sannel.House.Devices\Sannel.House.Devices.csproj", "{8B8367FB-A9DB-4B6E-8547-BC5297333442}"
@@ -33,7 +34,7 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.Devices.Client", "src\Sannel.House.Devices.Client\Sannel.House.Devices.Client.csproj", "{23871C57-D344-4A5A-B8DF-49DC628EC006}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Devices.Data.Migrations.PostgreSQL", "src\Migrations\Sannel.House.Devices.Data.Migrations.PostgreSQL\Sannel.House.Devices.Data.Migrations.PostgreSQL.csproj", "{ABC58BA8-B6D0-4E2F-A242-4FED9F07D7CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.Devices.Data.Migrations.PostgreSQL", "src\Migrations\Sannel.House.Devices.Data.Migrations.PostgreSQL\Sannel.House.Devices.Data.Migrations.PostgreSQL.csproj", "{ABC58BA8-B6D0-4E2F-A242-4FED9F07D7CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
