@@ -17,19 +17,19 @@ COPY ["src/Sannel.House.Devices.Data/Sannel.House.Devices.Data.csproj", "src/San
 COPY ["src/Migrations/Sannel.House.Devices.Data.Migrations.Sqlite/Sannel.House.Devices.Data.Migrations.Sqlite.csproj", "src/Migrations/Sannel.House.Devices.Data.Migrations.Sqlite/"]
 COPY ["src/Sannel.House.Devices.Repositories/Sannel.House.Devices.Repositories.csproj", "src/Sannel.House.Devices.Repositories/"]
 COPY ["src/Migrations/Sannel.House.Devices.Data.Migrations.SqlServer/Sannel.House.Devices.Data.Migrations.SqlServer.csproj", "src/Migrations/Sannel.House.Devices.Data.Migrations.SqlServer/"]
-RUN dotnet restore "src/Sannel.House.Devices/Sannel.House.Devices.csproj"
+RUN dotnet restore -r linux-arm "src/Sannel.House.Devices/Sannel.House.Devices.csproj"
 COPY . .
 WORKDIR "/src/src/Sannel.House.Devices"
-RUN dotnet build "Sannel.House.Devices.csproj" -c Release
+RUN dotnet build -r linux-arm "Sannel.House.Devices.csproj" -c Release
 
 
 #publish the software
 FROM build AS publish
 WORKDIR "/src/src/Sannel.House.Devices"
-RUN dotnet publish "Sannel.House.Devices.csproj" -c Release -o /app
+RUN dotnet publish -r linux-arm "Sannel.House.Devices.csproj" -c Release -o /app
 
 #prepare the image
-FROM base AS final
+FROM microsoft/dotnet:2.2-runtime-deps-stretch-slim-arm32v7
 WORKDIR /app
 COPY --from=publish /app .
 COPY --from=build /src/src/Sannel.House.Devices/app_config /app/app_config

@@ -2,24 +2,30 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sannel.House.Devices.Data;
 
-namespace Sannel.House.Devices.Data.Migrations.Sqlite.Migrations
+namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    partial class DevicesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190116190115_AddedManufactureIdsForAlternateIds")]
+    partial class AddedManufactureIdsForAlternateIds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028");
+                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Sannel.House.Devices.Models.AlternateDeviceId", b =>
                 {
                     b.Property<int>("AlternateId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateCreated");
 
@@ -38,13 +44,16 @@ namespace Sannel.House.Devices.Data.Migrations.Sqlite.Migrations
                     b.HasIndex("DeviceId");
 
                     b.HasIndex("MacAddress")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[MacAddress] IS NOT NULL");
 
                     b.HasIndex("Uuid")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Uuid] IS NOT NULL");
 
                     b.HasIndex("Manufacture", "ManufactureId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Manufacture] IS NOT NULL AND [ManufactureId] IS NOT NULL");
 
                     b.ToTable("AlternateDeviceIds");
                 });
@@ -52,7 +61,8 @@ namespace Sannel.House.Devices.Data.Migrations.Sqlite.Migrations
             modelBuilder.Entity("Sannel.House.Devices.Models.Device", b =>
                 {
                     b.Property<int>("DeviceId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateCreated");
 

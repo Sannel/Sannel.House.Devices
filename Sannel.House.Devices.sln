@@ -33,6 +33,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.Devices.Client", "src\Sannel.House.Devices.Client\Sannel.House.Devices.Client.csproj", "{23871C57-D344-4A5A-B8DF-49DC628EC006}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Devices.Data.Migrations.PostgreSQL", "src\Migrations\Sannel.House.Devices.Data.Migrations.PostgreSQL\Sannel.House.Devices.Data.Migrations.PostgreSQL.csproj", "{ABC58BA8-B6D0-4E2F-A242-4FED9F07D7CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{23871C57-D344-4A5A-B8DF-49DC628EC006}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23871C57-D344-4A5A-B8DF-49DC628EC006}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23871C57-D344-4A5A-B8DF-49DC628EC006}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABC58BA8-B6D0-4E2F-A242-4FED9F07D7CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABC58BA8-B6D0-4E2F-A242-4FED9F07D7CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABC58BA8-B6D0-4E2F-A242-4FED9F07D7CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABC58BA8-B6D0-4E2F-A242-4FED9F07D7CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,6 +97,7 @@ Global
 		{C37E2B16-6DE1-4BEB-91A2-7EC59F07FFBA} = {EDB22547-363D-41E7-98A1-81D5949652D6}
 		{93A84DEF-4E5A-401B-AF1E-1A948DC09DAC} = {EDB22547-363D-41E7-98A1-81D5949652D6}
 		{E9E98472-76FA-47F1-93FB-891563579B2B} = {EDB22547-363D-41E7-98A1-81D5949652D6}
+		{ABC58BA8-B6D0-4E2F-A242-4FED9F07D7CA} = {EDB22547-363D-41E7-98A1-81D5949652D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0F2B1DDD-90B0-45C5-AA21-98A481D51998}

@@ -49,6 +49,14 @@ namespace Sannel.House.Devices.Interfaces
 		Task<Device> GetDeviceByUuidAsync(Guid uuid);
 
 		/// <summary>
+		/// Gets the device by manufacture identifier asynchronous.
+		/// </summary>
+		/// <param name="manufacture">The manufacture.</param>
+		/// <param name="manufactureId">The manufacture identifier.</param>
+		/// <returns></returns>
+		Task<Device> GetDeviceByManufactureIdAsync(string manufacture, string manufactureId);
+
+		/// <summary>
 		/// Creates the device asynchronous.
 		/// </summary>
 		/// <param name="device">The device.</param>
@@ -82,6 +90,15 @@ namespace Sannel.House.Devices.Interfaces
 		Task<Device> AddAlternateUuidAsync(int deviceId, Guid uuid);
 
 		/// <summary>
+		/// Adds the alternate device identifier asynchronous.
+		/// </summary>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <param name="manufacture">The manufacture.</param>
+		/// <param name="manufactureId">The manufacture identifier.</param>
+		/// <returns></returns>
+		Task<Device> AddAlternateManufactureIdAsync(int deviceId, string manufacture, string manufactureId);
+
+		/// <summary>
 		/// Removes the alternate mac address asynchronous.
 		/// </summary>
 		/// <param name="macAddress">The mac address.</param>
@@ -98,6 +115,14 @@ namespace Sannel.House.Devices.Interfaces
 		/// The device or null if the uuid is not found
 		/// </returns>
 		Task<Device> RemoveAlternateUuidAsync(Guid uuid);
+
+		/// <summary>
+		/// Removes the alternate manufacture identifier asynchronous.
+		/// </summary>
+		/// <param name="manufacture">The manufacture.</param>
+		/// <param name="manufactureId">The manufacture identifier.</param>
+		/// <returns></returns>
+		Task<Device> RemoveAlternateManufactureIdAsync(string manufacture, string manufactureId);
 
 		/// <summary>
 		/// Gets the alternate ids for device asynchronous.

@@ -74,6 +74,21 @@ namespace Sannel.House.Devices.Models
 		/// The mac address.
 		/// </value>
 		public long? MacAddress { get; set; }
+
+		/// <summary>
+		/// Gets or sets the manufacture.
+		/// </summary>
+		/// <value>
+		/// The manufacture.
+		/// </value>
+		public string Manufacture { get; set; }
+		/// <summary>
+		/// Gets or sets the manufacture identifier.
+		/// </summary>
+		/// <value>
+		/// The manufacture identifier.
+		/// </value>
+		public string ManufactureId { get; set; }
 	}
 
 }

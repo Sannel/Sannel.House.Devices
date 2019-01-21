@@ -161,6 +161,49 @@ namespace Sannel.House.Devices.Controllers
 			}
 		}
 
+		[HttpPost("manufactureid/{manufacture}/{manufactureId}/{deviceId}")]
+		[Authorize(Roles = "DeviceWrite,Admin")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<ResponseModel<Device>>> Post(string manufacture, string manufactureId, int deviceId)
+		{
+			if(string.IsNullOrWhiteSpace(manufacture))
+			{
+				logger.LogError("Null or Empty Manufacture");
+				return BadRequest(new ErrorResponseModel("Manufacture is Empty","manufacture", "manufacture must not be null or whitespace"));
+			}
+
+			if(string.IsNullOrWhiteSpace(manufactureId))
+			{
+				logger.LogError("Null or Empty ManufactureId");
+				return BadRequest(new ErrorResponseModel("ManufactureID is Empty","manufactureId", "manufactureId must not be null or whitespace"));
+			}
+
+			if(deviceId < 0)
+			{
+				logger.LogError("Invalid device id({0}) passed in.", deviceId);
+				return BadRequest(new ErrorResponseModel("Invalid Device Id", "deviceId", "Device Id must be greater then or equal to 0"));
+			}
+
+			try
+			{
+				var device = await repo.AddAlternateManufactureIdAsync(deviceId, manufacture, manufactureId);
+				if(device == null)
+				{
+					logger.LogDebug("No device found with id {0}", deviceId);
+					return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "notFound", "No device found with that id"));
+				}
+
+				return Ok(new ResponseModel<Device>("Device", device));
+			}
+			catch(AlternateDeviceIdException aIdException)
+			{
+				logger.LogError(aIdException, "Alternate Device Id Exception");
+				return BadRequest(new ErrorResponseModel("Manufacture and ManufactureId Already Connected", "manufactureId", "That Manufacture and ManufactureId is already connected to a device"));
+			}
+		}
+
 		/// <summary>
 		/// Deletes the specified mac address.
 		/// </summary>

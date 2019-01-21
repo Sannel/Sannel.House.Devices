@@ -15,7 +15,7 @@ namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -31,11 +31,27 @@ namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
 
                     b.Property<long?>("MacAddress");
 
+                    b.Property<string>("Manufacture");
+
+                    b.Property<string>("ManufactureId");
+
                     b.Property<Guid?>("Uuid");
 
                     b.HasKey("AlternateId");
 
                     b.HasIndex("DeviceId");
+
+                    b.HasIndex("MacAddress")
+                        .IsUnique()
+                        .HasFilter("[MacAddress] IS NOT NULL");
+
+                    b.HasIndex("Uuid")
+                        .IsUnique()
+                        .HasFilter("[Uuid] IS NOT NULL");
+
+                    b.HasIndex("Manufacture", "ManufactureId")
+                        .IsUnique()
+                        .HasFilter("[Manufacture] IS NOT NULL AND [ManufactureId] IS NOT NULL");
 
                     b.ToTable("AlternateDeviceIds");
                 });
@@ -61,6 +77,8 @@ namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("DeviceId");
+
+                    b.HasIndex("DisplayOrder");
 
                     b.ToTable("Devices");
                 });

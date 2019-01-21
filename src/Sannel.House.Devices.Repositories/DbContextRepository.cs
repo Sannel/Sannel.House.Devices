@@ -227,6 +227,51 @@ namespace Sannel.House.Devices.Repositories
 		}
 
 		/// <summary>
+		/// Adds the alternate device identifier asynchronous.
+		/// </summary>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <param name="manufacture">The manufacture.</param>
+		/// <param name="manufactureId">The manufacture identifier.</param>
+		/// <returns></returns>
+		public async Task<Device> AddAlternateManufactureIdAsync(int deviceId, string manufacture, string manufactureId)
+		{
+			if (string.IsNullOrWhiteSpace(manufacture))
+			{
+				throw new ArgumentNullException(nameof(manufacture));
+			}
+
+			if(string.IsNullOrWhiteSpace(manufactureId))
+			{
+				throw new ArgumentNullException(nameof(manufactureId));
+			}
+
+			var device = await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == deviceId);
+			if(device == null)
+			{
+				return null;
+			}
+
+			var altId = await context.AlternateDeviceIds.AsNoTracking().FirstOrDefaultAsync(i => i.Manufacture == manufacture && i.ManufactureId == manufactureId);
+			if(altId != null)
+			{
+				throw new AlternateDeviceIdException($"The manufacture {manufacture} and manufacture id {manufactureId} are already associated with a device {altId.DeviceId}.");
+			}
+
+			altId = new AlternateDeviceId()
+			{
+				DeviceId = device.DeviceId,
+				DateCreated = DateTime.UtcNow,
+				Manufacture = manufacture,
+				ManufactureId = manufactureId
+			};
+
+			await context.AlternateDeviceIds.AddAsync(altId);
+			await context.SaveChangesAsync();
+
+			return device;
+		}
+
+		/// <summary>
 		/// Removes the alternate mac address asynchronous.
 		/// </summary>
 		/// <param name="macAddress">The mac address.</param>
@@ -284,6 +329,16 @@ namespace Sannel.House.Devices.Repositories
 
 			return await Task.Run(() => context.AlternateDeviceIds
 					.AsNoTracking().Where(i => i.DeviceId == deviceId));
+		}
+
+		public Task<Device> GetDeviceByManufactureIdAsync(string manufacture, string manufactureId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Device> RemoveAlternateManufactureIdAsync(string manufacture, string manufactureId)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

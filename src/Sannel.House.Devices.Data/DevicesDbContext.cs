@@ -29,6 +29,13 @@ namespace Sannel.House.Devices.Data
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			var altids = modelBuilder.Entity<AlternateDeviceId>();
+			altids.HasIndex(i => i.MacAddress).IsUnique();
+			altids.HasIndex(i => i.Uuid).IsUnique();
+			altids.HasIndex(nameof(AlternateDeviceId.Manufacture), nameof(AlternateDeviceId.ManufactureId)).IsUnique();
+
+			var devices = modelBuilder.Entity<Device>();
+			devices.HasIndex(i => i.DisplayOrder);
 		}
 	}
 }
