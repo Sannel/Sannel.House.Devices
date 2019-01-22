@@ -9,6 +9,7 @@ SetBuildType
 CleanDevFiles
 
 $version = GetVersion
+TryLogin
 
 return RunDockerCompose "push" $version $target
 

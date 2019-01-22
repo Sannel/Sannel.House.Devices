@@ -28,6 +28,14 @@ function GetImageName
 	return $name
 }
 
+function TryLogin()
+{
+	if($null -ne $env:docker_user)
+	{
+		docker login -u $env:docker_user -p $env:docker_password
+	}
+}
+
 function GetVersion
 {
 	$version = $env:BUILD_BUILDNUMBER;
