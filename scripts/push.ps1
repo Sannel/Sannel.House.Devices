@@ -10,7 +10,10 @@ CleanDevFiles
 
 $version = GetVersion
 TryLogin
+SetDockerComposeVariables
+$image="${env:DOCKER_REGISTRY}${imageName}:$buildType-$version-${env:SANNEL_ARCH}"
 
-return RunDockerCompose "push" $version $target
+
+return docker push $image
 
 

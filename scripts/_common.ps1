@@ -48,14 +48,11 @@ function GetVersion
 	return $version;
 }
 
-function RunDockerCompose
+function SetDockerComposeVariables
 {
 	param(
-		[string]$type,
-		[string]$version,
-		[string]$target
+		[string]$version
 	)
-
 	if($IsLinux -eq $true -or $IsMacOS -eq $true)
 	{
 		$uname = uname -m
@@ -73,7 +70,6 @@ function RunDockerCompose
 		$env:USER="root"
 		$env:SANNEL_ARCH="linux-$uname"
 		$env:SANNEL_VERSION=$version
-		return docker-compose -f "$PSScriptRoot/../docker-compose.yml" -f "$PSScriptRoot/../docker-compose.unix.yml" $type $target | Write-Host
 	}
 	else
 	{
@@ -81,7 +77,27 @@ function RunDockerCompose
 		$env:USER="administrator"
 		$env:SANNEL_ARCH="win"
 		$env:SANNEL_VERSION=$version
-		return docker-compose -f "$PSScriptRoot/../docker-compose.yml" -f "$PSScriptRoot/../docker-compose.windows.yml" $type $target | Write-Host
+	}
+}
+
+function RunDockerCompose
+{
+	param(
+		[string]$type,
+		[string]$version,
+		[string]$target,
+		[string]$options=""
+	)
+
+	SetDockerComposeVariables $version
+
+	if($IsLinux -eq $true -or $IsMacOS -eq $true)
+	{
+		return docker-compose -f "$PSScriptRoot/../docker-compose.yml" -f "$PSScriptRoot/../docker-compose.unix.yml" $type $options $target | Write-Host
+	}
+	else
+	{
+		return docker-compose -f "$PSScriptRoot/../docker-compose.yml" -f "$PSScriptRoot/../docker-compose.windows.yml" $type $options $target | Write-Host
 	}
 
 }
