@@ -48,6 +48,41 @@ function GetVersion
 	return $version;
 }
 
+function GetArchString
+{
+	if($IsLinux -eq $true -or $IsMacOS -eq $true)
+	{
+		$uname = uname -m
+		if($uname -eq "x86_64")
+		{
+			$uname = "x64";
+		}
+		if($uname -eq "armv7l") 
+		{
+			if([Environment]::Is64BitOperatingSystem)
+			{
+				$uname = "arm64";
+			}
+			else
+			{
+				$uname = "arm32";
+			}
+		}
+		return "linux-$uname"
+	}
+	else 
+	{
+		if([Environment]::Is64BitOperatingSystem)
+		{
+			return "win-64";
+		}
+		else
+		{
+			return "win-x86";	
+		}
+	}
+}
+
 function SetDockerComposeVariables
 {
 	param(
@@ -55,27 +90,15 @@ function SetDockerComposeVariables
 	)
 	if($IsLinux -eq $true -or $IsMacOS -eq $true)
 	{
-		$uname = uname -m
-		if($uname -eq "x86_64" -or $uname -eq "i386")
-		{
-			$uname = "x64";
-		}
-		if($uname -eq "armv7l" -or $uname -eq "unknown") # for now assume unknown is arm
-		{
-			$uname = "arm";
-		}
-
-		Write-Host "Linux $uname"
-
 		$env:USER="root"
-		$env:SANNEL_ARCH="linux-$uname"
+		$env:SANNEL_ARCH=GetArchString
 		$env:SANNEL_VERSION=$version
 	}
 	else
 	{
 		Write-Host "Windows"
 		$env:USER="administrator"
-		$env:SANNEL_ARCH="win"
+		$env:SANNEL_ARCH=GetArchString
 		$env:SANNEL_VERSION=$version
 	}
 }
