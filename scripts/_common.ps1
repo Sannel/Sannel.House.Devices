@@ -74,7 +74,7 @@ function GetArchString
 	{
 		if([Environment]::Is64BitOperatingSystem)
 		{
-			return "win-64";
+			return "win-x64";
 		}
 		else
 		{
