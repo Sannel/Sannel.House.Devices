@@ -291,6 +291,78 @@ namespace Sannel.House.Devices.Tests.Repositories
 		}
 
 		[Fact]
+		public async Task GetDeviceByManifactureIdAsyncTest()
+		{
+			using (var connection = OpenConnection())
+			{
+				using (var context = GetTestDB(connection))
+				{
+					var device1 = new Device()
+					{
+						DeviceId = 1,
+						Name = "Test Name",
+						IsReadOnly = true,
+						Description = "Dest Description",
+						DateCreated = DateTime.UtcNow,
+						DisplayOrder = 2
+					};
+					var device2 = new Device()
+					{
+						DeviceId = 2,
+						Name = "Test 2 Name",
+						IsReadOnly = true,
+						Description = "Test 2 Description",
+						DateCreated = DateTime.UtcNow.AddDays(-2),
+						DisplayOrder = 1
+					};
+
+					await context.Devices.AddRangeAsync(device1, device2);
+
+					var altId1 = new AlternateDeviceId()
+					{
+						DeviceId = device1.DeviceId,
+						DateCreated = DateTime.UtcNow,
+						Manufacture = "Arduino",
+						ManufactureId = "123456789"
+					};
+					var altId2 = new AlternateDeviceId()
+					{
+						DeviceId = device1.DeviceId,
+						DateCreated = DateTime.UtcNow,
+						Manufacture = "Zebra",
+						ManufactureId = "123456789"
+					};
+					var altId3 = new AlternateDeviceId()
+					{
+						DeviceId = device2.DeviceId,
+						DateCreated = DateTime.UtcNow,
+						Manufacture = "Particle",
+						ManufactureId = "ParticleId"
+					};
+
+					await context.AlternateDeviceIds.AddRangeAsync(altId1, altId2, altId3);
+					await context.SaveChangesAsync();
+
+					var repository = new DbContextRepository(context);
+					var actual = await repository.GetDeviceByManufactureIdAsync(altId1.Manufacture, altId1.ManufactureId);
+					Assert.NotNull(actual);
+					AssertEqual(device1, actual);
+
+					actual = await repository.GetDeviceByManufactureIdAsync(altId2.Manufacture, altId1.ManufactureId);
+					Assert.NotNull(actual);
+					AssertEqual(device1, actual);
+
+					actual = await repository.GetDeviceByManufactureIdAsync(altId3.Manufacture, altId3.ManufactureId);
+					Assert.NotNull(actual);
+					AssertEqual(device2, actual);
+
+					actual = await repository.GetDeviceByManufactureIdAsync("Unknown","Other");
+					Assert.Null(actual);
+				}
+			}
+		}
+
+		[Fact]
 		public async Task CreateDeviceAsyncTest()
 		{
 
@@ -514,6 +586,61 @@ namespace Sannel.House.Devices.Tests.Repositories
 		}
 
 		[Fact]
+		public async Task AddAlternateManifactureIdAsyncTest()
+		{
+
+			using (var connection = OpenConnection())
+			{
+				using (var context = GetTestDB(connection))
+				{
+					var device1 = new Device()
+					{
+						DeviceId = 1,
+						Name = "Test Name",
+						IsReadOnly = true,
+						Description = "Dest Description",
+						DateCreated = DateTime.UtcNow,
+						DisplayOrder = 2
+					};
+					var device2 = new Device()
+					{
+						DeviceId = 2,
+						Name = "Test 2 Name",
+						IsReadOnly = false,
+						Description = "Test 2 Description",
+						DateCreated = DateTime.UtcNow.AddDays(-2),
+						DisplayOrder = 1
+					};
+					await context.Devices.AddRangeAsync(device1, device2);
+					await context.SaveChangesAsync();
+
+					var manufacture = "Particle";
+					var manufactureId = "123456";
+
+					var repo = new DbContextRepository(context);
+
+					var actual = await repo.AddAlternateManufactureIdAsync(-1, manufacture, manufactureId);
+					Assert.Null(actual); // No device with -1 id
+
+					actual = await repo.AddAlternateManufactureIdAsync(device1.DeviceId, manufacture, manufactureId);
+					Assert.NotNull(actual);
+					AssertEqual(device1, actual);
+
+					var actualAltId = await context.AlternateDeviceIds.FirstOrDefaultAsync(i =>
+										i.DeviceId == device1.DeviceId
+										&& i.Manufacture == manufacture
+										&& i.ManufactureId == manufactureId);
+					Assert.NotNull(actualAltId);
+					Assert.True(actualAltId.DateCreated > default(DateTime) 
+						&& actualAltId.DateCreated < DateTime.UtcNow, "Suspect Date time was not set correctly");
+
+					await Assert.ThrowsAsync<AlternateDeviceIdException>(() => repo.AddAlternateManufactureIdAsync(device1.DeviceId, manufacture, manufactureId));
+
+				}
+			}
+		}
+
+		[Fact]
 		public async Task RemoveAlternateMacAddressAsyncTest()
 		{
 
@@ -576,6 +703,72 @@ namespace Sannel.House.Devices.Tests.Repositories
 			}
 		}
 		
+		[Fact]
+		public async Task RemoveAlternateManufactureIdAsyncTest()
+		{
+			using (var connection = OpenConnection())
+			{
+				using (var context = GetTestDB(connection))
+				{
+					var device1 = new Device()
+					{
+						DeviceId = 1,
+						Name = "Test Name",
+						IsReadOnly = true,
+						Description = "Dest Description",
+						DateCreated = DateTime.UtcNow,
+						DisplayOrder = 2
+					};
+					var device2 = new Device()
+					{
+						DeviceId = 2,
+						Name = "Test 2 Name",
+						IsReadOnly = false,
+						Description = "Test 2 Description",
+						DateCreated = DateTime.UtcNow.AddDays(-2),
+						DisplayOrder = 1
+					};
+
+					await context.Devices.AddRangeAsync(device1, device2);
+					await context.SaveChangesAsync();
+
+					var altId1 = new AlternateDeviceId()
+					{
+						DeviceId = device1.DeviceId,
+						DateCreated = DateTime.UtcNow,
+						Manufacture = "Particle",
+						ManufactureId = "Photon53"
+					};
+					var altId2 = new AlternateDeviceId
+					{
+						DeviceId = device1.DeviceId,
+						DateCreated = DateTime.UtcNow,
+						Manufacture = "Particle",
+						ManufactureId = "Photon34"
+					};
+
+					await context.AlternateDeviceIds.AddRangeAsync(altId1, altId2);
+					await context.SaveChangesAsync();
+					context.Entry(altId1).State = EntityState.Detached;
+					context.Entry(altId2).State = EntityState.Detached;
+
+					var repo = new DbContextRepository(context);
+
+					var actual = await repo.RemoveAlternateManufactureIdAsync("Particle", "Core");
+					Assert.Null(actual);
+
+					actual = await repo.RemoveAlternateManufactureIdAsync(altId1.Manufacture, altId1.ManufactureId);
+					Assert.NotNull(actual);
+					AssertEqual(device1, actual);
+
+					Assert.Null(context.AlternateDeviceIds.FirstOrDefault(i => i.Manufacture == altId1.Manufacture 
+																			&& i.ManufactureId == altId1.ManufactureId));
+					Assert.NotNull(context.AlternateDeviceIds.FirstOrDefault(i => i.Manufacture == altId2.Manufacture
+																			&& i.ManufactureId == altId2.ManufactureId));
+				}
+			}
+		}
+
 		[Fact]
 		public async Task RemoveAlternateUuidAsyncTest()
 		{
