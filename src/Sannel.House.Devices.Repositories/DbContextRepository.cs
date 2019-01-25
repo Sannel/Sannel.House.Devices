@@ -331,14 +331,41 @@ namespace Sannel.House.Devices.Repositories
 					.AsNoTracking().Where(i => i.DeviceId == deviceId));
 		}
 
-		public Task<Device> GetDeviceByManufactureIdAsync(string manufacture, string manufactureId)
+		/// <summary>
+		/// Gets the device by manufacture identifier asynchronous.
+		/// </summary>
+		/// <param name="manufacture">The manufacture.</param>
+		/// <param name="manufactureId">The manufacture identifier.</param>
+		/// <returns></returns>
+		public async Task<Device> GetDeviceByManufactureIdAsync(string manufacture, string manufactureId)
 		{
-			throw new NotImplementedException();
+			var alt = await context.AlternateDeviceIds
+				.Include(nameof(AlternateDeviceId.Device))
+				.AsNoTracking()
+				.FirstOrDefaultAsync(i => i.Manufacture == manufacture && i.ManufactureId == manufactureId);
+			return alt?.Device;
 		}
 
-		public Task<Device> RemoveAlternateManufactureIdAsync(string manufacture, string manufactureId)
+		/// <summary>
+		/// Removes the alternate manufacture identifier asynchronous.
+		/// </summary>
+		/// <param name="manufacture">The manufacture.</param>
+		/// <param name="manufactureId">The manufacture identifier.</param>
+		/// <returns></returns>
+		public async Task<Device> RemoveAlternateManufactureIdAsync(string manufacture, string manufactureId)
 		{
-			throw new NotImplementedException();
+
+			var altId = await context.AlternateDeviceIds.Include(i => i.Device)
+				.AsNoTracking().FirstOrDefaultAsync(i => i.Manufacture == manufacture && i.ManufactureId == manufactureId);
+			if (altId == null)
+			{
+				return null;
+			}
+
+			context.AlternateDeviceIds.Remove(altId);
+			await context.SaveChangesAsync();
+
+			return altId.Device;
 		}
 	}
 }
