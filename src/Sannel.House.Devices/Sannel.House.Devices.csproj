@@ -7,9 +7,9 @@
     <SignAssembly>false</SignAssembly>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Sannel.House.Device</PackageId>
-    <AssemblyVersion>$(Major).$(Minor).$(Patch).0</AssemblyVersion>
-    <FileVersion>$(Major).$(Minor).$(Patch).0</FileVersion>
-	<Version>$(Major).$(Minor).$(Patch)</Version>
+    <AssemblyVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</AssemblyVersion>
+    <FileVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</FileVersion>
+	<Version>$(Major).$(Minor).$(Patch).$(BuildNumber)</Version>
   </PropertyGroup>
 
   <ItemGroup>

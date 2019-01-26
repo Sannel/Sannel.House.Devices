@@ -5,15 +5,19 @@
     <RootNamespace>Sannel.House.Devices.Client</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Sannel.House.Devices.Client</PackageId>
-    <AssemblyVersion>$(Major).$(Minor).$(Patch).0</AssemblyVersion>
-    <FileVersion>$(Major).$(Minor).$(Patch).0</FileVersion>
-	<Version>$(Major).$(Minor).$(Patch).0-beta</Version>
+    <AssemblyVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</AssemblyVersion>
+    <FileVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</FileVersion>
+	<Version Condition="'$(IsRelease)' != 'true'">$(Major).$(Minor).$(Patch).$(BuildNumber)-beta</Version>
+	<Version Condition="'$(IsRelease)' == 'true'">$(Major).$(Minor).$(Patch).$(BuildNumber)</Version>
 	<Authors>Adam Holt</Authors>
 	<Company>Sannel Software, L.L.C.</Company>
 	<Copyright></Copyright>
 	<PackageLicenseUrl>https://github.com/Sannel/Sannel.House.Devices/blob/develop/LICENSE</PackageLicenseUrl>
 	<PackageProjectUrl>https://github.com/Sannel/Sannel.House.Devices</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/Sannel/Sannel.House.Devices</RepositoryUrl>
+	<PackageReleaseNotes><![CDATA[
+	$(Build_SourceVersionMessage)
+	$(Build_SourceVersion)]]></PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
