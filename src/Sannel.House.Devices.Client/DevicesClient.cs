@@ -166,6 +166,15 @@ namespace Sannel.House.Devices.Client
 			=> GetAsync($"Devices/GetByUuid/{uuid}");
 
 		/// <summary>
+		/// Gets the by manufacture identifier which is <paramref name="manufacture"/>+<paramref name="manufactureId"/> asynchronous.
+		/// </summary>
+		/// <param name="manufacture">The manufacture.</param>
+		/// <param name="manufactureId">The manufacture identifier.</param>
+		/// <returns></returns>
+		public Task<Results<Device>> GetByManufactureIdAsync(string manufacture, string manufactureId)
+			=> GetAsync($"Devices/GetByManufactureId/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}");
+
+		/// <summary>
 		/// Adds the device asynchronous.
 		/// </summary>
 		/// <param name="device">The device.</param>
@@ -352,6 +361,34 @@ namespace Sannel.House.Devices.Client
 		}
 
 		/// <summary>
+		/// Adds the manufacture alternate identifier asynchronous.
+		/// </summary>
+		/// <param name="manufacture">The manufacture.</param>
+		/// <param name="manufactureId">The manufacture identifier.</param>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <returns></returns>
+		public async Task<Results<Device>> AddAlternateIdAsync(string manufacture, string manufactureId, int deviceId)
+		{
+			var client = factory.CreateClient(nameof(DevicesClient));
+			UpdateAuthenticationToken(client);
+			try
+			{
+				var response = await client.PostAsync($"AlternateId/manufactureid/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}/{deviceId}", new StringContent(string.Empty));
+				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+			}
+			catch (Exception ex)
+			{
+				return new Results<Device>()
+				{
+					Status = 444,
+					Title = "Exception",
+					Success = false,
+					Exception = ex
+				};
+			}
+		}
+
+		/// <summary>
 		/// Deletes the alternate identifier asynchronous.
 		/// The alternateId is a mac address
 		/// </summary>
@@ -424,7 +461,7 @@ namespace Sannel.House.Devices.Client
 		}
 
 		/// <summary>
-		/// Deletes the alternate identifier asynchronous.
+		/// Deletes the Uuid alternate identifier asynchronous.
 		/// </summary>
 		/// <param name="uuid">The UUID.</param>
 		/// <returns></returns>
@@ -435,6 +472,33 @@ namespace Sannel.House.Devices.Client
 			try
 			{
 				var response = await client.DeleteAsync($"AlternateId/uuid/{uuid}");
+				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+			}
+			catch(Exception ex)
+			{
+				return new Results<Device>()
+				{
+					Status = 444,
+					Title = "Exception",
+					Success = false,
+					Exception = ex
+				};
+			}
+		}
+
+		/// <summary>
+		/// Deletes the manufacture alternate identifier asynchronous.
+		/// </summary>
+		/// <param name="manufacture">The manufacture.</param>
+		/// <param name="manufactureId">The manufacture identifier.</param>
+		/// <returns></returns>
+		public async Task<Results<Device>> DeleteAlternateIdAsync(string manufacture, string manufactureId)
+		{
+			var client = factory.CreateClient(nameof(DevicesClient));
+			UpdateAuthenticationToken(client);
+			try
+			{
+				var response = await client.DeleteAsync($"AlternateId/manufacture/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}");
 				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
 			}
 			catch(Exception ex)

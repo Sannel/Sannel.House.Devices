@@ -310,6 +310,69 @@ namespace Sannel.House.Devices.Tests.Controllers
 		}
 
 		[Fact]
+		public async Task GetDeviceByAlternateIdManufactureIdAsynctest()
+		{
+			var repo = new Mock<IDeviceRepository>();
+			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
+			{
+				var result = await controller.GetByManufactureId("","Photon");
+				var bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				var em = Assert.IsAssignableFrom<ErrorResponseModel>(bror.Value);
+				Assert.Single(em.Errors);
+				var first = em.Errors.First();
+				Assert.Equal("manufacture", first.Key);
+				Assert.Equal("Manufacture must not be null or whitespace", first.Value.First());
+				Assert.Equal("Manufacture is Empty", em.Title);
+				Assert.Equal(400, em.Status);
+
+				result = await controller.GetByManufactureId("Particle","");
+				bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				em = Assert.IsAssignableFrom<ErrorResponseModel>(bror.Value);
+				Assert.Single(em.Errors);
+				first = em.Errors.First();
+				Assert.Equal("manufactureId", first.Key);
+				Assert.Equal("ManufactureId must not be null or whitespace", first.Value.First());
+				Assert.Equal("ManufactureID is Empty", em.Title);
+				Assert.Equal(400, em.Status);
+
+				var manufacture = "Particle";
+				var manufactureId = "Photon";
+
+				repo.Setup(i => i.GetDeviceByManufactureIdAsync(manufacture, manufactureId)).ReturnsAsync((Device)null);
+
+				result = await controller.GetByManufactureId(manufacture, manufactureId);
+				var nfor = Assert.IsAssignableFrom<NotFoundObjectResult>(result.Result);
+				em = Assert.IsAssignableFrom<ErrorResponseModel>(nfor.Value);
+				first = em.Errors.First();
+				Assert.Equal("device", first.Key);
+				Assert.Equal("Device Not Found", first.Value.First());
+				Assert.Equal("Device Not Found", em.Title);
+				Assert.Equal(404, em.Status);
+
+				var device = new Device()
+				{
+					DeviceId = 1,
+					Name = "Test Device",
+					Description = "Test Description",
+					DisplayOrder = 9,
+					IsReadOnly = true,
+					DateCreated = DateTime.Now
+				};
+
+				repo.Setup(i => i.GetDeviceByManufactureIdAsync(manufacture, manufactureId))
+					.ReturnsAsync(device);
+
+				result = await controller.GetByManufactureId(manufacture, manufactureId);
+				var oor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
+				Assert.NotNull(oor.Value);
+				var actual = Assert.IsAssignableFrom<ResponseModel<Device>>(oor.Value);
+				Assert.Equal(200, actual.Status);
+				Assert.Equal("The Device", actual.Title);
+				AssertEqual(device, actual.Data);
+			}
+		}
+
+		[Fact]
 		public async Task PostTest()
 		{
 			var repo = new Mock<IDeviceRepository>();

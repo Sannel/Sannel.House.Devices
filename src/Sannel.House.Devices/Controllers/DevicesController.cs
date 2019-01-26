@@ -180,6 +180,37 @@ namespace Sannel.House.Devices.Controllers
 			return Ok(new ResponseModel<Device>("The Device", device));
 		}
 
+		[HttpGet("GetByManufactureId/{uuid}")]
+		[Authorize(Roles = "DeviceRead,Admin")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<ResponseModel<Device>>> GetByManufactureId(string manufacture, string manufactureId)
+		{
+			if(string.IsNullOrWhiteSpace(manufacture))
+			{
+				logger.LogError("Null or Empty Manufacture");
+				return BadRequest(new ErrorResponseModel("Manufacture is Empty","manufacture", "Manufacture must not be null or whitespace"));
+			}
+
+			if(string.IsNullOrWhiteSpace(manufactureId))
+			{
+				logger.LogError("Null or Empty ManufactureId");
+				return BadRequest(new ErrorResponseModel("ManufactureID is Empty","manufactureId", "ManufactureId must not be null or whitespace"));
+			}
+
+			var device = await repo.GetDeviceByManufactureIdAsync(manufacture, manufactureId);
+			if(device == null)
+			{
+				logger.LogDebug("Device with Manufacture/ManufactureId {0}/{1} not found", manufacture, manufactureId);
+				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "device", "Device Not Found"));
+			}
+
+			logger.LogDebug("Device with Manufacture/ManufactureId {0}/{1} was found", manufacture, manufactureId);
+
+			return Ok(new ResponseModel<Device>("The Device", device));
+		}
+
 		/// <summary>
 		/// Creates a new device with the data provided.
 		/// </summary>

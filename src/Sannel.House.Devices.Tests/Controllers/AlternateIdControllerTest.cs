@@ -432,5 +432,64 @@ namespace Sannel.House.Devices.Tests.Controllers
 
 			}
 		}
+
+		[Fact]
+		public async Task DeleteManufactureIdAsync()
+		{
+
+			var repo = new Mock<IDeviceRepository>();
+			using (var controller = new AlternateIdController(repo.Object, CreateLogger<AlternateIdController>()))
+			{
+				var result = await controller.Delete("","Photon");
+				var bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				var error = Assert.IsAssignableFrom<ErrorResponseModel>(bror.Value);
+				Assert.NotNull(error);
+				Assert.Single(error.Errors);
+				var err = error.Errors.First();
+				Assert.Equal("manufacture", err.Key);
+				Assert.Equal("Manufacture must not be null or whitespace", err.Value.First());
+
+				result = await controller.Delete("Particle","");
+				bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				error = Assert.IsAssignableFrom<ErrorResponseModel>(bror.Value);
+				Assert.NotNull(error);
+				Assert.Single(error.Errors);
+				err = error.Errors.First();
+				Assert.Equal("manufactureId", err.Key);
+				Assert.Equal("ManufactureId must not be null or whitespace", err.Value.First());
+
+				var manufacture = "Particle";
+				var manufactureId = "Photon";
+
+				repo.Setup(i => i.RemoveAlternateManufactureIdAsync(manufacture, manufactureId)).ReturnsAsync((Device)null);
+
+				result = await controller.Delete(manufacture, manufactureId);
+				var nfor = Assert.IsAssignableFrom<NotFoundObjectResult>(result.Result);
+				error = Assert.IsAssignableFrom<ErrorResponseModel>(nfor.Value);
+				Assert.NotNull(error);
+				Assert.Single(error.Errors);
+				err = error.Errors.First();
+				Assert.Equal("manufactureid", err.Key);
+				Assert.Equal("Manufacture/ManufactureId not found", err.Value.First());
+
+				var device1 = new Device()
+				{
+					DeviceId = 20,
+					Name = "Test Name",
+					IsReadOnly = true,
+					Description = "Dest Description",
+					DateCreated = DateTime.UtcNow,
+					DisplayOrder = 2
+				};
+
+				repo.Setup(i => i.RemoveAlternateManufactureIdAsync(manufacture, manufactureId)).ReturnsAsync(device1);
+
+				result = await controller.Delete(manufacture, manufactureId);
+				var okor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
+				var device = Assert.IsAssignableFrom<ResponseModel<Device>>(okor.Value);
+				AssertEqual(device1, device.Data);
+
+			}
+		}
 	}
 }

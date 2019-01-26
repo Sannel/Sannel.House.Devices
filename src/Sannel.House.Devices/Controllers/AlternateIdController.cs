@@ -270,13 +270,13 @@ namespace Sannel.House.Devices.Controllers
 			if(string.IsNullOrWhiteSpace(manufacture))
 			{
 				logger.LogError("Null or Empty Manufacture");
-				return BadRequest(new ErrorResponseModel("Manufacture is Empty","manufacture", "manufacture must not be null or whitespace"));
+				return BadRequest(new ErrorResponseModel("Manufacture is Empty","manufacture", "Manufacture must not be null or whitespace"));
 			}
 
 			if(string.IsNullOrWhiteSpace(manufactureId))
 			{
 				logger.LogError("Null or Empty ManufactureId");
-				return BadRequest(new ErrorResponseModel("ManufactureID is Empty","manufactureId", "manufactureId must not be null or whitespace"));
+				return BadRequest(new ErrorResponseModel("ManufactureID is Empty","manufactureId", "ManufactureId must not be null or whitespace"));
 			}
 
 			var device = await repo.RemoveAlternateManufactureIdAsync(manufacture, manufactureId);

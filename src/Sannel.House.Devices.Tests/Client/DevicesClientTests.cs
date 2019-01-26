@@ -557,6 +557,131 @@ namespace Sannel.House.Devices.Tests.Client
 		}
 
 		[Fact]
+		public async Task GetByManufactureIdAsyncTest()
+		{
+			var clientFactory = new Mock<IHttpClientFactory>();
+			var client = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+			var httpClient = new HttpClient(client.Object);
+			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
+			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
+
+			var devicesClient = new DevicesClient(clientFactory.Object);
+			var token = "test123";
+			devicesClient.GetAuthenticationToken += (s, args) =>
+			{
+				Assert.NotNull(args);
+				args.CacheToken = true;
+				args.Token = token;
+			};
+
+			var manufacture = "Particle";
+			var manufactureId = "Photon";
+
+			client.Protected().Setup<Task<HttpResponseMessage>>(
+				"SendAsync",
+				ItExpr.IsAny<HttpRequestMessage>(),
+				ItExpr.IsAny<CancellationToken>()
+			).ReturnsAsync((HttpRequestMessage r,CancellationToken c) =>
+			{
+				Assert.Equal(new Uri($"https://gateway.dev.local/api/v1/Devices/GetByManufactureId/{manufacture}/{manufactureId}"), r.RequestUri);
+				Assert.NotNull(r.Headers.Authorization);
+				Assert.Equal("Bearer", r.Headers.Authorization.Scheme);
+				Assert.Equal(token, r.Headers.Authorization.Parameter);
+				return new HttpResponseMessage()
+				{
+					StatusCode = System.Net.HttpStatusCode.OK,
+					Content = new StringContent(@"{
+	""data"": {
+
+		""deviceId"": 1,
+		""name"": ""Default Device"",
+		""description"": ""Default Device used for unknown devices"",
+		""displayOrder"": 1,
+		""dateCreated"": ""2019-12-09T21:15:00"",
+		""isReadOnly"": true
+
+	},
+	""status"": 200,
+	""title"": ""The Device""
+}")
+				};
+			}).Verifiable();
+
+			var result = await devicesClient.GetByManufactureIdAsync(manufacture, manufactureId);
+			Assert.NotNull(result);
+			Assert.True(result.Success);
+			Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+			Assert.NotNull(result.Data);
+			Assert.Equal(1, result.Data.DeviceId);
+			Assert.Equal("Default Device", result.Data.Name);
+			Assert.Equal("Default Device used for unknown devices", result.Data.Description);
+			Assert.Equal(1, result.Data.DisplayOrder);
+			Assert.Equal(new DateTime(2019, 12, 09, 21, 15, 0, DateTimeKind.Utc), result.Data.DateCreated);
+			Assert.True(result.Data.IsReadOnly, "Device is not makred read only");
+
+		}
+
+		[Fact]
+		public async Task GetByManufactureIdAsyncExceptionTest()
+		{
+			var clientFactory = new Mock<IHttpClientFactory>();
+			var client = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+			var httpClient = new HttpClient(client.Object);
+			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
+			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
+
+			var manufacture = "Particle";
+			var manufactureId = "Photon";
+
+			var devicesClient = new DevicesClient(clientFactory.Object);
+			var token = "test123";
+			devicesClient.GetAuthenticationToken += (s, args) =>
+			{
+				Assert.NotNull(args);
+				args.CacheToken = true;
+				args.Token = token;
+			};
+
+			client.Protected().Setup<Task<HttpResponseMessage>>(
+				"SendAsync",
+				ItExpr.IsAny<HttpRequestMessage>(),
+				ItExpr.IsAny<CancellationToken>()
+			).ReturnsAsync((HttpRequestMessage r,CancellationToken c) =>
+			{
+				Assert.Equal(new Uri($"https://gateway.dev.local/api/v1/Devices/GetByManufactureId/{manufacture}/{manufactureId}"), r.RequestUri);
+				Assert.NotNull(r.Headers.Authorization);
+				Assert.Equal("Bearer", r.Headers.Authorization.Scheme);
+				Assert.Equal(token, r.Headers.Authorization.Parameter);
+				return new HttpResponseMessage()
+				{
+					StatusCode = System.Net.HttpStatusCode.OK,
+					Content = new StringContent(@"{
+	""data"": {
+
+		""deviceId"": 1,
+		""name"": ""Default Device"",
+		""description"": ""Default Device used for unknown devices"",
+		""displayOrder"": 1,
+		""dateCreated"": ""2019-12-09T21:15:00"",
+		""isReadOnly"": true
+
+	},
+	""status"": 200,
+	""title"": ""The Device""
+")
+				};
+			}).Verifiable();
+
+			var result = await devicesClient.GetByManufactureIdAsync(manufacture, manufactureId);
+			Assert.NotNull(result);
+			Assert.False(result.Success);
+			Assert.Equal(444, result.Status);
+			Assert.Null(result.Data);
+			Assert.NotNull(result.Exception);
+
+		}
+
+		[Fact]
 		public async Task AddDeviceAsyncTest()
 		{
 			var clientFactory = new Mock<IHttpClientFactory>();
@@ -1228,6 +1353,137 @@ namespace Sannel.House.Devices.Tests.Client
 			Assert.Null(result.Data);
 
 		}
+		
+		[Fact]
+		public async Task AddAlternateIdAsyncManufactureIdTest()
+		{
+			var clientFactory = new Mock<IHttpClientFactory>();
+			var client = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+			var httpClient = new HttpClient(client.Object);
+			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
+			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
+			var manufacture = "Particle";
+			var manufactureId = "Photon";
+
+			var device = new Device()
+			{
+				DeviceId = 20,
+				Name = "Name Device",
+				Description = "Test Description",
+				IsReadOnly = true,
+				DateCreated = DateTime.UtcNow,
+				DisplayOrder = 20
+			};
+
+			var devicesClient = new DevicesClient(clientFactory.Object);
+			var token = "test123";
+			devicesClient.GetAuthenticationToken += (s, args) =>
+			{
+				Assert.NotNull(args);
+				args.CacheToken = true;
+				args.Token = token;
+			};
+
+			client.Protected().Setup<Task<HttpResponseMessage>>(
+				"SendAsync",
+				ItExpr.IsAny<HttpRequestMessage>(),
+				ItExpr.IsAny<CancellationToken>()
+			).ReturnsAsync((HttpRequestMessage r,CancellationToken c) =>
+			{
+				Assert.Equal(HttpMethod.Post, r.Method);
+				Assert.Equal(new Uri($"https://gateway.dev.local/api/v1/AlternateId/manufactureid/{manufacture}/{manufactureId}/20"), r.RequestUri);
+				Assert.NotNull(r.Headers.Authorization);
+				Assert.Equal("Bearer", r.Headers.Authorization.Scheme);
+				Assert.Equal(token, r.Headers.Authorization.Parameter);
+
+				Assert.Equal(string.Empty, r.Content.ReadAsStringAsync().Result);
+
+				return new HttpResponseMessage()
+				{
+					StatusCode = System.Net.HttpStatusCode.OK,
+					Content = new StringContent(@"{'success':true,status: 200,'Data':
+{
+		""deviceId"": 20,
+		""name"": ""Default Device"",
+		""description"": ""Default Device used for unknown devices"",
+		""displayOrder"": 2,
+		""dateCreated"": ""2019-12-09T21:15:00"",
+		""isReadOnly"": true
+}}")
+				};
+			}).Verifiable();
+
+			var result = await devicesClient.AddAlternateIdAsync(manufacture, manufactureId, 20);
+			Assert.NotNull(result);
+			Assert.True(result.Success);
+			Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+			var d = result.Data;
+			Assert.Equal(20, d.DeviceId);
+			Assert.Equal("Default Device", d.Name);
+			Assert.Equal("Default Device used for unknown devices", d.Description);
+			Assert.Equal(2, d.DisplayOrder);
+			Assert.Equal(new DateTime(2019, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
+			Assert.True(d.IsReadOnly, "Device is not marked read only");
+
+		}
+
+		[Fact]
+		public async Task AddAlternateIdAsyncManufactureIdExceptionTest()
+		{
+			var clientFactory = new Mock<IHttpClientFactory>();
+			var client = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+			var httpClient = new HttpClient(client.Object);
+			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
+			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
+
+			var manufacture = "Particle";
+			var manufactureId = "Photon";
+
+			var device = new Device()
+			{
+				DeviceId = 20,
+				Name = "Name Device",
+				Description = "Test Description",
+				IsReadOnly = true,
+				DateCreated = DateTime.UtcNow,
+				DisplayOrder = 20
+			};
+
+			var devicesClient = new DevicesClient(clientFactory.Object);
+			var token = "test123";
+			devicesClient.GetAuthenticationToken += (s, args) =>
+			{
+				Assert.NotNull(args);
+				args.CacheToken = true;
+				args.Token = token;
+			};
+
+			client.Protected().Setup<Task<HttpResponseMessage>>(
+				"SendAsync",
+				ItExpr.IsAny<HttpRequestMessage>(),
+				ItExpr.IsAny<CancellationToken>()
+			).ReturnsAsync((HttpRequestMessage r,CancellationToken c) =>
+			{
+				Assert.Equal(HttpMethod.Post, r.Method);
+				Assert.Equal(new Uri($"https://gateway.dev.local/api/v1/AlternateId/manufactureid/{manufacture}/{manufactureId}/20"), r.RequestUri);
+				Assert.NotNull(r.Headers.Authorization);
+				Assert.Equal("Bearer", r.Headers.Authorization.Scheme);
+				Assert.Equal(token, r.Headers.Authorization.Parameter);
+
+				return new HttpResponseMessage()
+				{
+					StatusCode = System.Net.HttpStatusCode.OK,
+					Content = new StringContent("{ 'success':true,status 400,'Data':5}")
+				};
+			}).Verifiable();
+
+			var result = await devicesClient.AddAlternateIdAsync(manufacture, manufactureId, 20);
+			Assert.NotNull(result);
+			Assert.False(result.Success);
+			Assert.Equal(444, result.Status);
+			Assert.Null(result.Data);
+
+		}
 
 		[Fact]
 		public async Task DeleteAlternateIdAsyncMacTest()
@@ -1532,6 +1788,136 @@ namespace Sannel.House.Devices.Tests.Client
 			}).Verifiable();
 
 			var result = await devicesClient.DeleteAlternateIdAsync(uuid);
+			Assert.NotNull(result);
+			Assert.False(result.Success);
+			Assert.Equal(444, result.Status);
+			Assert.Null(result.Data);
+
+		}
+
+		[Fact]
+		public async Task DeleteAlternateIdAsyncManufactureIdTest()
+		{
+			var clientFactory = new Mock<IHttpClientFactory>();
+			var client = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+			var httpClient = new HttpClient(client.Object);
+			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
+			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
+
+			var manufacture = "Particle";
+			var manufactureId = "Photon";
+
+			var device = new Device()
+			{
+				DeviceId = 20,
+				Name = "Name Device",
+				Description = "Test Description",
+				IsReadOnly = true,
+				DateCreated = DateTime.UtcNow,
+				DisplayOrder = 20
+			};
+
+			var devicesClient = new DevicesClient(clientFactory.Object);
+			var token = "test123";
+			devicesClient.GetAuthenticationToken += (s, args) =>
+			{
+				Assert.NotNull(args);
+				args.CacheToken = true;
+				args.Token = token;
+			};
+
+			client.Protected().Setup<Task<HttpResponseMessage>>(
+				"SendAsync",
+				ItExpr.IsAny<HttpRequestMessage>(),
+				ItExpr.IsAny<CancellationToken>()
+			).ReturnsAsync((HttpRequestMessage r,CancellationToken c) =>
+			{
+				Assert.Equal(HttpMethod.Delete, r.Method);
+				Assert.Equal(new Uri($"https://gateway.dev.local/api/v1/AlternateId/manufacture/{manufacture}/{manufactureId}"), r.RequestUri);
+				Assert.NotNull(r.Headers.Authorization);
+				Assert.Equal("Bearer", r.Headers.Authorization.Scheme);
+				Assert.Equal(token, r.Headers.Authorization.Parameter);
+
+				return new HttpResponseMessage()
+				{
+					StatusCode = System.Net.HttpStatusCode.OK,
+					Content = new StringContent(@"{'success':true,status: 200,'Data':
+{
+		""deviceId"": 20,
+		""name"": ""Default Device"",
+		""description"": ""Default Device used for unknown devices"",
+		""displayOrder"": 2,
+		""dateCreated"": ""2019-12-09T21:15:00"",
+		""isReadOnly"": true
+}}")
+				};
+			}).Verifiable();
+
+			var result = await devicesClient.DeleteAlternateIdAsync(manufacture, manufactureId);
+			Assert.NotNull(result);
+			Assert.True(result.Success);
+			Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+			var d = result.Data;
+			Assert.Equal(20, d.DeviceId);
+			Assert.Equal("Default Device", d.Name);
+			Assert.Equal("Default Device used for unknown devices", d.Description);
+			Assert.Equal(2, d.DisplayOrder);
+			Assert.Equal(new DateTime(2019, 12, 09, 21, 15, 0, DateTimeKind.Utc), d.DateCreated);
+			Assert.True(d.IsReadOnly, "Device is not marked read only");
+
+		}
+
+		[Fact]
+		public async Task DeleteAlternateIdAsyncManufacuteIdExceptionTest()
+		{
+			var clientFactory = new Mock<IHttpClientFactory>();
+			var client = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+			var httpClient = new HttpClient(client.Object);
+			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
+			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
+
+			var manufacture = "Particle";
+			var manufactureId = "Photon";
+
+			var device = new Device()
+			{
+				DeviceId = 20,
+				Name = "Name Device",
+				Description = "Test Description",
+				IsReadOnly = true,
+				DateCreated = DateTime.UtcNow,
+				DisplayOrder = 20
+			};
+
+			var devicesClient = new DevicesClient(clientFactory.Object);
+			var token = "test123";
+			devicesClient.GetAuthenticationToken += (s, args) =>
+			{
+				Assert.NotNull(args);
+				args.CacheToken = true;
+				args.Token = token;
+			};
+
+			client.Protected().Setup<Task<HttpResponseMessage>>(
+				"SendAsync",
+				ItExpr.IsAny<HttpRequestMessage>(),
+				ItExpr.IsAny<CancellationToken>()
+			).ReturnsAsync((HttpRequestMessage r,CancellationToken c) =>
+			{
+				Assert.Equal(HttpMethod.Delete, r.Method);
+				Assert.Equal(new Uri($"https://gateway.dev.local/api/v1/AlternateId/manufacture/{manufacture}/{manufactureId}"), r.RequestUri);
+				Assert.NotNull(r.Headers.Authorization);
+				Assert.Equal("Bearer", r.Headers.Authorization.Scheme);
+				Assert.Equal(token, r.Headers.Authorization.Parameter);
+
+				return new HttpResponseMessage()
+				{
+					StatusCode = System.Net.HttpStatusCode.OK,
+					Content = new StringContent("{ 'success':true,status 400,'Data':5}")
+				};
+			}).Verifiable();
+
+			var result = await devicesClient.DeleteAlternateIdAsync(manufacture, manufactureId);
 			Assert.NotNull(result);
 			Assert.False(result.Success);
 			Assert.Equal(444, result.Status);
