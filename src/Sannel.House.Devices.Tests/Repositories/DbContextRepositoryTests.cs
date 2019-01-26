@@ -619,6 +619,9 @@ namespace Sannel.House.Devices.Tests.Repositories
 
 					var repo = new DbContextRepository(context);
 
+					await Assert.ThrowsAsync<ArgumentNullException>(() => repo.AddAlternateManufactureIdAsync(1, null, ""));
+					await Assert.ThrowsAsync<ArgumentNullException>(() => repo.AddAlternateManufactureIdAsync(1, "32", null));
+
 					var actual = await repo.AddAlternateManufactureIdAsync(-1, manufacture, manufactureId);
 					Assert.Null(actual); // No device with -1 id
 

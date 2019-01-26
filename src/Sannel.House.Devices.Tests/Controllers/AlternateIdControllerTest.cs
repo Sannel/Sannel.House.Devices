@@ -259,6 +259,85 @@ namespace Sannel.House.Devices.Tests.Controllers
 		}
 
 		[Fact]
+		public async Task PostManufactureIdTest()
+		{
+
+			var repo = new Mock<IDeviceRepository>();
+			using (var controller = new AlternateIdController(repo.Object, CreateLogger<AlternateIdController>()))
+			{
+				var result = await controller.Post("", null, -1);
+				var bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				var error = Assert.IsAssignableFrom<ErrorResponseModel>(bror.Value);
+				Assert.NotNull(error);
+				Assert.Single(error.Errors);
+				var err = error.Errors.First();
+				Assert.Equal("manufacture", err.Key);
+				Assert.Equal("manufacture must not be null or whitespace", err.Value.First());
+
+				result = await controller.Post("Particle", null, -1);
+				bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				error = Assert.IsAssignableFrom<ErrorResponseModel>(bror.Value);
+				Assert.NotNull(error);
+				Assert.Single(error.Errors);
+				err = error.Errors.First();
+				Assert.Equal("manufactureId", err.Key);
+				Assert.Equal("manufactureId must not be null or whitespace", err.Value.First());
+
+				result = await controller.Post("Particle", "Tinker", -1);
+				bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				error = Assert.IsAssignableFrom<ErrorResponseModel>(bror.Value);
+				Assert.NotNull(error);
+				Assert.Single(error.Errors);
+				err = error.Errors.First();
+				Assert.Equal("deviceId", err.Key);
+				Assert.Equal("Device Id must be greater then or equal to 0", err.Value.First());
+
+				var manufacture = "Particle";
+				var manufactureId = "Photon";
+
+				repo.Setup(i => i.AddAlternateManufactureIdAsync(20, manufacture, manufactureId)).ThrowsAsync(new AlternateDeviceIdException("Device already connected"));
+
+
+				result = await controller.Post(manufacture, manufactureId, 20);
+				bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
+				error = Assert.IsAssignableFrom<ErrorResponseModel>(bror.Value);
+				Assert.NotNull(error);
+				Assert.Single(error.Errors);
+				err = error.Errors.First();
+				Assert.Equal("manufactureId", err.Key);
+				Assert.Equal("That Manufacture and ManufactureId is already connected to a device", err.Value.First());
+
+				repo.Setup(i => i.AddAlternateManufactureIdAsync(20, manufacture, manufactureId)).ReturnsAsync((Device)null);
+
+				result = await controller.Post(manufacture, manufactureId, 20);
+				var nfor = Assert.IsAssignableFrom<NotFoundObjectResult>(result.Result);
+				error = Assert.IsAssignableFrom<ErrorResponseModel>(nfor.Value);
+				Assert.NotNull(error);
+				Assert.Single(error.Errors);
+				err = error.Errors.First();
+				Assert.Equal("notFound", err.Key);
+				Assert.Equal("No device found with that id", err.Value.First());
+
+				var device1 = new Device()
+				{
+					DeviceId = 20,
+					Name = "Test Name",
+					IsReadOnly = true,
+					Description = "Dest Description",
+					DateCreated = DateTime.UtcNow,
+					DisplayOrder = 2
+				};
+
+				repo.Setup(i => i.AddAlternateManufactureIdAsync(20, manufacture, manufactureId)).ReturnsAsync(device1);
+
+				result = await controller.Post(manufacture, manufactureId, 20);
+				var okor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
+				var device = Assert.IsAssignableFrom<ResponseModel<Device>>(okor.Value);
+				AssertEqual(device1, device.Data);
+			}
+		}
+
+		[Fact]
 		public async Task DeleteMacAddressAsync()
 		{
 

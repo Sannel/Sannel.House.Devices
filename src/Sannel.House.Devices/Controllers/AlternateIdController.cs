@@ -260,5 +260,34 @@ namespace Sannel.House.Devices.Controllers
 			return Ok(new ResponseModel<Device>("Device", device));
 		}
 
+		[HttpDelete("manufacture/{manufacture}/{manufactureId}")]
+		[Authorize(Roles = "DeviceWrite,Admin")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<ResponseModel<Device>>> Delete(string manufacture, string manufactureId)
+		{
+			if(string.IsNullOrWhiteSpace(manufacture))
+			{
+				logger.LogError("Null or Empty Manufacture");
+				return BadRequest(new ErrorResponseModel("Manufacture is Empty","manufacture", "manufacture must not be null or whitespace"));
+			}
+
+			if(string.IsNullOrWhiteSpace(manufactureId))
+			{
+				logger.LogError("Null or Empty ManufactureId");
+				return BadRequest(new ErrorResponseModel("ManufactureID is Empty","manufactureId", "manufactureId must not be null or whitespace"));
+			}
+
+			var device = await repo.RemoveAlternateManufactureIdAsync(manufacture, manufactureId);
+			if(device == null)
+			{
+				logger.LogDebug("ManufactureId not found {0}/{1}", manufacture, manufactureId);
+				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound,"ManufactureId Not Found","manufactureid", "Manufacture/ManufactureId not found"));
+			}
+
+			return Ok(new ResponseModel<Device>("Device", device));
+		}
+
 	}
 }
