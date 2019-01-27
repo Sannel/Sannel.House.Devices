@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -7,8 +7,8 @@
     <PackageId>Sannel.House.Devices.Client</PackageId>
     <AssemblyVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</AssemblyVersion>
     <FileVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</FileVersion>
-	<Version Condition="'$(IsRelease)' != 'true'">$(Major).$(Minor)$(Patch).$(BuildNumber)-beta</Version>
-	<Version Condition="'$(IsRelease)' == 'true'">$(Major).$(Minor)$(Patch).$(BuildNumber)</Version>
+	<Version Condition="'$(IsRelease)' != 'true'">$(Major)$(Minor).$(Patch).$(BuildNumber)-beta</Version>
+	<Version Condition="'$(IsRelease)' == 'true'">$(Major)$(Minor).$(Patch).$(BuildNumber)</Version>
 	<Authors>Adam Holt</Authors>
 	<Company>Sannel Software, L.L.C.</Company>
 	<Copyright></Copyright>
