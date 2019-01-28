@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Migrations\Sannel.House.Devices.Data.Migrations.MySql\Sannel.House.Devices.Data.Migrations.MySql.csproj" />
+    <ProjectReference Include="..\Migrations\Sannel.House.Devices.Data.Migrations.PostgreSQL\Sannel.House.Devices.Data.Migrations.PostgreSQL.csproj" />
     <ProjectReference Include="..\Migrations\Sannel.House.Devices.Data.Migrations.Sqlite\Sannel.House.Devices.Data.Migrations.Sqlite.csproj" />
     <ProjectReference Include="..\Migrations\Sannel.House.Devices.Data.Migrations.SqlServer\Sannel.House.Devices.Data.Migrations.SqlServer.csproj" />
     <ProjectReference Include="..\Sannel.House.Devices.Data\Sannel.House.Devices.Data.csproj" />

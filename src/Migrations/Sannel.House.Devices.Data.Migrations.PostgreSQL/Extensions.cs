@@ -17,7 +17,7 @@ namespace Sannel.House.Devices.Data.Migrations.PostgresSQL
 {
 	public static class Extensions
 	{
-		public static DbContextOptionsBuilder ConfigureNpgsql(this DbContextOptionsBuilder option, string connectionString)
+		public static DbContextOptionsBuilder ConfigurePostgreSQL(this DbContextOptionsBuilder option, string connectionString)
 		=> option.UseNpgsql(connectionString, i => i.MigrationsAssembly(typeof(Extensions).Assembly.GetName().FullName));
 	}
 }

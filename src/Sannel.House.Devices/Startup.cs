@@ -33,6 +33,7 @@ using Sannel.House.Devices.Data;
 using Sannel.House.Devices.Data.Migrations.MySql;
 using Sannel.House.Devices.Data.Migrations.Sqlite;
 using Sannel.House.Devices.Data.Migrations.SqlServer;
+using Sannel.House.Devices.Data.Migrations.PostgresSQL;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Repositories;
 using System.Net;
@@ -67,6 +68,10 @@ namespace Sannel.House.Devices
 						break;
 					case "sqlserver":
 						o.ConfigureSqlServer(Configuration["Db:ConnectionString"]);
+						break;
+					case "PostgreSQL":
+					case "postgresql":
+						o.ConfigurePostgreSQL(Configuration["Db:ConnectionString"]);
 						break;
 					case "sqlite":
 					default:
@@ -110,6 +115,7 @@ namespace Sannel.House.Devices
 			var db = provider.GetService<DevicesDbContext>();
 
 			if (string.Compare(p, "mysql", true) == 0
+					|| string.Compare(p, "postgresql", true) == 0
 					|| string.Compare(p, "sqlserver", true) == 0)
 			{
 				if(!db.WaitForServer(logger))
