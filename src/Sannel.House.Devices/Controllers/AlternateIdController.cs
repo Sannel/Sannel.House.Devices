@@ -260,7 +260,7 @@ namespace Sannel.House.Devices.Controllers
 			return Ok(new ResponseModel<Device>("Device", device));
 		}
 
-		[HttpDelete("manufacture/{manufacture}/{manufactureId}")]
+		[HttpDelete("manufactureid/{manufacture}/{manufactureId}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]

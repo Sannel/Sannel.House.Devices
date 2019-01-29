@@ -180,7 +180,7 @@ namespace Sannel.House.Devices.Controllers
 			return Ok(new ResponseModel<Device>("The Device", device));
 		}
 
-		[HttpGet("GetByManufactureId/{uuid}")]
+		[HttpGet("GetByManufactureId/{manufacture}/{manufactureId}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
