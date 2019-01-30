@@ -1,6 +1,7 @@
 #!/usr/local/bin/pwsh
 param(
-	[switch]$DevicesOnly
+	[switch]$DevicesOnly,
+	[switch]$MainOnly
 )
 
 . "$PSScriptRoot/_common.ps1"
@@ -8,7 +9,7 @@ param(
 SetBuildType
 
 $target = "";
-if($DevicesOnly)
+if($DevicesOnly -or $MainOnly)
 {
 	$target = "devices";
 }
