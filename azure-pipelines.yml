@@ -1,0 +1,33 @@
+resources:
+- repo: self
+  clean: true
+
+jobs:
+
+- job: Phase_1
+  displayName: Linux Arm
+  condition: succeeded()
+  pool:
+    name: linux-arm
+#Task group has not been exported, task groups are not supported yet
+
+#Task group has not been exported, task groups are not supported yet
+
+
+- job: Phase_2
+  displayName: Windows
+  condition: succeeded()
+  pool:
+    vmImage: Hosted Windows Container
+#Task group has not been exported, task groups are not supported yet
+
+
+- job: Phase_3
+  displayName: Linux x64
+  condition: succeeded()
+  pool:
+    name: linux-x64
+#Task group has not been exported, task groups are not supported yet
+
+#Task group has not been exported, task groups are not supported yet
+
