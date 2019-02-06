@@ -1,19 +1,27 @@
 #!/usr/local/bin/pwsh
 param(
+	[switch]$DevicesOnly,
+	[switch]$MainOnly
 )
 
-$target = "devices"
 . "$PSScriptRoot/_common.ps1"
 
 SetBuildType
+
+$target = "";
+if($DevicesOnly -or $MainOnly)
+{
+	$target = "devices";
+}
+
+# Pull latest images 
+docker pull microsoft/dotnet:2.2-aspnetcore-runtime
+docker pull microsoft/dotnet:2.2-sdk
+
 CleanDevFiles
 
 $version = GetVersion
-TryLogin
-SetDockerComposeVariables
-$image="${env:DOCKER_REGISTRY}${imageName}:$buildType-$version-${env:SANNEL_ARCH}"
 
-
-return docker push $image
+return RunDockerCompose "push" $version $target
 
 
