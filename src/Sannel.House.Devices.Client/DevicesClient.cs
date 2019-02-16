@@ -30,7 +30,7 @@ namespace Sannel.House.Devices.Client
 		public DevicesClient(IHttpClientFactory factory) 
 			=> this.factory = factory;
 
-		protected void UpdateAuthenticationToken(HttpClient client)
+		protected virtual void UpdateAuthenticationToken(HttpClient client)
 		{
 			var args = new AuthenticationTokenArgs();
 			GetAuthenticationToken?.Invoke(this, args);
@@ -43,7 +43,7 @@ namespace Sannel.House.Devices.Client
 		/// Gets a paged list of Devices asynchronous.
 		/// </summary>
 		/// <returns></returns>
-		public Task<PagedResults<Device>> GetPagedAsync()
+		public virtual Task<PagedResults<Device>> GetPagedAsync()
 			=> GetPagedAsync(0, 25);
 
 		/// <summary>
@@ -51,7 +51,7 @@ namespace Sannel.House.Devices.Client
 		/// </summary>
 		/// <param name="page">The page.</param>
 		/// <returns></returns>
-		public Task<PagedResults<Device>> GetPagedAsync(long page)
+		public virtual Task<PagedResults<Device>> GetPagedAsync(long page)
 			=> GetPagedAsync(page, 25);
 
 		/// <summary>
@@ -60,7 +60,7 @@ namespace Sannel.House.Devices.Client
 		/// <typeparam name="T"></typeparam>
 		/// <param name="message">The message.</param>
 		/// <returns></returns>
-		protected async Task<T> DeserializeIfSupportedCodeAsync<T>(HttpResponseMessage message)
+		protected virtual async Task<T> DeserializeIfSupportedCodeAsync<T>(HttpResponseMessage message)
 			where T : IResults, new()
 		{
 			switch (message.StatusCode)
@@ -93,7 +93,7 @@ namespace Sannel.House.Devices.Client
 		/// <param name="page">The page.</param>
 		/// <param name="pageSize">Size of the page.</param>
 		/// <returns></returns>
-		public async Task<PagedResults<Device>> GetPagedAsync(long page, int pageSize)
+		public virtual async Task<PagedResults<Device>> GetPagedAsync(long page, int pageSize)
 		{ 
 			var client = factory.CreateClient(nameof(DevicesClient));
 			UpdateAuthenticationToken(client);
@@ -120,7 +120,7 @@ namespace Sannel.House.Devices.Client
 		/// </summary>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		public Task<Results<Device>> GetDeviceAsync(int deviceId)
+		public virtual Task<Results<Device>> GetDeviceAsync(int deviceId)
 			=> GetAsync($"Devices/{deviceId}");
 
 		/// <summary>
@@ -128,7 +128,7 @@ namespace Sannel.House.Devices.Client
 		/// </summary>
 		/// <param name="url">The URL.</param>
 		/// <returns></returns>
-		protected async Task<Results<Device>> GetAsync(string url)
+		protected virtual async Task<Results<Device>> GetAsync(string url)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
 			UpdateAuthenticationToken(client);
@@ -154,7 +154,7 @@ namespace Sannel.House.Devices.Client
 		/// </summary>
 		/// <param name="macAddress">The mac address.</param>
 		/// <returns></returns>
-		public Task<Results<Device>> GetByMacAddressAsync(long macAddress)
+		public virtual Task<Results<Device>> GetByMacAddressAsync(long macAddress)
 			=> GetAsync($"Devices/GetByMac/{macAddress}");
 
 		/// <summary>
@@ -162,7 +162,7 @@ namespace Sannel.House.Devices.Client
 		/// </summary>
 		/// <param name="uuid">The UUID.</param>
 		/// <returns></returns>
-		public Task<Results<Device>> GetByUuidAsync(Guid uuid)
+		public virtual Task<Results<Device>> GetByUuidAsync(Guid uuid)
 			=> GetAsync($"Devices/GetByUuid/{uuid}");
 
 		/// <summary>
@@ -171,7 +171,7 @@ namespace Sannel.House.Devices.Client
 		/// <param name="manufacture">The manufacture.</param>
 		/// <param name="manufactureId">The manufacture identifier.</param>
 		/// <returns></returns>
-		public Task<Results<Device>> GetByManufactureIdAsync(string manufacture, string manufactureId)
+		public virtual Task<Results<Device>> GetByManufactureIdAsync(string manufacture, string manufactureId)
 			=> GetAsync($"Devices/GetByManufactureId/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}");
 
 		/// <summary>
@@ -179,7 +179,7 @@ namespace Sannel.House.Devices.Client
 		/// </summary>
 		/// <param name="device">The device.</param>
 		/// <returns></returns>
-		public async Task<Results<int>> AddDeviceAsync(Device device)
+		public virtual async Task<Results<int>> AddDeviceAsync(Device device)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
 			UpdateAuthenticationToken(client);
@@ -209,7 +209,7 @@ namespace Sannel.House.Devices.Client
 		/// </summary>
 		/// <param name="device">The device.</param>
 		/// <returns></returns>
-		public async Task<Results<int>> UpdateDeviceAsync(Device device)
+		public virtual async Task<Results<int>> UpdateDeviceAsync(Device device)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
 			UpdateAuthenticationToken(client);
@@ -239,7 +239,7 @@ namespace Sannel.House.Devices.Client
 		/// </summary>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		public async Task<Results<List<AlternateDeviceId>>> GetAlernateIdsAsync(int deviceId)
+		public virtual async Task<Results<List<AlternateDeviceId>>> GetAlernateIdsAsync(int deviceId)
 		{ 
 			var client = factory.CreateClient(nameof(DevicesClient));
 			UpdateAuthenticationToken(client);
@@ -277,7 +277,7 @@ namespace Sannel.House.Devices.Client
 		/// </remarks>
 		/// <exception cref="ArgumentNullException">macAddress</exception>
 		/// <exception cref="ArgumentOutOfRangeException">macAddress - macAddress must be 6 or 8 bytes long. Also if the array of bytes cannot be converted to a long</exception>
-		public Task<Results<Device>> AddAlternateIdAsync(byte[] macAddress, int deviceId)
+		public virtual Task<Results<Device>> AddAlternateIdAsync(byte[] macAddress, int deviceId)
 		{
 			var fixedMacAddress = new byte[8];
 			if(macAddress == null)
@@ -312,7 +312,7 @@ namespace Sannel.House.Devices.Client
 		/// <param name="macAddress">The mac address.</param>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		public async Task<Results<Device>> AddAlternateIdAsync(long macAddress, int deviceId)
+		public virtual async Task<Results<Device>> AddAlternateIdAsync(long macAddress, int deviceId)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
 			UpdateAuthenticationToken(client);
@@ -339,7 +339,7 @@ namespace Sannel.House.Devices.Client
 		/// <param name="uuid">The UUID.</param>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		public async Task<Results<Device>> AddAlternateIdAsync(Guid uuid, int deviceId)
+		public virtual async Task<Results<Device>> AddAlternateIdAsync(Guid uuid, int deviceId)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
 			UpdateAuthenticationToken(client);
@@ -367,7 +367,7 @@ namespace Sannel.House.Devices.Client
 		/// <param name="manufactureId">The manufacture identifier.</param>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		public async Task<Results<Device>> AddAlternateIdAsync(string manufacture, string manufactureId, int deviceId)
+		public virtual async Task<Results<Device>> AddAlternateIdAsync(string manufacture, string manufactureId, int deviceId)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
 			UpdateAuthenticationToken(client);
@@ -405,7 +405,7 @@ namespace Sannel.House.Devices.Client
 		/// </remarks>
 		/// <exception cref="ArgumentNullException">macAddress</exception>
 		/// <exception cref="ArgumentOutOfRangeException">macAddress - macAddress must be 6 or 8 bytes long. Also if the array of bytes cannot be converted to a long</exception>
-		public Task<Results<Device>> DeleteAlternateIdAsync(byte[] macAddress)
+		public virtual Task<Results<Device>> DeleteAlternateIdAsync(byte[] macAddress)
 		{
 			var fixedMacAddress = new byte[8];
 			if(macAddress == null)
@@ -439,7 +439,7 @@ namespace Sannel.House.Devices.Client
 		/// </summary>
 		/// <param name="macAddress">The mac address.</param>
 		/// <returns></returns>
-		public async Task<Results<Device>> DeleteAlternateIdAsync(long macAddress)
+		public virtual async Task<Results<Device>> DeleteAlternateIdAsync(long macAddress)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
 			UpdateAuthenticationToken(client);
@@ -465,7 +465,7 @@ namespace Sannel.House.Devices.Client
 		/// </summary>
 		/// <param name="uuid">The UUID.</param>
 		/// <returns></returns>
-		public async Task<Results<Device>> DeleteAlternateIdAsync(Guid uuid)
+		public virtual async Task<Results<Device>> DeleteAlternateIdAsync(Guid uuid)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
 			UpdateAuthenticationToken(client);
@@ -492,7 +492,7 @@ namespace Sannel.House.Devices.Client
 		/// <param name="manufacture">The manufacture.</param>
 		/// <param name="manufactureId">The manufacture identifier.</param>
 		/// <returns></returns>
-		public async Task<Results<Device>> DeleteAlternateIdAsync(string manufacture, string manufactureId)
+		public virtual async Task<Results<Device>> DeleteAlternateIdAsync(string manufacture, string manufactureId)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
 			UpdateAuthenticationToken(client);

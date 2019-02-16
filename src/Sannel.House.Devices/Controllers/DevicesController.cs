@@ -35,10 +35,7 @@ namespace Sannel.House.Devices.Controllers
 			repo = repository ?? throw new ArgumentNullException(nameof(repository));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
-		/*						"DeviceCreate",
-						"DeviceEdit",
-						"DeviceRead",*/
-		// GET: api/<controller>
+
 		/// <summary>
 		/// Gets the first 25 devices
 		/// </summary>
