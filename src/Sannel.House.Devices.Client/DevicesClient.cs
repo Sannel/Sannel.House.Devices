@@ -14,6 +14,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Security;
 
 namespace Sannel.House.Devices.Client
 {
@@ -30,13 +31,16 @@ namespace Sannel.House.Devices.Client
 		public DevicesClient(IHttpClientFactory factory) 
 			=> this.factory = factory;
 
-		protected virtual void UpdateAuthenticationToken(HttpClient client)
+		/// <summary>
+		/// Gets or sets the bearer authentication token.
+		/// </summary>
+		/// <value>
+		/// The authentication token.
+		/// </value>
+		public string AuthToken
 		{
-			var args = new AuthenticationTokenArgs();
-			GetAuthenticationToken?.Invoke(this, args);
-
-			client.DefaultRequestHeaders.Authorization 
-				= new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", args.Token);
+			get;
+			set;
 		}
 
 		/// <summary>
@@ -88,6 +92,14 @@ namespace Sannel.House.Devices.Client
 		}
 
 		/// <summary>
+		/// Adds the authorization header.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		protected void AddAuthorizationHeader(HttpRequestMessage message) 
+			=> message.Headers.Authorization 
+				= new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", AuthToken);
+
+		/// <summary>
 		/// Gets a paged list of Devices asynchronous.
 		/// </summary>
 		/// <param name="page">The page.</param>
@@ -96,14 +108,17 @@ namespace Sannel.House.Devices.Client
 		public virtual async Task<PagedResults<Device>> GetPagedAsync(long page, int pageSize)
 		{ 
 			var client = factory.CreateClient(nameof(DevicesClient));
-			UpdateAuthenticationToken(client);
 			try
 			{
-				var response = await client.GetAsync($"Devices/GetPaged/{page}/{pageSize}");
-				var obj = await DeserializeIfSupportedCodeAsync<PagedResults<Device>>(response);
-				return obj;
+				using (var message = new HttpRequestMessage(HttpMethod.Get, $"Devices/GetPaged/{page}/{pageSize}"))
+				{
+					AddAuthorizationHeader(message);
+					var response = await client.SendAsync(message);
+					var obj = await DeserializeIfSupportedCodeAsync<PagedResults<Device>>(response);
+					return obj;
+				}
 			}
-			catch(Exception ex)
+			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
 			{
 				return new PagedResults<Device>()
 				{
@@ -131,13 +146,16 @@ namespace Sannel.House.Devices.Client
 		protected virtual async Task<Results<Device>> GetAsync(string url)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
-			UpdateAuthenticationToken(client);
 			try
 			{
-				var response = await client.GetAsync(url);
-				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				using (var message = new HttpRequestMessage(HttpMethod.Get, url))
+				{
+					AddAuthorizationHeader(message);
+					var response = await client.SendAsync(message);
+					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				}
 			}
-			catch(Exception ex)
+			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
 			{
 				return new Results<Device>()
 				{
@@ -182,17 +200,20 @@ namespace Sannel.House.Devices.Client
 		public virtual async Task<Results<int>> AddDeviceAsync(Device device)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
-			UpdateAuthenticationToken(client);
 			try
 			{
-				var response = await client.PostAsync($"Devices",
-					new StringContent(
-						await Task.Run(() =>JsonConvert.SerializeObject(device)),
-						System.Text.Encoding.UTF8,
-						"application/json"));
-				return await DeserializeIfSupportedCodeAsync<Results<int>>(response);
+				using (var message = new HttpRequestMessage(HttpMethod.Post, "Devices"))
+				{
+					AddAuthorizationHeader(message);
+					message.Content = new StringContent(
+							await Task.Run(() => JsonConvert.SerializeObject(device)),
+							System.Text.Encoding.UTF8,
+							"application/json");
+					var response = await client.SendAsync(message);
+					return await DeserializeIfSupportedCodeAsync<Results<int>>(response);
+				}
 			}
-			catch(Exception ex)
+			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
 			{
 				return new Results<int>()
 				{
@@ -212,17 +233,20 @@ namespace Sannel.House.Devices.Client
 		public virtual async Task<Results<int>> UpdateDeviceAsync(Device device)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
-			UpdateAuthenticationToken(client);
 			try
 			{
-				var response = await client.PutAsync($"Devices",
-					new StringContent(
-						await Task.Run(() =>JsonConvert.SerializeObject(device)),
-						System.Text.Encoding.UTF8,
-						"application/json"));
-				return await DeserializeIfSupportedCodeAsync<Results<int>>(response);
+				using (var message = new HttpRequestMessage(HttpMethod.Put, "Devices"))
+				{
+					AddAuthorizationHeader(message);
+					message.Content = new StringContent(
+							await Task.Run(() => JsonConvert.SerializeObject(device)),
+							System.Text.Encoding.UTF8,
+							"application/json");
+					var response = await client.SendAsync(message);
+					return await DeserializeIfSupportedCodeAsync<Results<int>>(response);
+				}
 			}
-			catch(Exception ex)
+			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
 			{
 				return new Results<int>()
 				{
@@ -242,13 +266,16 @@ namespace Sannel.House.Devices.Client
 		public virtual async Task<Results<List<AlternateDeviceId>>> GetAlernateIdsAsync(int deviceId)
 		{ 
 			var client = factory.CreateClient(nameof(DevicesClient));
-			UpdateAuthenticationToken(client);
 			try
 			{
-				var response = await client.GetAsync($"AlternateId/{deviceId}");
-				return await DeserializeIfSupportedCodeAsync<Results<List<AlternateDeviceId>>>(response);
+				using (var message = new HttpRequestMessage(HttpMethod.Get, $"AlternateId/{deviceId}"))
+				{
+					AddAuthorizationHeader(message);
+					var response = await client.SendAsync(message);
+					return await DeserializeIfSupportedCodeAsync<Results<List<AlternateDeviceId>>>(response);
+				}
 			}
-			catch(Exception ex)
+			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
 			{
 				return new Results<List<AlternateDeviceId>>()
 				{
@@ -315,13 +342,18 @@ namespace Sannel.House.Devices.Client
 		public virtual async Task<Results<Device>> AddAlternateIdAsync(long macAddress, int deviceId)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
-			UpdateAuthenticationToken(client);
 			try
 			{
-				var response = await client.PostAsync($"AlternateId/mac/{macAddress}/{deviceId}", new StringContent(string.Empty));
-				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				using (var message = new HttpRequestMessage(HttpMethod.Post, $"AlternateId/mac/{macAddress}/{deviceId}"))
+				{
+					AddAuthorizationHeader(message);
+					message.Content = new StringContent("");
+
+					var response = await client.SendAsync(message);
+					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				}
 			}
-			catch(Exception ex)
+			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
 			{
 				return new Results<Device>()
 				{
@@ -342,13 +374,17 @@ namespace Sannel.House.Devices.Client
 		public virtual async Task<Results<Device>> AddAlternateIdAsync(Guid uuid, int deviceId)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
-			UpdateAuthenticationToken(client);
 			try
 			{
-				var response = await client.PostAsync($"AlternateId/uuid/{uuid}/{deviceId}", new StringContent(string.Empty));
-				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				using (var message = new HttpRequestMessage(HttpMethod.Post, $"AlternateId/uuid/{uuid}/{deviceId}"))
+				{
+					AddAuthorizationHeader(message);
+					message.Content = new StringContent("");
+					var response = await client.SendAsync(message);
+					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				}
 			}
-			catch(Exception ex)
+			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
 			{
 				return new Results<Device>()
 				{
@@ -370,13 +406,17 @@ namespace Sannel.House.Devices.Client
 		public virtual async Task<Results<Device>> AddAlternateIdAsync(string manufacture, string manufactureId, int deviceId)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
-			UpdateAuthenticationToken(client);
 			try
 			{
-				var response = await client.PostAsync($"AlternateId/manufactureid/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}/{deviceId}", new StringContent(string.Empty));
-				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				using (var message = new HttpRequestMessage(HttpMethod.Post, $"AlternateId/manufactureid/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}/{deviceId}"))
+				{
+					AddAuthorizationHeader(message);
+					message.Content = new StringContent("");
+					var response = await client.SendAsync(message);
+					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				}
 			}
-			catch (Exception ex)
+			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
 			{
 				return new Results<Device>()
 				{
@@ -442,13 +482,17 @@ namespace Sannel.House.Devices.Client
 		public virtual async Task<Results<Device>> DeleteAlternateIdAsync(long macAddress)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
-			UpdateAuthenticationToken(client);
 			try
 			{
-				var response = await client.DeleteAsync($"AlternateId/mac/{macAddress}");
-				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				using (var message = new HttpRequestMessage(HttpMethod.Delete, $"AlternateId/mac/{macAddress}"))
+				{
+					AddAuthorizationHeader(message);
+					message.Content = new StringContent("");
+					var response = await client.SendAsync(message);
+					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				}
 			}
-			catch(Exception ex)
+			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
 			{
 				return new Results<Device>()
 				{
@@ -468,13 +512,16 @@ namespace Sannel.House.Devices.Client
 		public virtual async Task<Results<Device>> DeleteAlternateIdAsync(Guid uuid)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
-			UpdateAuthenticationToken(client);
 			try
 			{
-				var response = await client.DeleteAsync($"AlternateId/uuid/{uuid}");
-				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				using (var message = new HttpRequestMessage(HttpMethod.Delete, $"AlternateId/uuid/{uuid}"))
+				{
+					AddAuthorizationHeader(message);
+					var response = await client.SendAsync(message);
+					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				}
 			}
-			catch(Exception ex)
+			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
 			{
 				return new Results<Device>()
 				{
@@ -495,13 +542,16 @@ namespace Sannel.House.Devices.Client
 		public virtual async Task<Results<Device>> DeleteAlternateIdAsync(string manufacture, string manufactureId)
 		{
 			var client = factory.CreateClient(nameof(DevicesClient));
-			UpdateAuthenticationToken(client);
 			try
 			{
-				var response = await client.DeleteAsync($"AlternateId/manufacture/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}");
-				return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				using (var message = new HttpRequestMessage(HttpMethod.Delete, $"AlternateId/manufacture/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}"))
+				{
+					AddAuthorizationHeader(message);
+					var response = await client.SendAsync(message);
+					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
+				}
 			}
-			catch(Exception ex)
+			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
 			{
 				return new Results<Device>()
 				{

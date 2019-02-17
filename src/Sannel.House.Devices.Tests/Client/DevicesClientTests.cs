@@ -37,12 +37,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -103,12 +98,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -145,12 +135,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -210,12 +195,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -272,12 +252,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -329,12 +304,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -391,12 +361,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -448,12 +413,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -510,12 +470,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -567,12 +522,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			var manufacture = "Particle";
 			var manufactureId = "Photon";
@@ -635,12 +585,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -702,12 +647,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -759,12 +699,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -816,12 +751,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -873,12 +803,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -920,12 +845,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -993,12 +913,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -1078,12 +993,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -1192,12 +1102,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -1248,12 +1153,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -1320,12 +1220,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -1377,12 +1272,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -1451,12 +1341,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -1523,12 +1408,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -1635,12 +1515,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -1691,12 +1566,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -1761,12 +1631,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -1819,12 +1684,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
@@ -1891,12 +1751,7 @@ namespace Sannel.House.Devices.Tests.Client
 
 			var devicesClient = new DevicesClient(clientFactory.Object);
 			var token = "test123";
-			devicesClient.GetAuthenticationToken += (s, args) =>
-			{
-				Assert.NotNull(args);
-				args.CacheToken = true;
-				args.Token = token;
-			};
+			devicesClient.AuthToken = token;
 
 			client.Protected().Setup<Task<HttpResponseMessage>>(
 				"SendAsync",
