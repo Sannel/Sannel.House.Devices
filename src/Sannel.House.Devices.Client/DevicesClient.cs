@@ -22,8 +22,6 @@ namespace Sannel.House.Devices.Client
 	{
 		private readonly IHttpClientFactory factory;
 
-		public event EventHandler<AuthenticationTokenArgs> GetAuthenticationToken;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DevicesClient"/> class.
 		/// </summary>
