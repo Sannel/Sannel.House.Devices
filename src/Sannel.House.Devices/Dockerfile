@@ -7,6 +7,7 @@ EXPOSE 443
 #build the software
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
+COPY [".nuget/nuget.config", ".nuget/nuget.config"]
 COPY ["Directory.Build.props", "./"]
 COPY ["src/Sannel.House.Devices/Sannel.House.Devices.csproj", "src/Sannel.House.Devices/"]
 COPY ["src/Sannel.House.Devices.Tests/Sannel.House.Devices.Tests.csproj", "src/Sannel.House.Devices.Tests/"]
@@ -17,7 +18,7 @@ COPY ["src/Sannel.House.Devices.Data/Sannel.House.Devices.Data.csproj", "src/San
 COPY ["src/Migrations/Sannel.House.Devices.Data.Migrations.Sqlite/Sannel.House.Devices.Data.Migrations.Sqlite.csproj", "src/Migrations/Sannel.House.Devices.Data.Migrations.Sqlite/"]
 COPY ["src/Sannel.House.Devices.Repositories/Sannel.House.Devices.Repositories.csproj", "src/Sannel.House.Devices.Repositories/"]
 COPY ["src/Migrations/Sannel.House.Devices.Data.Migrations.SqlServer/Sannel.House.Devices.Data.Migrations.SqlServer.csproj", "src/Migrations/Sannel.House.Devices.Data.Migrations.SqlServer/"]
-RUN dotnet restore "src/Sannel.House.Devices/Sannel.House.Devices.csproj"
+RUN dotnet restore --configfile .nuget/nuget.config "src/Sannel.House.Devices/Sannel.House.Devices.csproj"
 COPY . .
 WORKDIR "/src/src/Sannel.House.Devices"
 RUN dotnet build "Sannel.House.Devices.csproj" -c Release
