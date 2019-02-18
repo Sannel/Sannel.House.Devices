@@ -15,19 +15,24 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Security;
+using Microsoft.Extensions.Logging;
 
 namespace Sannel.House.Devices.Client
 {
 	public class DevicesClient
 	{
 		private readonly IHttpClientFactory factory;
+		private readonly ILogger logger;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DevicesClient"/> class.
 		/// </summary>
 		/// <param name="factory">The Http Client factory.</param>
-		public DevicesClient(IHttpClientFactory factory) 
-			=> this.factory = factory;
+		public DevicesClient(IHttpClientFactory factory, ILogger<DevicesClient> logger)
+		{
+			this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+		}
 
 		/// <summary>
 		/// Gets or sets the bearer authentication token.
@@ -111,6 +116,12 @@ namespace Sannel.House.Devices.Client
 				using (var message = new HttpRequestMessage(HttpMethod.Get, $"Devices/GetPaged/{page}/{pageSize}"))
 				{
 					AddAuthorizationHeader(message);
+
+					if(logger.IsEnabled(LogLevel.Debug))
+					{
+						logger.LogDebug("RequestUri: {0}", message.RequestUri);
+						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
+					}
 					var response = await client.SendAsync(message);
 					var obj = await DeserializeIfSupportedCodeAsync<PagedResults<Device>>(response);
 					return obj;
@@ -149,6 +160,11 @@ namespace Sannel.House.Devices.Client
 				using (var message = new HttpRequestMessage(HttpMethod.Get, url))
 				{
 					AddAuthorizationHeader(message);
+					if(logger.IsEnabled(LogLevel.Debug))
+					{
+						logger.LogDebug("RequestUri: {0}", message.RequestUri);
+						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
+					}
 					var response = await client.SendAsync(message);
 					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
 				}
@@ -203,6 +219,11 @@ namespace Sannel.House.Devices.Client
 				using (var message = new HttpRequestMessage(HttpMethod.Post, "Devices"))
 				{
 					AddAuthorizationHeader(message);
+					if(logger.IsEnabled(LogLevel.Debug))
+					{
+						logger.LogDebug("RequestUri: {0}", message.RequestUri);
+						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
+					}
 					message.Content = new StringContent(
 							await Task.Run(() => JsonConvert.SerializeObject(device)),
 							System.Text.Encoding.UTF8,
@@ -236,6 +257,11 @@ namespace Sannel.House.Devices.Client
 				using (var message = new HttpRequestMessage(HttpMethod.Put, "Devices"))
 				{
 					AddAuthorizationHeader(message);
+					if(logger.IsEnabled(LogLevel.Debug))
+					{
+						logger.LogDebug("RequestUri: {0}", message.RequestUri);
+						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
+					}
 					message.Content = new StringContent(
 							await Task.Run(() => JsonConvert.SerializeObject(device)),
 							System.Text.Encoding.UTF8,
@@ -269,6 +295,11 @@ namespace Sannel.House.Devices.Client
 				using (var message = new HttpRequestMessage(HttpMethod.Get, $"AlternateId/{deviceId}"))
 				{
 					AddAuthorizationHeader(message);
+					if(logger.IsEnabled(LogLevel.Debug))
+					{
+						logger.LogDebug("RequestUri: {0}", message.RequestUri);
+						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
+					}
 					var response = await client.SendAsync(message);
 					return await DeserializeIfSupportedCodeAsync<Results<List<AlternateDeviceId>>>(response);
 				}
@@ -345,6 +376,11 @@ namespace Sannel.House.Devices.Client
 				using (var message = new HttpRequestMessage(HttpMethod.Post, $"AlternateId/mac/{macAddress}/{deviceId}"))
 				{
 					AddAuthorizationHeader(message);
+					if(logger.IsEnabled(LogLevel.Debug))
+					{
+						logger.LogDebug("RequestUri: {0}", message.RequestUri);
+						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
+					}
 					message.Content = new StringContent("");
 
 					var response = await client.SendAsync(message);
@@ -377,6 +413,11 @@ namespace Sannel.House.Devices.Client
 				using (var message = new HttpRequestMessage(HttpMethod.Post, $"AlternateId/uuid/{uuid}/{deviceId}"))
 				{
 					AddAuthorizationHeader(message);
+					if(logger.IsEnabled(LogLevel.Debug))
+					{
+						logger.LogDebug("RequestUri: {0}", message.RequestUri);
+						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
+					}
 					message.Content = new StringContent("");
 					var response = await client.SendAsync(message);
 					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
@@ -409,6 +450,11 @@ namespace Sannel.House.Devices.Client
 				using (var message = new HttpRequestMessage(HttpMethod.Post, $"AlternateId/manufactureid/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}/{deviceId}"))
 				{
 					AddAuthorizationHeader(message);
+					if(logger.IsEnabled(LogLevel.Debug))
+					{
+						logger.LogDebug("RequestUri: {0}", message.RequestUri);
+						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
+					}
 					message.Content = new StringContent("");
 					var response = await client.SendAsync(message);
 					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
@@ -485,6 +531,11 @@ namespace Sannel.House.Devices.Client
 				using (var message = new HttpRequestMessage(HttpMethod.Delete, $"AlternateId/mac/{macAddress}"))
 				{
 					AddAuthorizationHeader(message);
+					if(logger.IsEnabled(LogLevel.Debug))
+					{
+						logger.LogDebug("RequestUri: {0}", message.RequestUri);
+						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
+					}
 					message.Content = new StringContent("");
 					var response = await client.SendAsync(message);
 					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
@@ -515,6 +566,11 @@ namespace Sannel.House.Devices.Client
 				using (var message = new HttpRequestMessage(HttpMethod.Delete, $"AlternateId/uuid/{uuid}"))
 				{
 					AddAuthorizationHeader(message);
+					if(logger.IsEnabled(LogLevel.Debug))
+					{
+						logger.LogDebug("RequestUri: {0}", message.RequestUri);
+						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
+					}
 					var response = await client.SendAsync(message);
 					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
 				}
@@ -545,6 +601,11 @@ namespace Sannel.House.Devices.Client
 				using (var message = new HttpRequestMessage(HttpMethod.Delete, $"AlternateId/manufacture/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}"))
 				{
 					AddAuthorizationHeader(message);
+					if(logger.IsEnabled(LogLevel.Debug))
+					{
+						logger.LogDebug("RequestUri: {0}", message.RequestUri);
+						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
+					}
 					var response = await client.SendAsync(message);
 					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
 				}
