@@ -83,18 +83,16 @@ namespace Sannel.House.Devices
 			services.AddScoped<IDeviceRepository, DbContextRepository>();
 
 
-			services.AddAuthentication("houseapi")
-					.AddIdentityServerAuthentication("houseapi", o =>
+			services.AddAuthentication(Configuration["Authentication:Schema"])
+					.AddIdentityServerAuthentication(Configuration["Authentication:Schema"], o =>
 						{
 							o.Authority = this.Configuration["Authentication:AuthorityUrl"];
 							o.ApiName = this.Configuration["Authentication:ApiName"];
 							o.SupportedTokens = SupportedTokens.Both;
-#if DEBUG
 							if (Configuration.GetValue<bool?>("Authentication:DisableRequireHttpsMetadata") == true)
 							{
 								o.RequireHttpsMetadata = false;
 							}
-#endif
 						});
 
 			services.AddSwaggerDocument();

@@ -1,0 +1,24 @@
+---
+Db:
+  Provider: sqlite
+  ConnectionString: Data Source=app_data/data.db
+Authentication:
+  Schema: houseapi
+  AuthorityUrl: https://house.dev.local
+  ApiName: houseapi
+  DisableRequireHttpsMetadata: true
+Cert:
+  Install: true
+  Crt: app_config/Sannel Software - Dev - CA.crt
+Logging:
+  LogLevel:
+    Default: Debug
+    System: Information
+    Microsoft: Information
+Kestrel:
+  Endpoints:
+    HTTPS:
+      Url: https://*:443
+      Certificate:
+        Path: app_config/house.dev.local.pfx
+        Password: "@Password1"
