@@ -12,12 +12,13 @@
 	<Authors>Adam Holt</Authors>
 	<Company>Sannel Software, L.L.C.</Company>
 	<Copyright></Copyright>
-	<PackageLicenseUrl>https://github.com/Sannel/Sannel.House.Devices/blob/develop/LICENSE</PackageLicenseUrl>
 	<PackageProjectUrl>https://github.com/Sannel/Sannel.House.Devices</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/Sannel/Sannel.House.Devices</RepositoryUrl>
 	<PackageReleaseNotes><![CDATA[
 	$(Build_SourceVersionMessage)
 	$(Build_SourceVersion)]]></PackageReleaseNotes>
+	<PackageLicenseExpression></PackageLicenseExpression>
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -35,9 +36,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Sannel.House.Client" Version="201902.118.101-beta" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
