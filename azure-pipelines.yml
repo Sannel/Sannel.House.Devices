@@ -21,7 +21,7 @@ jobs:
     displayName: 'dotnet restore'
     inputs:
       command: custom
-      projects: Sannel.House.Devices.sln
+      projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj;src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj;src/Sannel.House.Devices.Tests/Sannel.House.Devices.Tests.csproj
       custom: restore
       arguments: '-r osx-x64 --configfile .nuget/nuget.config'
       feedsToUse: config
@@ -30,7 +30,7 @@ jobs:
   - task: DotNetCoreCLI@2
     displayName: 'dotnet build Release'
     inputs:
-      projects: Sannel.House.Devices.sln
+      projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj;src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj;src/Sannel.House.Devices.Tests/Sannel.House.Devices.Tests.csproj
       arguments: '-r osx-x64 -c Release'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   - task: DotNetCoreCLI@2
@@ -42,8 +42,8 @@ jobs:
   - task: DotNetCoreCLI@2
     displayName: 'dotnet test'
     inputs:
+      projects: src/Sannel.House.Devices.Tests/Sannel.House.Devices.Tests.csproj
       command: test
-      projects: Sannel.House.Devices.sln
       publishTestResults: true
   - task: DotNetCoreCLI@2
     displayName: 'dotnet publish'
