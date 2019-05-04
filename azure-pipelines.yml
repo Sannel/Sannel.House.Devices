@@ -68,6 +68,7 @@ jobs:
     inputs:
       projects: '**/*Tests.csproj'
       command: test
+      arguments: '--collect "Code coverage"'
       publishTestResults: true
   - task: CopyFiles@2
     displayName: 'Copy Files to: $(Build.StagingDirectory)/Sannel.House.Devices/app_config/'
@@ -110,7 +111,7 @@ jobs:
       displayName: 'dotnet restore'
       inputs:
         command: custom
-        projects: Sannel.House.Devices.sln
+        projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
         custom: restore
         arguments: '-r linux-arm --configfile .nuget/nuget.config'
         feedsToUse: config
@@ -119,13 +120,13 @@ jobs:
     - task: DotNetCoreCLI@2
       displayName: 'dotnet build Release'
       inputs:
-        projects: Sannel.House.Devices.sln
+        projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
         arguments: '-r linux-arm -c Release'
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     - task: DotNetCoreCLI@2
       displayName: 'dotnet build Debug'
       inputs:
-        projects: Sannel.House.Devices.sln
+        projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
         arguments: '-r linux-arm -c Debug'
       condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     - task: DotNetCoreCLI@2
@@ -133,7 +134,7 @@ jobs:
       inputs:
         command: publish
         publishWebProjects: false
-        projects: Sannel.House.Devices.sln
+        projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
         arguments: '-r linux-arm -o $(Build.StagingDirectory)'
         zipAfterPublish: false
     - task: CopyFiles@2
@@ -207,7 +208,7 @@ jobs:
       displayName: 'dotnet restore'
       inputs:
         command: custom
-        projects: Sannel.House.Devices.sln
+        projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
         custom: restore
         arguments: '-r linux-x64 --configfile .nuget/nuget.config'
         feedsToUse: config
@@ -217,32 +218,49 @@ jobs:
     - task: DotNetCoreCLI@2
       displayName: 'dotnet build Release'
       inputs:
-        projects: Sannel.House.Devices.sln
+        projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
         arguments: '-r linux-x64 -c Release'
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
     - task: DotNetCoreCLI@2
       displayName: 'dotnet build Debug'
       inputs:
-        projects: Sannel.House.Devices.sln
+        projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
         arguments: '-r linux-x64 -c Debug'
       condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet test'
-      inputs:
-        command: test
-        projects: Sannel.House.Devices.sln
-        publishTestResults: true
     - task: DotNetCoreCLI@2
       displayName: 'dotnet publish'
       inputs:
         command: publish
         publishWebProjects: false
-        projects: Sannel.House.Devices.sln
+        projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
         arguments: '-r linux-x64 -o $(Build.StagingDirectory)'
         zipAfterPublish: false
 
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet clean'
+      inputs:
+        command: custom
+        projects: '**/*.csproj'
+        custom: clean
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet restore'
+      inputs:
+        command: custom
+        projects: '**/*Tests.csproj'
+        custom: restore
+        arguments: '-r linux-x64 --configfile .nuget/nuget.config'
+        feedsToUse: config
+        nugetConfigPath: .nuget/nuget.config
+        externalFeedCredentials: 'Sannel House MyGet'
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet test'
+      inputs:
+        projects: '**/*Tests.csproj'
+        command: test
+        arguments: '--collect "Code coverage"'
+        publishTestResults: true
     - task: CopyFiles@2
       displayName: 'Copy Files to: $(Build.StagingDirectory)/Sannel.House.Devices/app_config/'
       inputs:
@@ -309,7 +327,7 @@ jobs:
       displayName: 'dotnet restore'
       inputs:
         command: custom
-        projects: Sannel.House.Devices.sln
+        projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
         custom: restore
         arguments: '-r win-x64 --configfile .nuget/nuget.config'
         feedsToUse: config
@@ -318,29 +336,46 @@ jobs:
     - task: DotNetCoreCLI@2
       displayName: 'dotnet build Release'
       inputs:
-        projects: Sannel.House.Devices.sln
+        projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
         arguments: '-r win-x64 -c Release'
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     - task: DotNetCoreCLI@2
       displayName: 'dotnet build Debug'
       inputs:
-        projects: Sannel.House.Devices.sln
+        projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
         arguments: '-r win-x64 -c Debug'
       condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet test'
-      inputs:
-        command: test
-        projects: Sannel.House.Devices.sln
-        publishTestResults: true
     - task: DotNetCoreCLI@2
       displayName: 'dotnet publish'
       inputs:
         command: publish
         publishWebProjects: false
-        projects: Sannel.House.Devices.sln
+        projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
         arguments: '-r win-x64 -o $(Build.StagingDirectory)'
         zipAfterPublish: false
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet clean'
+      inputs:
+        command: custom
+        projects: '**/*.csproj'
+        custom: clean
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet restore'
+      inputs:
+        command: custom
+        projects: '**/*Tests.csproj'
+        custom: restore
+        arguments: '-r win-x64 --configfile .nuget/nuget.config'
+        feedsToUse: config
+        nugetConfigPath: .nuget/nuget.config
+        externalFeedCredentials: 'Sannel House MyGet'
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet test'
+      inputs:
+        projects: '**/*Tests.csproj'
+        command: test
+        arguments: '--collect "Code coverage"'
+        publishTestResults: true
     - task: CopyFiles@2
       displayName: 'Copy Files to: $(Build.StagingDirectory)/Sannel.House.Devices/app_config/'
       inputs:
