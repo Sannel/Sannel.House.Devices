@@ -30,13 +30,13 @@ jobs:
   - task: DotNetCoreCLI@2
     displayName: 'dotnet build Release'
     inputs:
-      projects: src/**/*.csproj
+      projects: src/**/*.csproj;!src/**/*Tests.csproj
       arguments: '-r osx-x64 -c Release'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   - task: DotNetCoreCLI@2
     displayName: 'dotnet build Debug'
     inputs:
-      projects: src/**/*.csproj
+      projects: src/**/*.csproj;!src/**/*Tests.csproj
       arguments: '-r osx-x64 -c Debug'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
   - task: DotNetCoreCLI@2
