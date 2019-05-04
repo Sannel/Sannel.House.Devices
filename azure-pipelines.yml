@@ -50,8 +50,9 @@ jobs:
   - task: DotNetCoreCLI@2
     displayName: 'dotnet clean'
     inputs:
-      projects: '**/*Tests.csproj'
-      command: clean
+      command: custom
+      projects: '**/*.csproj'
+      custom: clean
   - task: DotNetCoreCLI@2
     displayName: 'dotnet restore'
     inputs:
