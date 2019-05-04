@@ -40,12 +40,6 @@ jobs:
       arguments: '-r osx-x64 -c Debug'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
   - task: DotNetCoreCLI@2
-    displayName: 'dotnet test'
-    inputs:
-      projects: '**/*Tests.csproj'
-      command: test
-      publishTestResults: true
-  - task: DotNetCoreCLI@2
     displayName: 'dotnet publish'
     inputs:
       command: publish
@@ -53,6 +47,27 @@ jobs:
       projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
       arguments: '-r osx-x64 -o $(Build.StagingDirectory)'
       zipAfterPublish: false
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet clean'
+    inputs:
+      projects: '**/*Tests.csproj'
+      command: clean
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet restore'
+    inputs:
+      command: custom
+      projects: '**/*Tests.csproj'
+      custom: restore
+      arguments: '-r osx-x64 --configfile .nuget/nuget.config'
+      feedsToUse: config
+      nugetConfigPath: .nuget/nuget.config
+      externalFeedCredentials: 'Sannel House MyGet'
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet test'
+    inputs:
+      projects: '**/*Tests.csproj'
+      command: test
+      publishTestResults: true
   - task: CopyFiles@2
     displayName: 'Copy Files to: $(Build.StagingDirectory)/Sannel.House.Devices/app_config/'
     inputs:
