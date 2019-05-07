@@ -495,7 +495,6 @@ jobs:
       displayName: 'dotnet publish'
       inputs:
         command: publish
-        publishPackageMetadata: true
         projects: src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj
         arguments: '-o $(Build.StagingDirectory)'
     - task: PublishPipelineArtifact@0
