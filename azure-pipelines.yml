@@ -494,9 +494,11 @@ jobs:
     - task: DotNetCoreCLI@2
       displayName: 'dotnet pack'
       inputs:
-        command: pack
-        projects: src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj
-        arguments: '-o $(Build.StagingDirectory)'
+        command: 'pack'
+        feedsToUse: 'select'
+        packagesToPack: 'src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj'
+        configuration: 'Debug'
+        versioningScheme: 'byBuildNumber'
     - task: PublishPipelineArtifact@0
       displayName: 'Publish Pipeline Artifact'
       inputs:
