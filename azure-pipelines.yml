@@ -90,6 +90,65 @@ jobs:
       artifactName: 'osx-x64'
       targetPath: '$(Build.StagingDirectory)'
 
+- job: client
+  pool:
+    vmImage: ubuntu-16.04
+  dependsOn: windows_x64
+  condition: succeeded('windows_x64')
+  steps:
+    - task: DotNetCoreInstaller@0
+      displayName: 'Use .NET Core sdk $(sdk_version)'
+      inputs:
+        version: $(sdk_version)
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet restore'
+      inputs:
+        command: custom
+        projects: src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj
+        custom: restore
+        arguments: '--configfile .nuget/nuget.config'
+        feedsToUse: config
+        nugetConfigPath: .nuget/nuget.config
+        externalFeedCredentials: 'Sannel House MyGet'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build Release'
+      inputs:
+        projects: src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj
+        arguments: '-c Release'
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build Debug'
+      inputs:
+        projects: src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj
+        arguments: '-c Debug'
+      condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet pack Release'
+      inputs:
+        command: 'pack'
+        feedsToUse: 'select'
+        packagesToPack: 'src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj'
+        configuration: 'Release'
+        versioningScheme: 'off'
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet pack Debug'
+      inputs:
+        command: 'pack'
+        feedsToUse: 'select'
+        packagesToPack: 'src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj'
+        configuration: 'Debug'
+        versioningScheme: 'off'
+      condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+    - task: PublishPipelineArtifact@0
+      displayName: 'Publish Pipeline Artifact'
+      inputs:
+        artifactName: 'client-nuget'
+        targetPath: '$(Build.StagingDirectory)'
+
 - job: linux_arm
   pool:
     vmImage: ubuntu-16.04
@@ -98,6 +157,7 @@ jobs:
   steps:
     - powershell: |
         # Write your commands here
+        return 20
         sudo apt-get update
         sudo apt-get install -y qemu qemu-user-static qemu-user binfmt-support
         Copy-Item -Verbose /usr/bin/qemu-arm-static $(Build.StagingDirectory)
@@ -456,62 +516,3 @@ jobs:
         artifactName: 'win-x64'
         targetPath: '$(Build.StagingDirectory)'
 
-- job: client
-  pool:
-    vmImage: ubuntu-16.04
-  dependsOn: windows_x64
-  condition: succeeded('windows_x64')
-  steps:
-    - task: DotNetCoreInstaller@0
-      displayName: 'Use .NET Core sdk $(sdk_version)'
-      inputs:
-        version: $(sdk_version)
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet restore'
-      inputs:
-        command: custom
-        projects: src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj
-        custom: restore
-        arguments: '--configfile .nuget/nuget.config'
-        feedsToUse: config
-        nugetConfigPath: .nuget/nuget.config
-        externalFeedCredentials: 'Sannel House MyGet'
-
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet build Release'
-      inputs:
-        projects: src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj
-        arguments: '-c Release'
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet build Debug'
-      inputs:
-        projects: src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj
-        arguments: '-c Debug'
-      condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet pack Release'
-      inputs:
-        command: 'pack'
-        feedsToUse: 'select'
-        packagesToPack: 'src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj'
-        configuration: 'Release'
-        versioningScheme: 'byBuildNumber'
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet pack Debug'
-      inputs:
-        command: 'pack'
-        feedsToUse: 'select'
-        packagesToPack: 'src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj'
-        configuration: 'Debug'
-        versioningScheme: 'byBuildNumber'
-        arguments: '--version-suffix -beta'
-      condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-    - task: PublishPipelineArtifact@0
-      displayName: 'Publish Pipeline Artifact'
-      inputs:
-        artifactName: 'client-nuget'
-        targetPath: '$(Build.StagingDirectory)'
