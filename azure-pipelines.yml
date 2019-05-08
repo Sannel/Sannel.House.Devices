@@ -494,7 +494,7 @@ jobs:
     - task: DotNetCoreCLI@2
       displayName: 'dotnet publish'
       inputs:
-        command: publish
+        command: pack
         projects: src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj
         arguments: '-o $(Build.StagingDirectory)'
     - task: PublishPipelineArtifact@0
