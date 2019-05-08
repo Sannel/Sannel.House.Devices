@@ -499,6 +499,17 @@ jobs:
         packagesToPack: 'src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj'
         configuration: 'Debug'
         versioningScheme: 'byBuildNumber'
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet pack'
+      inputs:
+        command: 'pack'
+        feedsToUse: 'select'
+        packagesToPack: 'src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj'
+        configuration: 'Debug'
+        versioningScheme: 'byBuildNumber'
+        arguments: '--version-suffix beta'
+      condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     - task: PublishPipelineArtifact@0
       displayName: 'Publish Pipeline Artifact'
       inputs:
