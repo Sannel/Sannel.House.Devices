@@ -478,7 +478,21 @@ jobs:
         externalFeedCredentials: 'Sannel House MyGet'
 
     - task: DotNetCoreCLI@2
-      displayName: 'dotnet pack'
+      displayName: 'dotnet build Release'
+      inputs:
+        projects: src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj
+        arguments: '-c Release'
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build Debug'
+      inputs:
+        projects: src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj
+        arguments: '-c Debug'
+      condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet pack Release'
       inputs:
         command: 'pack'
         feedsToUse: 'select'
@@ -487,14 +501,14 @@ jobs:
         versioningScheme: 'byBuildNumber'
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     - task: DotNetCoreCLI@2
-      displayName: 'dotnet pack'
+      displayName: 'dotnet pack Debug'
       inputs:
         command: 'pack'
         feedsToUse: 'select'
         packagesToPack: 'src/Sannel.House.Devices.Client/Sannel.House.Devices.Client.csproj'
         configuration: 'Debug'
         versioningScheme: 'byBuildNumber'
-        arguments: '--version-suffix beta'
+        arguments: '--version-suffix -beta'
       condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     - task: PublishPipelineArtifact@0
       displayName: 'Publish Pipeline Artifact'
