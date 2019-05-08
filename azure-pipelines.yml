@@ -93,8 +93,8 @@ jobs:
 - job: client
   pool:
     vmImage: ubuntu-16.04
-  dependsOn: windows_x64
-  condition: succeeded('windows_x64')
+  dependsOn: osx
+  condition: succeeded('osx')
   steps:
     - task: DotNetCoreInstaller@0
       displayName: 'Use .NET Core sdk $(sdk_version)'
@@ -152,8 +152,8 @@ jobs:
 - job: linux_arm
   pool:
     vmImage: ubuntu-16.04
-  dependsOn: osx
-  condition: succeeded('osx')
+  dependsOn: client
+  condition: succeeded('client')
   steps:
     - powershell: |
         # Write your commands here
