@@ -157,7 +157,6 @@ jobs:
   steps:
     - powershell: |
         # Write your commands here
-        return 20
         sudo apt-get update
         sudo apt-get install -y qemu qemu-user-static qemu-user binfmt-support
         Copy-Item -Verbose /usr/bin/qemu-arm-static $(Build.StagingDirectory)
