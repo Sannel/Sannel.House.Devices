@@ -3,7 +3,7 @@ trigger:
 - develop
 
 variables:
-  sdk_version: 2.2.203
+  sdk_version: 2.2.204
   imageName: sannel/house.devices:$(Build.SourceBranchName)-$(Build.BuildId)
 
 name: $(date:yyyy.MM.dd)$(rev:.rr)
