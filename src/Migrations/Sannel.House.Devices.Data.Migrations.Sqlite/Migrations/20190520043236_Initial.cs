@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace Sannel.House.Devices.Data.Migrations.PostgreSQL.Migrations
+namespace Sannel.House.Devices.Data.Migrations.Sqlite.Migrations
 {
-    public partial class Inital : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,11 +12,11 @@ namespace Sannel.House.Devices.Data.Migrations.PostgreSQL.Migrations
                 columns: table => new
                 {
                     DeviceId = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(maxLength: 256, nullable: false),
                     Description = table.Column<string>(maxLength: 2000, nullable: false),
                     DisplayOrder = table.Column<int>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateCreated = table.Column<DateTimeOffset>(nullable: false),
                     IsReadOnly = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -30,9 +29,9 @@ namespace Sannel.House.Devices.Data.Migrations.PostgreSQL.Migrations
                 columns: table => new
                 {
                     AlternateId = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     DeviceId = table.Column<int>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateCreated = table.Column<DateTimeOffset>(nullable: false),
                     Uuid = table.Column<Guid>(nullable: true),
                     MacAddress = table.Column<long>(nullable: true),
                     Manufacture = table.Column<string>(nullable: true),

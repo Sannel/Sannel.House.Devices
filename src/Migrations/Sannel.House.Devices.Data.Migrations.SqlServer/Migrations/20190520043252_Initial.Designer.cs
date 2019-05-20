@@ -2,33 +2,40 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sannel.House.Devices.Data;
 
-namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
+namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20181206053909_Inital")]
-    partial class Inital
+    [Migration("20190520043252_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Sannel.House.Devices.Models.AlternateDeviceId", b =>
                 {
                     b.Property<int>("AlternateId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated");
 
                     b.Property<int>("DeviceId");
 
                     b.Property<long?>("MacAddress");
+
+                    b.Property<string>("Manufacture");
+
+                    b.Property<string>("ManufactureId");
 
                     b.Property<Guid?>("Uuid");
 
@@ -36,15 +43,28 @@ namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
 
                     b.HasIndex("DeviceId");
 
+                    b.HasIndex("MacAddress")
+                        .IsUnique()
+                        .HasFilter("[MacAddress] IS NOT NULL");
+
+                    b.HasIndex("Uuid")
+                        .IsUnique()
+                        .HasFilter("[Uuid] IS NOT NULL");
+
+                    b.HasIndex("Manufacture", "ManufactureId")
+                        .IsUnique()
+                        .HasFilter("[Manufacture] IS NOT NULL AND [ManufactureId] IS NOT NULL");
+
                     b.ToTable("AlternateDeviceIds");
                 });
 
             modelBuilder.Entity("Sannel.House.Devices.Models.Device", b =>
                 {
                     b.Property<int>("DeviceId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -59,6 +79,8 @@ namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("DeviceId");
+
+                    b.HasIndex("DisplayOrder");
 
                     b.ToTable("Devices");
                 });

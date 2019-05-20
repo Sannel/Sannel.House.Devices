@@ -15,7 +15,7 @@ namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -25,7 +25,7 @@ namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated");
 
                     b.Property<int>("DeviceId");
 
@@ -62,7 +62,7 @@ namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated");
 
                     b.Property<string>("Description")
                         .IsRequired()

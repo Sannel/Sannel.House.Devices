@@ -14,7 +14,7 @@ namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Sannel.House.Devices.Models.AlternateDeviceId", b =>
@@ -22,7 +22,7 @@ namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
                     b.Property<int>("AlternateId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated");
 
                     b.Property<int>("DeviceId");
 
@@ -55,7 +55,7 @@ namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
                     b.Property<int>("DeviceId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated");
 
                     b.Property<string>("Description")
                         .IsRequired()

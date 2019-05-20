@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
+namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
 {
-    public partial class Inital : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,11 +13,11 @@ namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
                 columns: table => new
                 {
                     DeviceId = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(maxLength: 256, nullable: false),
                     Description = table.Column<string>(maxLength: 2000, nullable: false),
                     DisplayOrder = table.Column<int>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateCreated = table.Column<DateTimeOffset>(nullable: false),
                     IsReadOnly = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -30,11 +30,13 @@ namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
                 columns: table => new
                 {
                     AlternateId = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     DeviceId = table.Column<int>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateCreated = table.Column<DateTimeOffset>(nullable: false),
                     Uuid = table.Column<Guid>(nullable: true),
-                    MacAddress = table.Column<long>(nullable: true)
+                    MacAddress = table.Column<long>(nullable: true),
+                    Manufacture = table.Column<string>(nullable: true),
+                    ManufactureId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -51,6 +53,32 @@ namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
                 name: "IX_AlternateDeviceIds_DeviceId",
                 table: "AlternateDeviceIds",
                 column: "DeviceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AlternateDeviceIds_MacAddress",
+                table: "AlternateDeviceIds",
+                column: "MacAddress",
+                unique: true,
+                filter: "[MacAddress] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AlternateDeviceIds_Uuid",
+                table: "AlternateDeviceIds",
+                column: "Uuid",
+                unique: true,
+                filter: "[Uuid] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AlternateDeviceIds_Manufacture_ManufactureId",
+                table: "AlternateDeviceIds",
+                columns: new[] { "Manufacture", "ManufactureId" },
+                unique: true,
+                filter: "[Manufacture] IS NOT NULL AND [ManufactureId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Devices_DisplayOrder",
+                table: "Devices",
+                column: "DisplayOrder");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

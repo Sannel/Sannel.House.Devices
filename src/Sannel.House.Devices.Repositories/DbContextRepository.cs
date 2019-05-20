@@ -180,7 +180,7 @@ namespace Sannel.House.Devices.Repositories
 			altId = new AlternateDeviceId()
 			{
 				DeviceId = device.DeviceId,
-				DateCreated = DateTime.UtcNow,
+				DateCreated = DateTimeOffset.UtcNow,
 				MacAddress = macAddress
 			};
 
@@ -216,7 +216,7 @@ namespace Sannel.House.Devices.Repositories
 			altId = new AlternateDeviceId()
 			{
 				DeviceId = device.DeviceId,
-				DateCreated = DateTime.UtcNow,
+				DateCreated = DateTimeOffset.UtcNow,
 				Uuid = uuid
 			};
 
@@ -260,7 +260,7 @@ namespace Sannel.House.Devices.Repositories
 			altId = new AlternateDeviceId()
 			{
 				DeviceId = device.DeviceId,
-				DateCreated = DateTime.UtcNow,
+				DateCreated = DateTimeOffset.UtcNow,
 				Manufacture = manufacture,
 				ManufactureId = manufactureId
 			};

@@ -67,7 +67,7 @@ namespace Sannel.House.Devices.Models
 		/// <value>
 		/// The date created.
 		/// </value>
-		public DateTime DateCreated { get; set; }
+		public DateTimeOffset DateCreated { get; set; }
 
 		/// <summary>
 		/// Gets or sets if this device is readonly

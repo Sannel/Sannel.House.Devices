@@ -4,29 +4,26 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sannel.House.Devices.Data;
 
-namespace Sannel.House.Devices.Data.Migrations.PostgreSQL.Migrations
+namespace Sannel.House.Devices.Data.Migrations.Sqlite.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20190116214659_Inital")]
-    partial class Inital
+    [Migration("20190520043236_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
 
             modelBuilder.Entity("Sannel.House.Devices.Models.AlternateDeviceId", b =>
                 {
                     b.Property<int>("AlternateId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated");
 
                     b.Property<int>("DeviceId");
 
@@ -59,7 +56,7 @@ namespace Sannel.House.Devices.Data.Migrations.PostgreSQL.Migrations
                     b.Property<int>("DeviceId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated");
 
                     b.Property<string>("Description")
                         .IsRequired()

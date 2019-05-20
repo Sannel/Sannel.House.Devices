@@ -6,24 +6,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sannel.House.Devices.Data;
 
-namespace Sannel.House.Devices.Data.Migrations.Sqlite.Migrations
+namespace Sannel.House.Devices.Data.Migrations.MySql.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20190116190239_AddedManufactureIdsForAlternateIds")]
-    partial class AddedManufactureIdsForAlternateIds
+    [Migration("20190520043058_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028");
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Sannel.House.Devices.Models.AlternateDeviceId", b =>
                 {
                     b.Property<int>("AlternateId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated");
 
                     b.Property<int>("DeviceId");
 
@@ -56,7 +57,7 @@ namespace Sannel.House.Devices.Data.Migrations.Sqlite.Migrations
                     b.Property<int>("DeviceId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated");
 
                     b.Property<string>("Description")
                         .IsRequired()
