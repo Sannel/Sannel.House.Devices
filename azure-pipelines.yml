@@ -560,7 +560,7 @@ jobs:
       displayName: 'dotnet build Debug'
       inputs:
         projects: src/Sannel.House.Devices/Sannel.House.Devices.csproj
-        arguments: '-r win-x64 -c Debug'
+        arguments: '-r win-arm -c Debug'
       condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     - task: DotNetCoreCLI@2
       displayName: 'dotnet publish'
