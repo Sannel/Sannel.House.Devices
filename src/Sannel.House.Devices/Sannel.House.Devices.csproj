@@ -31,13 +31,13 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.7.2" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
-    <PackageReference Include="NSwag.AspNetCore" Version="12.2.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.7.9" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />
+    <PackageReference Include="NSwag.AspNetCore" Version="12.3.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
-    <PackageReference Include="Sannel.House.Data" Version="201902.118.101-beta" />
-    <PackageReference Include="Sannel.House.Models" Version="201902.118.101-beta" />
-    <PackageReference Include="Sannel.House.Web" Version="201902.118.101-beta" />
+    <PackageReference Include="Sannel.House.Data" Version="0.5.139-beta" />
+    <PackageReference Include="Sannel.House.Models" Version="0.5.139-beta" />
+    <PackageReference Include="Sannel.House.Web" Version="0.5.139-beta" />
     <PackageReference Include="NetEscapades.Configuration.Yaml" Version="1.6.0" />
   </ItemGroup>
 

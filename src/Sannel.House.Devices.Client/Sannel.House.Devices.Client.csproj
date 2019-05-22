@@ -5,11 +5,11 @@
     <RootNamespace>Sannel.House.Devices.Client</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Sannel.House.Devices.Client</PackageId>
-    <AssemblyVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</AssemblyVersion>
-    <FileVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</FileVersion>
-	<Version Condition="'$(IsRelease)' != 'true'">$(Major)$(Minor).1$(Patch).1$(BuildNumber)-beta</Version>
-	<Version Condition="'$(IsRelease)' == 'true'">$(Major)$(Minor).1$(Patch).1$(BuildNumber)</Version>
-	<Authors>Adam Holt</Authors>
+		<AssemblyVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</AssemblyVersion>
+		<FileVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</FileVersion>
+		<Version Condition="'$(Configuration)' != 'Release'">$(Major).$(Minor).$(Patch)-beta</Version>
+		<Version Condition="'$(Configuration)' == 'Release'">$(Major).$(Minor).$(Patch)</Version>
+		<Authors>Adam Holt</Authors>
 	<Company>Sannel Software, L.L.C.</Company>
 	<Copyright></Copyright>
 	<PackageProjectUrl>https://github.com/Sannel/Sannel.House.Devices</PackageProjectUrl>
@@ -37,7 +37,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="Sannel.House.Client" Version="201902.118.101-beta" />
+    <PackageReference Include="Sannel.House.Client.Common" Version="0.5.139-beta" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
 
