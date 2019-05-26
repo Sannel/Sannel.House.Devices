@@ -156,6 +156,7 @@ jobs:
 - job: linux_arm
   pool:
     vmImage: ubuntu-16.04
+#  variables:
   steps:
     - powershell: |
         # Write your commands here
@@ -234,8 +235,8 @@ jobs:
         context: '$(Build.StagingDirectory)'
         imageName: '$(imageName)-linux-arm32v7'
     - powershell: |
-        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.arm32v7.tar $(imageName)-linux-arm32v7
-        bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.arm32v7.tar
+        docker save -o $(Build.StagingDirectory)/linux.arm32v7.tar $(imageName)-linux-arm32v7
+        bzip2 -9 $(Build.StagingDirectory)/linux.arm32v7.tar
       displayName: 'export image'
 #    - task: Docker@1
 #      displayName: 'Push an image'
@@ -352,9 +353,7 @@ jobs:
         context: '$(Build.StagingDirectory)'
         imageName: '$(imageName)-linux-x64'
     - powershell: |
-        echo "docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.x64.tar $(imageName)-linux-x64)
         docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.x64.tar $(imageName)-linux-x64
-        echo "bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.x64.tar"
         bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.x64.tar
       displayName: 'export image'
 #    - task: Docker@1
