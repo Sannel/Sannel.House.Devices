@@ -19,32 +19,20 @@ using Microsoft.Extensions.Logging;
 
 namespace Sannel.House.Devices.Client
 {
-	public class DevicesClient
+	public class DevicesClient : ClientBase
 	{
-		private readonly IHttpClientFactory factory;
-		private readonly ILogger logger;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DevicesClient"/> class.
 		/// </summary>
 		/// <param name="factory">The Http Client factory.</param>
-		public DevicesClient(IHttpClientFactory factory, ILogger<DevicesClient> logger)
-		{
-			this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
-			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-		}
+		public DevicesClient(IHttpClientFactory factory, ILogger<DevicesClient> logger) : base(factory, logger)
+		{}
 
-		/// <summary>
-		/// Gets or sets the bearer authentication token.
-		/// </summary>
-		/// <value>
-		/// The authentication token.
-		/// </value>
-		public string AuthToken
-		{
-			get;
-			set;
-		}
+		/// <summary>Gets the client.</summary>
+		/// <returns></returns>
+		protected override HttpClient GetClient()
+			=> factory.CreateClient(nameof(DevicesClient));
 
 		/// <summary>
 		/// Gets a paged list of Devices asynchronous.
@@ -60,47 +48,6 @@ namespace Sannel.House.Devices.Client
 		/// <returns></returns>
 		public virtual Task<PagedResults<Device>> GetPagedAsync(long page)
 			=> GetPagedAsync(page, 25);
-
-		/// <summary>
-		/// Deserializes if supported code asynchronous.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="message">The message.</param>
-		/// <returns></returns>
-		protected virtual async Task<T> DeserializeIfSupportedCodeAsync<T>(HttpResponseMessage message)
-			where T : IResults, new()
-		{
-			switch (message.StatusCode)
-			{
-				case System.Net.HttpStatusCode.OK:
-				case System.Net.HttpStatusCode.NotFound:
-				case System.Net.HttpStatusCode.BadRequest:
-					var data = await message.Content.ReadAsStringAsync();
-					var obj = await Task.Run(() => JsonConvert.DeserializeObject<T>(data));
-					obj.Success = message.StatusCode == System.Net.HttpStatusCode.OK;
-					return obj;
-
-				default:
-					var err = new T
-					{
-						Success = false,
-						Status = (int)message.StatusCode,
-					};
-					if(message.Content != null && message.Content.Headers.ContentLength > 0)
-					{
-						err.Title = await message.Content.ReadAsStringAsync();
-					}
-					return err;
-			};
-		}
-
-		/// <summary>
-		/// Adds the authorization header.
-		/// </summary>
-		/// <param name="message">The message.</param>
-		protected void AddAuthorizationHeader(HttpRequestMessage message) 
-			=> message.Headers.Authorization 
-				= new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", AuthToken);
 
 		/// <summary>
 		/// Gets a paged list of Devices asynchronous.
@@ -211,110 +158,24 @@ namespace Sannel.House.Devices.Client
 		/// </summary>
 		/// <param name="device">The device.</param>
 		/// <returns></returns>
-		public virtual async Task<Results<int>> AddDeviceAsync(Device device)
-		{
-			var client = factory.CreateClient(nameof(DevicesClient));
-			try
-			{
-				using (var message = new HttpRequestMessage(HttpMethod.Post, "Devices"))
-				{
-					AddAuthorizationHeader(message);
-					if(logger.IsEnabled(LogLevel.Debug))
-					{
-						logger.LogDebug("RequestUri: {0}", message.RequestUri);
-						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
-					}
-					message.Content = new StringContent(
-							await Task.Run(() => JsonConvert.SerializeObject(device)),
-							System.Text.Encoding.UTF8,
-							"application/json");
-					var response = await client.SendAsync(message);
-					return await DeserializeIfSupportedCodeAsync<Results<int>>(response);
-				}
-			}
-			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
-			{
-				return new Results<int>()
-				{
-					Status = 444,
-					Title = "Exception",
-					Success = false,
-					Exception = ex
-				};
-			}
-		}
+		public virtual Task<Results<int>> AddDeviceAsync(Device device)
+			=> PostAsync<Results<int>>("Devices", device);
 
 		/// <summary>
 		/// Updates the device.
 		/// </summary>
 		/// <param name="device">The device.</param>
 		/// <returns></returns>
-		public virtual async Task<Results<int>> UpdateDeviceAsync(Device device)
-		{
-			var client = factory.CreateClient(nameof(DevicesClient));
-			try
-			{
-				using (var message = new HttpRequestMessage(HttpMethod.Put, "Devices"))
-				{
-					AddAuthorizationHeader(message);
-					if(logger.IsEnabled(LogLevel.Debug))
-					{
-						logger.LogDebug("RequestUri: {0}", message.RequestUri);
-						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
-					}
-					message.Content = new StringContent(
-							await Task.Run(() => JsonConvert.SerializeObject(device)),
-							System.Text.Encoding.UTF8,
-							"application/json");
-					var response = await client.SendAsync(message);
-					return await DeserializeIfSupportedCodeAsync<Results<int>>(response);
-				}
-			}
-			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
-			{
-				return new Results<int>()
-				{
-					Status = 444,
-					Title = "Exception",
-					Success = false,
-					Exception = ex
-				};
-			}
-		}
+		public virtual Task<Results<int>> UpdateDeviceAsync(Device device)
+			=> PutAsync<Results<int>>("Devices", device);
 
 		/// <summary>
 		/// Gets the alternate ids asynchronous.
 		/// </summary>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		public virtual async Task<Results<List<AlternateDeviceId>>> GetAlernateIdsAsync(int deviceId)
-		{ 
-			var client = factory.CreateClient(nameof(DevicesClient));
-			try
-			{
-				using (var message = new HttpRequestMessage(HttpMethod.Get, $"AlternateId/{deviceId}"))
-				{
-					AddAuthorizationHeader(message);
-					if(logger.IsEnabled(LogLevel.Debug))
-					{
-						logger.LogDebug("RequestUri: {0}", message.RequestUri);
-						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
-					}
-					var response = await client.SendAsync(message);
-					return await DeserializeIfSupportedCodeAsync<Results<List<AlternateDeviceId>>>(response);
-				}
-			}
-			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
-			{
-				return new Results<List<AlternateDeviceId>>()
-				{
-					Status = 444,
-					Title = "Exception",
-					Success = false,
-					Exception = ex
-				};
-			}
-		}
+		public virtual Task<Results<List<AlternateDeviceId>>> GetAlernateIdsAsync(int deviceId)
+			=> GetAsync<Results<List<AlternateDeviceId>>>($"AlternateId/{deviceId}");
 
 		/// <summary>
 		/// Adds the alternate identifier asynchronous.
@@ -368,36 +229,8 @@ namespace Sannel.House.Devices.Client
 		/// <param name="macAddress">The mac address.</param>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		public virtual async Task<Results<Device>> AddAlternateIdAsync(long macAddress, int deviceId)
-		{
-			var client = factory.CreateClient(nameof(DevicesClient));
-			try
-			{
-				using (var message = new HttpRequestMessage(HttpMethod.Post, $"AlternateId/mac/{macAddress}/{deviceId}"))
-				{
-					AddAuthorizationHeader(message);
-					if(logger.IsEnabled(LogLevel.Debug))
-					{
-						logger.LogDebug("RequestUri: {0}", message.RequestUri);
-						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
-					}
-					message.Content = new StringContent("");
-
-					var response = await client.SendAsync(message);
-					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
-				}
-			}
-			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
-			{
-				return new Results<Device>()
-				{
-					Status = 444,
-					Title = "Exception",
-					Success = false,
-					Exception = ex
-				};
-			}
-		}
+		public virtual Task<Results<Device>> AddAlternateIdAsync(long macAddress, int deviceId)
+			=> PostAsync<Results<Device>>($"AlternateId/mac/{macAddress}/{deviceId}",new object() { });
 
 		/// <summary>
 		/// Adds the alternate identifier asynchronous.
@@ -405,35 +238,8 @@ namespace Sannel.House.Devices.Client
 		/// <param name="uuid">The UUID.</param>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		public virtual async Task<Results<Device>> AddAlternateIdAsync(Guid uuid, int deviceId)
-		{
-			var client = factory.CreateClient(nameof(DevicesClient));
-			try
-			{
-				using (var message = new HttpRequestMessage(HttpMethod.Post, $"AlternateId/uuid/{uuid}/{deviceId}"))
-				{
-					AddAuthorizationHeader(message);
-					if(logger.IsEnabled(LogLevel.Debug))
-					{
-						logger.LogDebug("RequestUri: {0}", message.RequestUri);
-						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
-					}
-					message.Content = new StringContent("");
-					var response = await client.SendAsync(message);
-					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
-				}
-			}
-			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
-			{
-				return new Results<Device>()
-				{
-					Status = 444,
-					Title = "Exception",
-					Success = false,
-					Exception = ex
-				};
-			}
-		}
+		public virtual Task<Results<Device>> AddAlternateIdAsync(Guid uuid, int deviceId)
+			=> PostAsync<Results<Device>>($"AlternateId/uuid/{uuid}/{deviceId}",new object() { });
 
 		/// <summary>
 		/// Adds the manufacture alternate identifier asynchronous.
@@ -442,35 +248,8 @@ namespace Sannel.House.Devices.Client
 		/// <param name="manufactureId">The manufacture identifier.</param>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		public virtual async Task<Results<Device>> AddAlternateIdAsync(string manufacture, string manufactureId, int deviceId)
-		{
-			var client = factory.CreateClient(nameof(DevicesClient));
-			try
-			{
-				using (var message = new HttpRequestMessage(HttpMethod.Post, $"AlternateId/manufactureid/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}/{deviceId}"))
-				{
-					AddAuthorizationHeader(message);
-					if(logger.IsEnabled(LogLevel.Debug))
-					{
-						logger.LogDebug("RequestUri: {0}", message.RequestUri);
-						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
-					}
-					message.Content = new StringContent("");
-					var response = await client.SendAsync(message);
-					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
-				}
-			}
-			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
-			{
-				return new Results<Device>()
-				{
-					Status = 444,
-					Title = "Exception",
-					Success = false,
-					Exception = ex
-				};
-			}
-		}
+		public virtual Task<Results<Device>> AddAlternateIdAsync(string manufacture, string manufactureId, int deviceId)
+			=> PostAsync<Results<Device>>($"AlternateId/manufactureid/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}/{deviceId}", new object() { });
 
 		/// <summary>
 		/// Deletes the alternate identifier asynchronous.
@@ -523,69 +302,16 @@ namespace Sannel.House.Devices.Client
 		/// </summary>
 		/// <param name="macAddress">The mac address.</param>
 		/// <returns></returns>
-		public virtual async Task<Results<Device>> DeleteAlternateIdAsync(long macAddress)
-		{
-			var client = factory.CreateClient(nameof(DevicesClient));
-			try
-			{
-				using (var message = new HttpRequestMessage(HttpMethod.Delete, $"AlternateId/mac/{macAddress}"))
-				{
-					AddAuthorizationHeader(message);
-					if(logger.IsEnabled(LogLevel.Debug))
-					{
-						logger.LogDebug("RequestUri: {0}", message.RequestUri);
-						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
-					}
-					message.Content = new StringContent("");
-					var response = await client.SendAsync(message);
-					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
-				}
-			}
-			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
-			{
-				return new Results<Device>()
-				{
-					Status = 444,
-					Title = "Exception",
-					Success = false,
-					Exception = ex
-				};
-			}
-		}
+		public virtual Task<Results<Device>> DeleteAlternateIdAsync(long macAddress)
+			=> DeleteAsync<Results<Device>>($"AlternateId/mac/{macAddress}");
 
 		/// <summary>
 		/// Deletes the Uuid alternate identifier asynchronous.
 		/// </summary>
 		/// <param name="uuid">The UUID.</param>
 		/// <returns></returns>
-		public virtual async Task<Results<Device>> DeleteAlternateIdAsync(Guid uuid)
-		{
-			var client = factory.CreateClient(nameof(DevicesClient));
-			try
-			{
-				using (var message = new HttpRequestMessage(HttpMethod.Delete, $"AlternateId/uuid/{uuid}"))
-				{
-					AddAuthorizationHeader(message);
-					if(logger.IsEnabled(LogLevel.Debug))
-					{
-						logger.LogDebug("RequestUri: {0}", message.RequestUri);
-						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
-					}
-					var response = await client.SendAsync(message);
-					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
-				}
-			}
-			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
-			{
-				return new Results<Device>()
-				{
-					Status = 444,
-					Title = "Exception",
-					Success = false,
-					Exception = ex
-				};
-			}
-		}
+		public virtual Task<Results<Device>> DeleteAlternateIdAsync(Guid uuid)
+			=> DeleteAsync<Results<Device>>($"AlternateId/uuid/{uuid}");
 
 		/// <summary>
 		/// Deletes the manufacture alternate identifier asynchronous.
@@ -593,33 +319,7 @@ namespace Sannel.House.Devices.Client
 		/// <param name="manufacture">The manufacture.</param>
 		/// <param name="manufactureId">The manufacture identifier.</param>
 		/// <returns></returns>
-		public virtual async Task<Results<Device>> DeleteAlternateIdAsync(string manufacture, string manufactureId)
-		{
-			var client = factory.CreateClient(nameof(DevicesClient));
-			try
-			{
-				using (var message = new HttpRequestMessage(HttpMethod.Delete, $"AlternateId/manufacture/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}"))
-				{
-					AddAuthorizationHeader(message);
-					if(logger.IsEnabled(LogLevel.Debug))
-					{
-						logger.LogDebug("RequestUri: {0}", message.RequestUri);
-						logger.LogDebug("AuthHeader: {0}", message.Headers.Authorization);
-					}
-					var response = await client.SendAsync(message);
-					return await DeserializeIfSupportedCodeAsync<Results<Device>>(response);
-				}
-			}
-			catch (Exception ex) when (ex is HttpRequestException || ex is JsonException)
-			{
-				return new Results<Device>()
-				{
-					Status = 444,
-					Title = "Exception",
-					Success = false,
-					Exception = ex
-				};
-			}
-		}
+		public virtual Task<Results<Device>> DeleteAlternateIdAsync(string manufacture, string manufactureId)
+			=> DeleteAsync<Results<Device>>($"AlternateId/manufacture/{Uri.EscapeUriString(manufacture)}/{Uri.EscapeUriString(manufactureId)}");
 	}
 }

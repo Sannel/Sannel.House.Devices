@@ -1007,7 +1007,7 @@ namespace Sannel.House.Devices.Tests.Client
 				Assert.Equal("Bearer", r.Headers.Authorization.Scheme);
 				Assert.Equal(token, r.Headers.Authorization.Parameter);
 
-				Assert.Equal(string.Empty, r.Content.ReadAsStringAsync().Result);
+				Assert.Equal("{}", r.Content.ReadAsStringAsync().Result);
 
 				return new HttpResponseMessage()
 				{
@@ -1167,7 +1167,7 @@ namespace Sannel.House.Devices.Tests.Client
 				Assert.Equal("Bearer", r.Headers.Authorization.Scheme);
 				Assert.Equal(token, r.Headers.Authorization.Parameter);
 
-				Assert.Equal(string.Empty, r.Content.ReadAsStringAsync().Result);
+				Assert.Equal("{}", r.Content.ReadAsStringAsync().Result);
 
 				return new HttpResponseMessage()
 				{
@@ -1286,7 +1286,7 @@ namespace Sannel.House.Devices.Tests.Client
 				Assert.Equal("Bearer", r.Headers.Authorization.Scheme);
 				Assert.Equal(token, r.Headers.Authorization.Parameter);
 
-				Assert.Equal(string.Empty, r.Content.ReadAsStringAsync().Result);
+				Assert.Equal("{}", r.Content.ReadAsStringAsync().Result);
 
 				return new HttpResponseMessage()
 				{
