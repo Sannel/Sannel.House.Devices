@@ -476,11 +476,8 @@ jobs:
       inputs:
         containerregistrytype: 'Container Registry'
         dockerRegistryConnection: 'Docker Hub'
-        dockerFile: '$(Build.StagingDirectory)/Dockerfile'
-        buildArguments: 'tag=2.2-nanoserver-1803'
-        defaultContext: false
-        context: '$(Build.StagingDirectory)'
-        imageName: '$(imageName)-win-x64-1803'
+        action: 'Run a Docker command'
+        customCommand: 'build --build-arg tag=2.2-nanoserver-1803 -t $(imageName)-win-x64-1803 --isolation hyperv $(Build.StagingDirectory)'
     - powershell: |
         docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).win.x64.1803.tar $(imageName)-win-x64-1803
         docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).win.x64.1809.tar $(imageName)-win-x64-1809
