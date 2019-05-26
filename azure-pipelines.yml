@@ -482,15 +482,19 @@ jobs:
     - powershell: |
         docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar $(imageName)-win-x64-1803
         docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar $(imageName)-win-x64-1809
-#        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar $(imageName)-win-x64-1903
         Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar.zip
         Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar.zip
-#        Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar.zip
         Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar 
         Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar 
-#        Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar 
       displayName: 'export images'
-#    - task: Docker@0
+
+#    - powershell: |
+#        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar $(imageName)-win-x64-1903
+#        Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar.zip
+#        Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar 
+#      displayName: 'export 1903'
+
+#    - task: Docker@0 #1709 is no longer supported by dotnet core images
 #      displayName: 'Build an image x64 1709'
 #      inputs:
 #        containerregistrytype: 'Container Registry'
