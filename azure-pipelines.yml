@@ -5,7 +5,7 @@ trigger:
 variables:
   sdk_version: 2.2.300
   dockerRepositoryRoot: sannel
-  dockerRepositoryName: house.sensorlogging
+  dockerRepositoryName: house.devices
   dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
   imageName: $(dockerRepositoryRoot)/$(dockerRepositoryName):$(dockerTagBase)
   projectFolder: Sannel.House.Devices
