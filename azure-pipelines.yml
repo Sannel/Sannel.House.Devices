@@ -97,61 +97,61 @@ jobs:
       targetPath: '$(Build.StagingDirectory)'
 
 - job: client
-   pool:
-     vmImage: ubuntu-16.04
-   steps:
-     - task: DotNetCoreInstaller@0
-       displayName: 'Use .NET Core sdk $(sdk_version)'
-       inputs:
-         version: $(sdk_version)
-     - task: DotNetCoreCLI@2
-       displayName: 'dotnet restore'
-       inputs:
-         command: custom
-         projects: src/$(projectFolder).Client/$(projectFolder).Client.csproj
-         custom: restore
-         arguments: '--configfile .nuget/nuget.config'
-         feedsToUse: config
-         nugetConfigPath: .nuget/nuget.config
-         externalFeedCredentials: 'Sannel House MyGet'
+  pool:
+    vmImage: ubuntu-16.04
+  steps:
+    - task: DotNetCoreInstaller@0
+      displayName: 'Use .NET Core sdk $(sdk_version)'
+      inputs:
+        version: $(sdk_version)
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet restore'
+      inputs:
+        command: custom
+        projects: src/$(projectFolder).Client/$(projectFolder).Client.csproj
+        custom: restore
+        arguments: '--configfile .nuget/nuget.config'
+        feedsToUse: config
+        nugetConfigPath: .nuget/nuget.config
+        externalFeedCredentials: 'Sannel House MyGet'
 
-     - task: DotNetCoreCLI@2
-       displayName: 'dotnet build Release'
-       inputs:
-         projects: src/$(projectFolder).Client/$(projectFolder).Client.csproj
-         arguments: '-c Release'
-       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build Release'
+      inputs:
+        projects: src/$(projectFolder).Client/$(projectFolder).Client.csproj
+        arguments: '-c Release'
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
-     - task: DotNetCoreCLI@2
-       displayName: 'dotnet build Debug'
-       inputs:
-         projects: src/$(projectFolder).Client/$(projectFolder).Client.csproj
-         arguments: '-c Debug'
-       condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build Debug'
+      inputs:
+        projects: src/$(projectFolder).Client/$(projectFolder).Client.csproj
+        arguments: '-c Debug'
+      condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
 
-     - task: DotNetCoreCLI@2
-       displayName: 'dotnet pack Release'
-       inputs:
-         command: 'pack'
-         feedsToUse: 'select'
-         packagesToPack: 'src/$(projectFolder).Client/$(projectFolder).Client.csproj'
-         configuration: 'Release'
-         versioningScheme: 'off'
-       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-     - task: DotNetCoreCLI@2
-       displayName: 'dotnet pack Debug'
-       inputs:
-         command: 'pack'
-         feedsToUse: 'select'
-         packagesToPack: 'src/$(projectFolder).Client/$(projectFolder).Client.csproj'
-         configuration: 'Debug'
-         versioningScheme: 'off'
-       condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-     - task: PublishPipelineArtifact@0
-       displayName: 'Publish Pipeline Artifact'
-       inputs:
-         artifactName: 'client-nuget'
-         targetPath: '$(Build.StagingDirectory)'
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet pack Release'
+      inputs:
+        command: 'pack'
+        feedsToUse: 'select'
+        packagesToPack: 'src/$(projectFolder).Client/$(projectFolder).Client.csproj'
+        configuration: 'Release'
+        versioningScheme: 'off'
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet pack Debug'
+      inputs:
+        command: 'pack'
+        feedsToUse: 'select'
+        packagesToPack: 'src/$(projectFolder).Client/$(projectFolder).Client.csproj'
+        configuration: 'Debug'
+        versioningScheme: 'off'
+      condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+    - task: PublishPipelineArtifact@0
+      displayName: 'Publish Pipeline Artifact'
+      inputs:
+        artifactName: 'client-nuget'
+        targetPath: '$(Build.StagingDirectory)'
 
 - job: linux_arm
   pool:
