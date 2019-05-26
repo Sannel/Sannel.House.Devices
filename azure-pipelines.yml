@@ -156,7 +156,6 @@ jobs:
 - job: linux_arm
   pool:
     vmImage: ubuntu-16.04
-#  variables:
   steps:
     - powershell: |
         # Write your commands here
@@ -354,8 +353,9 @@ jobs:
         context: '$(Build.StagingDirectory)'
         imageName: '$(imageName)-linux-x64'
     - powershell: |
-        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.x64.tar $(imageName)-linux-x64
-        bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.x64.tar
+        $img = "$(imageName)".ToLower()
+        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).linux.x64.tar "${img}-linux-x64"
+        bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).linux.x64.tar
       displayName: 'export image'
 #    - task: Docker@1
 #      displayName: 'Push an image'
@@ -482,8 +482,9 @@ jobs:
         context: '$(Build.StagingDirectory)'
         imageName: '$(imageName)-win-x64-1803'
     - powershell: |
-        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar $(imageName)-win-x64-1803
-        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar $(imageName)-win-x64-1809
+        $img = "$(imageName)".ToLower()
+        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar "${img}-win-x64-1803"
+        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar "${img}-win-x64-1809"
         Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar.zip
         Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar.zip
         Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar 
@@ -620,7 +621,8 @@ jobs:
 #        action: 'Run a Docker command'
 #        customCommand: 'build --build-arg tag=2.2-nanoserver-1903-arm32v7 -t $(imageName)-win-arm-1903 --isolation hyperv $(Build.StagingDirectory)'
     - powershell: |
-        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar $(imageName)-win-arm-1809
+        $img = "$(imageName)".ToLower()
+        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar "${img}-win-arm-1809"
         Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar.zip
         Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar 
 #        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1903.tar $(imageName)-win-arm-1903
