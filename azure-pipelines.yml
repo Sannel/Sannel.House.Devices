@@ -3,7 +3,7 @@ trigger:
 - develop
 
 variables:
-  sdk_version: 2.2.204
+  sdk_version: 2.2.300
   dockerRepositoryRoot: sannel
   dockerRepositoryName: house.sensorlogging
   dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
@@ -455,13 +455,13 @@ jobs:
         
         copy-item -Force -Verbose build/windows/Dockerfile $(Build.StagingDirectory)/
       displayName: 'Prepare Items'
-    - task: Docker@0
-      displayName: 'Build an image x64 1903'
-      inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryConnection: 'Docker Hub'
-        action: 'Run a Docker command'
-        customCommand: 'build --build-arg tag=2.2-nanoserver-1903 -t $(imageName)-win-x64-1903 --isolation hyperv $(Build.StagingDirectory)'
+#    - task: Docker@0
+#      displayName: 'Build an image x64 1903'
+#      inputs:
+#        containerregistrytype: 'Container Registry'
+#        dockerRegistryConnection: 'Docker Hub'
+#        action: 'Run a Docker command'
+#        customCommand: 'build --build-arg tag=2.2-nanoserver-1903 -t $(imageName)-win-x64-1903 --isolation hyperv $(Build.StagingDirectory)'
     - task: Docker@0
       displayName: 'Build an image x64 1809'
       inputs:
@@ -482,13 +482,13 @@ jobs:
     - powershell: |
         docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar $(imageName)-win-x64-1803
         docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar $(imageName)-win-x64-1809
-        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar $(imageName)-win-x64-1903
+#        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar $(imageName)-win-x64-1903
         Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar.zip
         Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar.zip
-        Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar.zip
+#        Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar.zip
         Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar 
         Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar 
-        Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar 
+#        Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1903.tar 
       displayName: 'export images'
 #    - task: Docker@0
 #      displayName: 'Build an image x64 1709'
