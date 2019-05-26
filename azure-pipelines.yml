@@ -9,7 +9,7 @@ variables:
   dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
   imageName: $(dockerRepositoryRoot)/$(dockerRepositoryName):$(dockerTagBase)
   projectFolder: Sannel.House.Devices
-  mainProjectPath: src/$(projectFolder)/Sannel.House.Devices.csproj
+  mainProjectPath: src/$(projectFolder)/$(projectFolder).csproj
   mainConfigPath: src/$(projectFolder)/app_config
 
 name: $(date:yyyy.MM.dd)$(rev:.rr)
@@ -352,7 +352,9 @@ jobs:
         context: '$(Build.StagingDirectory)'
         imageName: '$(imageName)-linux-x64'
     - powershell: |
+        echo "docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.x64.tar $(imageName)-linux-x64)
         docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.x64.tar $(imageName)-linux-x64
+        echo "bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.x64.tar"
         bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.x64.tar
       displayName: 'export image'
 #    - task: Docker@1
