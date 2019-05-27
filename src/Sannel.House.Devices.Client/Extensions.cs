@@ -17,18 +17,15 @@ namespace Sannel.House.Devices.Client
 {
 	public static class Extensions
 	{
+		/// <summary>
+		/// Adds the devices HTTP client registration.
+		/// </summary>
+		/// <param name="service">The service.</param>
+		/// <param name="baseUrl">The base URL.</param>
+		/// <returns></returns>
 		public static IServiceCollection AddDevicesHttpClientRegistration(this IServiceCollection service, Uri baseUrl)
 		{
-			var builder = new UriBuilder(baseUrl)
-			{
-				Path = "/api/v1/"
-			};
-			service.AddHttpClient(nameof(DevicesClient), (i) =>
-			{
-				i.BaseAddress = builder.Uri;
-				i.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-				i.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("DevicesClient","1.0"));
-			});
+			Sannel.House.Client.Helpers.RegisterClient(service, baseUrl, "/api/v1/", nameof(DevicesClient), "1.0");
 
 			return service;
 		}

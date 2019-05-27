@@ -17,9 +17,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.0" />
     <PackageReference Include="Moq" Version="4.10.1" />
-    <PackageReference Include="Sannel.House.Client.Common" Version="0.5.168-beta" />
-    <PackageReference Include="Sannel.House.Models" Version="0.5.139-beta" />
-    <PackageReference Include="Sannel.House.Web" Version="0.5.139-beta" />
+    <PackageReference Include="Sannel.House.Client.Common" Version="0.5.185-beta" />
+    <PackageReference Include="Sannel.House.Models" Version="0.5.184-beta" />
+    <PackageReference Include="Sannel.House.Web" Version="0.5.184-beta" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
