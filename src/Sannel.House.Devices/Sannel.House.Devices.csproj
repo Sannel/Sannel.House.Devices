@@ -5,7 +5,7 @@
     <DockerTargetOS>Windows</DockerTargetOS>
     <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
     <SignAssembly>false</SignAssembly>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>Sannel.House.Device</PackageId>
     <AssemblyVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</AssemblyVersion>
     <FileVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</FileVersion>
