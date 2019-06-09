@@ -9,8 +9,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.*/
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 
 namespace Sannel.House.Devices.Client
@@ -29,5 +31,26 @@ namespace Sannel.House.Devices.Client
 
 			return service;
 		}
+
+		/// <summary>
+		/// Adds the devices client registration.
+		/// </summary>
+		/// <param name="services">The services.</param>
+		/// <returns></returns>
+		public static IServiceCollection AddDevicesClientRegistration(this IServiceCollection services)
+			=> services.AddTransient((s) =>
+				new DevicesClient(s.GetService<IHttpClientFactory>(),
+					s.GetService<ILogger<DevicesClient>>()));
+
+		/// <summary>
+		/// Adds the devices client.
+		/// </summary>
+		/// <param name="service">The service.</param>
+		/// <param name="baseUrl">The base URL.</param>
+		/// <returns></returns>
+		public static IServiceCollection AddDevicesClient(this IServiceCollection service, Uri baseUrl)
+			=> service.AddDevicesHttpClientRegistration(baseUrl)
+				.AddDevicesClientRegistration();
+
 	}
 }

@@ -26,13 +26,21 @@ namespace Sannel.House.Devices.Client
 		/// Initializes a new instance of the <see cref="DevicesClient"/> class.
 		/// </summary>
 		/// <param name="factory">The Http Client factory.</param>
-		public DevicesClient(IHttpClientFactory factory, ILogger<DevicesClient> logger) : base(factory, logger)
+		public DevicesClient(IHttpClientFactory factory, ILogger logger) : base(factory, logger)
 		{}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DevicesClient"/> class.
+		/// </summary>
+		/// <param name="client">The client.</param>
+		/// <param name="logger">The logger.</param>
+		public DevicesClient(HttpClient client, ILogger logger) : base(client, logger)
+		{ }
 
 		/// <summary>Gets the client.</summary>
 		/// <returns></returns>
 		protected override HttpClient GetClient()
-			=> factory.CreateClient(nameof(DevicesClient));
+			=> client ?? factory.CreateClient(nameof(DevicesClient));
 
 		/// <summary>
 		/// Gets a paged list of Devices asynchronous.
