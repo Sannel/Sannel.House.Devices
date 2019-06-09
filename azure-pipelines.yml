@@ -275,7 +275,7 @@ jobs:
 - job: linux_arm64
   pool:
     vmImage: ubuntu-16.04
-  condition: and(ne(variables['disableLinux'], 'true'), ne(veriables['disableArm64'], 'true'))
+  condition: and(ne(variables['disableLinux'], 'true'), ne(variables['disableArm64'], 'true'))
   steps:
     - powershell: |
         # Write your commands here
