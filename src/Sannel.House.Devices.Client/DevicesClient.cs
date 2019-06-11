@@ -23,18 +23,27 @@ namespace Sannel.House.Devices.Client
 	{
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DevicesClient"/> class.
+		/// Initializes a new instance of the <see cref="DevicesClient" /> class.
 		/// </summary>
 		/// <param name="factory">The Http Client factory.</param>
-		public DevicesClient(IHttpClientFactory factory, ILogger logger) : base(factory, logger)
+		/// <param name="baseUrl">The base URL i.e. http://gateway or http://gateway:8080</param>
+		/// <param name="logger">The logger.</param>
+		public DevicesClient(IHttpClientFactory factory, Uri baseUrl, ILogger logger) 
+			: base(factory, 
+				$"{baseUrl.Scheme}://{baseUrl.Host}:{baseUrl.Port}/api/v1/", 
+				logger)
 		{}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DevicesClient"/> class.
+		/// Initializes a new instance of the <see cref="DevicesClient" /> class.
 		/// </summary>
 		/// <param name="client">The client.</param>
+		/// <param name="baseUrl">The base URL i.e. http://gateway or http://gateway:8080</param>
 		/// <param name="logger">The logger.</param>
-		public DevicesClient(HttpClient client, ILogger logger) : base(client, logger)
+		public DevicesClient(HttpClient client, Uri baseUrl, ILogger logger) 
+			: base(client, 
+				$"{baseUrl.Scheme}://{baseUrl.Host}:{baseUrl.Port}/api/v1/", 
+				logger)
 		{ }
 
 		/// <summary>Gets the client.</summary>

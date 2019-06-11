@@ -35,7 +35,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -96,7 +96,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -133,7 +133,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -193,7 +193,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -250,7 +250,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -302,7 +302,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -359,7 +359,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -411,7 +411,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -468,7 +468,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -520,7 +520,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -583,7 +583,7 @@ namespace Sannel.House.Devices.Tests.Client
 			var manufacture = "Particle";
 			var manufactureId = "Photon";
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -645,7 +645,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -697,7 +697,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -749,7 +749,59 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
+			var token = "test123";
+			devicesClient.AuthToken = token;
+
+			client.Protected().Setup<Task<HttpResponseMessage>>(
+				"SendAsync",
+				ItExpr.IsAny<HttpRequestMessage>(),
+				ItExpr.IsAny<CancellationToken>()
+			).ReturnsAsync((HttpRequestMessage r,CancellationToken c) =>
+			{
+				Assert.Equal(HttpMethod.Put, r.Method);
+				Assert.Equal(new Uri("https://gateway.dev.local/api/v1/Devices"), r.RequestUri);
+				Assert.NotNull(r.Headers.Authorization);
+				Assert.Equal("Bearer", r.Headers.Authorization.Scheme);
+				Assert.Equal(token, r.Headers.Authorization.Parameter);
+
+				Assert.Equal(JsonConvert.SerializeObject(device), r.Content.ReadAsStringAsync().Result);
+
+				return new HttpResponseMessage()
+				{
+					StatusCode = System.Net.HttpStatusCode.OK,
+					Content = new StringContent("{ 'success':true,status: 200,'Data':5}")
+				};
+			}).Verifiable();
+
+			var result = await devicesClient.UpdateDeviceAsync(device);
+			Assert.NotNull(result);
+			Assert.True(result.Success);
+			Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+			Assert.Equal(5, result.Data);
+
+		}
+
+		[Fact]
+		public async Task UpdateDeviceAsync2Test()
+		{
+			var client = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+			var httpClient = new HttpClient(client.Object)
+			{
+				BaseAddress = new Uri("https://gateway.dev.local/api/v1/")
+			};
+
+			var device = new Device()
+			{
+				DeviceId = 20,
+				Name = "Name Device",
+				Description = "Test Description",
+				IsReadOnly = true,
+				DateCreated = DateTime.UtcNow,
+				DisplayOrder = 20
+			};
+
+			var devicesClient = new DevicesClient(httpClient, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -801,7 +853,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -843,7 +895,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -911,7 +963,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -991,7 +1043,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -1058,7 +1110,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 
 			await Assert.ThrowsAsync<ArgumentNullException>("macAddress", () => devicesClient.AddAlternateIdAsync(null, 20));
 			await Assert.ThrowsAsync<ArgumentOutOfRangeException>("macAddress", () => devicesClient.AddAlternateIdAsync(new byte[] { 0x23 }, 20));
@@ -1100,7 +1152,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -1151,7 +1203,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -1218,7 +1270,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -1270,7 +1322,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -1339,7 +1391,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -1406,7 +1458,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -1471,7 +1523,7 @@ namespace Sannel.House.Devices.Tests.Client
 			httpClient.BaseAddress = new Uri("https://gateway.dev.local/api/v1/");
 			clientFactory.Setup(i => i.CreateClient(nameof(DevicesClient))).Returns(httpClient);
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 
 			await Assert.ThrowsAsync<ArgumentNullException>("macAddress", () => devicesClient.DeleteAlternateIdAsync(null));
 			await Assert.ThrowsAsync<ArgumentOutOfRangeException>("macAddress", () => devicesClient.DeleteAlternateIdAsync(new byte[] { 0x23 }));
@@ -1513,7 +1565,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -1564,7 +1616,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -1629,7 +1681,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -1682,7 +1734,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 
@@ -1749,7 +1801,7 @@ namespace Sannel.House.Devices.Tests.Client
 				DisplayOrder = 20
 			};
 
-			var devicesClient = new DevicesClient(clientFactory.Object, CreateLogger<DevicesClient>());
+			var devicesClient = new DevicesClient(clientFactory.Object, new Uri("https://gateway.dev.local"), CreateLogger<DevicesClient>()) ;
 			var token = "test123";
 			devicesClient.AuthToken = token;
 

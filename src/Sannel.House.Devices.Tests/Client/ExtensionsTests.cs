@@ -27,12 +27,11 @@ namespace Sannel.House.Devices.Tests.Client
 		public void AddDevicesHttpClientRegistrationTest()
 		{
 			var service = new ServiceCollection();
-			service.AddDevicesHttpClientRegistration(new Uri("http://gateway.dev.local"));
+			service.AddDevicesHttpClientRegistration();
 			var provider = service.BuildServiceProvider();
 			var factory = provider.GetService<IHttpClientFactory>();
 			var httpClient = factory.CreateClient(nameof(DevicesClient));
 			Assert.NotNull(httpClient);
-			Assert.Equal("http://gateway.dev.local/api/v1/", httpClient.BaseAddress.ToString());
 			if(httpClient.DefaultRequestHeaders.TryGetValues("Accept", out var s))
 			{
 				Assert.Single(s);

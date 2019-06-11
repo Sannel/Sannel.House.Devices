@@ -25,9 +25,9 @@ namespace Sannel.House.Devices.Client
 		/// <param name="service">The service.</param>
 		/// <param name="baseUrl">The base URL.</param>
 		/// <returns></returns>
-		public static IServiceCollection AddDevicesHttpClientRegistration(this IServiceCollection service, Uri baseUrl)
+		public static IServiceCollection AddDevicesHttpClientRegistration(this IServiceCollection service)
 		{
-			Sannel.House.Client.Helpers.RegisterClient(service, baseUrl, "/api/v1/", nameof(DevicesClient), "1.0");
+			Sannel.House.Client.Helpers.RegisterClient(service, nameof(DevicesClient), "1.0");
 
 			return service;
 		}
@@ -37,9 +37,10 @@ namespace Sannel.House.Devices.Client
 		/// </summary>
 		/// <param name="services">The services.</param>
 		/// <returns></returns>
-		public static IServiceCollection AddDevicesClientRegistration(this IServiceCollection services)
+		public static IServiceCollection AddDevicesClientRegistration(this IServiceCollection services, Uri baseUri)
 			=> services.AddTransient((s) =>
 				new DevicesClient(s.GetService<IHttpClientFactory>(),
+					baseUri,
 					s.GetService<ILogger<DevicesClient>>()));
 
 		/// <summary>
@@ -49,8 +50,8 @@ namespace Sannel.House.Devices.Client
 		/// <param name="baseUrl">The base URL.</param>
 		/// <returns></returns>
 		public static IServiceCollection AddDevicesClient(this IServiceCollection service, Uri baseUrl)
-			=> service.AddDevicesHttpClientRegistration(baseUrl)
-				.AddDevicesClientRegistration();
+			=> service.AddDevicesHttpClientRegistration()
+				.AddDevicesClientRegistration(baseUrl);
 
 	}
 }
