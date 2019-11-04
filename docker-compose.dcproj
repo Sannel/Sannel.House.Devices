@@ -9,8 +9,6 @@
     <DockerServiceName>sannel.house.devices</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docker-compose.windows.yml" />
-    <None Include="docker-compose.unix.yml" />
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>

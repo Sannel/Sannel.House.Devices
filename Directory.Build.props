@@ -1,6 +1,6 @@
 <Project>
 	<PropertyGroup>
-		<Major>0</Major>
+		<Major>$([System.DateTime]::Now.ToString('yyMM'))</Major>
 		<Minor>5</Minor>
 		<Patch Condition="'$(Build_BuildId)' != ''">$(Build_BuildId)</Patch>
 		<Patch Condition="'$(Patch)' == ''">0</Patch>

@@ -1,38 +1,42 @@
-version: '3.6'
+version: '2.4'
 
 services:
   users:
-    image: ${DOCKER_REGISTRY}sannelhouseusers:beta
+    image: ${DOCKER_REGISTRY}house.users:beta
     networks: 
       housenet:
         aliases:
           - "users.house.dev.local"
-    ports:
-      - "443:443"
+        ipv4_address: '192.168.200.2'
 
-  tests:
-    image: ${DOCKER_REGISTRY}sannelhousedevices:tests-${SANNEL_ARCH}
-    ports:
-      - "8080:80"
-    build:
-      context: .
-      dockerfile: src/Sannel.House.Devices.Tests/Dockerfile
-    networks:
-      - housenet
+  gateway:
+    image: ${DOCKER_REGISTRY}house.gateway:beta
+    volumes:
+    - "./RunData/gateway:c:/app/app_config"
+    networks: 
+      housenet:
+        aliases:
+          - "users.house.dev.local"
+        ipv4_address: '192.168.200.3'
 
   devices:
-    image: ${DOCKER_REGISTRY}${ImageName}:${BuildType}-${SANNEL_VERSION}-${SANNEL_ARCH}
+    image: ${DOCKER_REGISTRY}house.devices:alpha
     build:
       context: .
       dockerfile: src/Sannel.House.Devices/Dockerfile
-      args:
-        USER: "${USER}"
     networks:
-      - housenet
-    ports:
-      - "8443:443"
+      housenet:
+        aliases:
+          - "devices.house.dev.local"
+        ipv4_address: '192.168.200.4'
     depends_on:
       - users
 
 networks:
   housenet:
+    driver: nat
+    ipam:
+      driver: windows
+      config:
+        - subnet: '192.168.200.0/24'
+          gateway: '192.168.200.1'

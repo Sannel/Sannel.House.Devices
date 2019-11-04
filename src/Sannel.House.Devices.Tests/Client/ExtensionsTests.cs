@@ -17,71 +17,71 @@ using Xunit;
 using Moq;
 using Microsoft.AspNetCore.Http;
 using Sannel.House.Client;
-using Sannel.House.Devices.Client;
+//using Sannel.House.Devices.Client;
 
-namespace Sannel.House.Devices.Tests.Client
-{
-	public class ExtensionsTests
-	{
-		[Fact]
-		public void AddDevicesHttpClientRegistrationTest()
-		{
-			var service = new ServiceCollection();
-			service.AddDevicesHttpClientRegistration();
-			var provider = service.BuildServiceProvider();
-			var factory = provider.GetService<IHttpClientFactory>();
-			var httpClient = factory.CreateClient(nameof(DevicesClient));
-			Assert.NotNull(httpClient);
-			if(httpClient.DefaultRequestHeaders.TryGetValues("Accept", out var s))
-			{
-				Assert.Single(s);
-				Assert.Equal("application/json", s.First());
-			}
-			else
-			{
-				Assert.True(false, "Header not set correctly");
-			}
-			if(httpClient.DefaultRequestHeaders.TryGetValues("User-Agent", out var h))
-			{
-				var cs = string.Join(' ', h);
-				Assert.Equal("DevicesClient/1.0", cs);
-			}
-			else
-			{
-				Assert.True(false, "Header not set correctly");
-			}
-		}
+//namespace Sannel.House.Devices.Tests.Client
+//{
+//	public class ExtensionsTests
+//	{
+//		[Fact]
+//		public void AddDevicesHttpClientRegistrationTest()
+//		{
+//			var service = new ServiceCollection();
+//			service.AddDevicesHttpClientRegistration();
+//			var provider = service.BuildServiceProvider();
+//			var factory = provider.GetService<IHttpClientFactory>();
+//			var httpClient = factory.CreateClient(nameof(DevicesClient));
+//			Assert.NotNull(httpClient);
+//			if(httpClient.DefaultRequestHeaders.TryGetValues("Accept", out var s))
+//			{
+//				Assert.Single(s);
+//				Assert.Equal("application/json", s.First());
+//			}
+//			else
+//			{
+//				Assert.True(false, "Header not set correctly");
+//			}
+//			if(httpClient.DefaultRequestHeaders.TryGetValues("User-Agent", out var h))
+//			{
+//				var cs = string.Join(' ', h);
+//				Assert.Equal("DevicesClient/1.0", cs);
+//			}
+//			else
+//			{
+//				Assert.True(false, "Header not set correctly");
+//			}
+//		}
 
-		/*[Fact]
-		public void AddDevicesSDKRegistrationTest()
-		{
-			var service = new ServiceCollection();
-			service.AddDevicesSDKRegistration(new Uri("http://gateway.dev.local"));
-			var provider = service.BuildServiceProvider();
-			var client = provider.GetService<DevicesClient>();
-			Assert.NotNull(client);
-			var m = client.GetType().GetRuntimeMethods().First(i => i.Name == "FireGetAuthenticationToken");
+//		/*[Fact]
+//		public void AddDevicesSDKRegistrationTest()
+//		{
+//			var service = new ServiceCollection();
+//			service.AddDevicesSDKRegistration(new Uri("http://gateway.dev.local"));
+//			var provider = service.BuildServiceProvider();
+//			var client = provider.GetService<DevicesClient>();
+//			Assert.NotNull(client);
+//			var m = client.GetType().GetRuntimeMethods().First(i => i.Name == "FireGetAuthenticationToken");
 
-			var args = new AuthenticationTokenArgs();
-			m.Invoke(client, new[] { args });
-			Assert.False(args.CacheToken);
-			Assert.Null(args.Token);
+//			var args = new AuthenticationTokenArgs();
+//			m.Invoke(client, new[] { args });
+//			Assert.False(args.CacheToken);
+//			Assert.Null(args.Token);
 
-			var hd = new HeaderDictionary();
-			var mock = new Mock<IHttpContextAccessor>();
-			mock.Setup(i => i.HttpContext.Request.Headers).Returns(hd);
-			service.AddTransient(i => mock.Object);
+//			var hd = new HeaderDictionary();
+//			var mock = new Mock<IHttpContextAccessor>();
+//			mock.Setup(i => i.HttpContext.Request.Headers).Returns(hd);
+//			service.AddTransient(i => mock.Object);
 
-			provider = service.BuildServiceProvider();
-			client = provider.GetService<DevicesClient>();
-			m.Invoke(client, new[] { args });
-			Assert.False(args.CacheToken);
-			Assert.Null(args.Token);
+//			provider = service.BuildServiceProvider();
+//			client = provider.GetService<DevicesClient>();
+//			m.Invoke(client, new[] { args });
+//			Assert.False(args.CacheToken);
+//			Assert.Null(args.Token);
 
-			hd.Add("Authorization", new Microsoft.Extensions.Primitives.StringValues("Bearer test"));
-			m.Invoke(client, new[] { args });
-			Assert.True(args.CacheToken);
-			Assert.Equal("test", args.Token);
-		}*/
-	}
-}
+//			hd.Add("Authorization", new Microsoft.Extensions.Primitives.StringValues("Bearer test"));
+//			m.Invoke(client, new[] { args });
+//			Assert.True(args.CacheToken);
+//			Assert.Equal("test", args.Token);
+//		}*/
+//	}
+//}

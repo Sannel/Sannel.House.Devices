@@ -5,5 +5,4 @@ EXPOSE 8080
 EXPOSE 8443
 
 COPY Sannel.House.Devices/ .
-USER ContainerUser
 ENTRYPOINT ["dotnet", "Sannel.House.Devices.dll"]

@@ -30,7 +30,6 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sannel.House.Devices.Data;
-using Sannel.House.Devices.Data.Migrations.MySql;
 using Sannel.House.Devices.Data.Migrations.Sqlite;
 using Sannel.House.Devices.Data.Migrations.SqlServer;
 using Sannel.House.Devices.Data.Migrations.PostgresSQL;
@@ -40,11 +39,21 @@ using System.Net;
 using System.Net.Security;
 using System.Net.Http;
 using NSwag.AspNetCore;
+using Microsoft.Extensions.Hosting;
+using System.Globalization;
 
 namespace Sannel.House.Devices
 {
+	/// <summary>
+	/// The startup class for Devices
+	/// </summary>
 	public class Startup
 	{
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Startup" /> class.
+		/// </summary>
+		/// <param name="configuration">The configuration.</param>
 		public Startup(IConfiguration configuration)
 		{
 			var root = (ConfigurationRoot)configuration;
@@ -52,21 +61,31 @@ namespace Sannel.House.Devices
 			Configuration = configuration;
 		}
 
+		/// <summary>
+		/// Gets the configuration.
+		/// </summary>
+		/// <value>
+		/// The configuration.
+		/// </value>
 		public IConfiguration Configuration { get; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
+		/// <summary>
+		/// Configures the services.
+		/// </summary>
+		/// <param name="services">The services.</param>
 		public void ConfigureServices(IServiceCollection services)
 		{ 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
 			services.AddDbContextPool<DevicesDbContext>(o =>
 			{
 				switch (Configuration["Db:Provider"])
 				{
+					case "MySQL":
 					case "mysql":
-						o.ConfigureMySql(Configuration["Db:ConnectionString"]);
-						break;
+						throw new NotSupportedException("We are currently not supporting mysql as a database provider");
+
 					case "sqlserver":
+					case "SqlServer":
 						o.ConfigureSqlServer(Configuration["Db:ConnectionString"]);
 						break;
 					case "PostgreSQL":
@@ -96,6 +115,10 @@ namespace Sannel.House.Devices
 						});
 
 			services.AddSwaggerDocument();
+			services.AddOpenApiDocument();
+
+			services.AddAuthorization();
+			services.AddControllers();
 
 			services.AddHealthChecks()
 				.AddDbHealthCheck<DevicesDbContext>("DbHealthCheck", async (context) =>
@@ -105,20 +128,28 @@ namespace Sannel.House.Devices
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env,IServiceProvider provider,ILogger<Startup> logger)
+		/// <summary>
+		/// Configures the specified application.
+		/// </summary>
+		/// <param name="app">The application.</param>
+		/// <param name="env">The env.</param>
+		/// <param name="provider">The provider.</param>
+		/// <param name="logger">The logger.</param>
+		/// <exception cref="Exception">Shutting Down</exception>
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IServiceProvider provider,ILogger<Startup> logger)
 		{
 			provider.CheckAndInstallTrustedCertificate();
 
 			var p = Configuration["Db:Provider"];
 			var db = provider.GetService<DevicesDbContext>();
 
-			if (string.Compare(p, "mysql", true) == 0
-					|| string.Compare(p, "postgresql", true) == 0
-					|| string.Compare(p, "sqlserver", true) == 0)
+			if (string.Compare(p, "mysql", true, CultureInfo.InvariantCulture) == 0
+					|| string.Compare(p, "postgresql", true, CultureInfo.InvariantCulture) == 0
+					|| string.Compare(p, "sqlserver", true, CultureInfo.InvariantCulture) == 0)
 			{
 				if(!db.WaitForServer(logger))
 				{
-					throw new Exception("Shutting down");
+					throw new Exception("Shutting Down");
 				}
 			}
 
@@ -129,14 +160,19 @@ namespace Sannel.House.Devices
 			}
 
 			app.UseHealthChecks("/health");
+			app.UseRouting();
+
 
 			app.UseAuthentication();
-			app.UseHttpsRedirection();
+			app.UseAuthorization();
 
-			app.UseSwagger();
-			app.UseSwaggerUi3();
+			//app.UseSwaggerUi3();
+			//app.UseOpenApi();
 
-			app.UseMvc();
+			app.UseEndpoints(i =>
+			{
+				i.MapControllers();
+			});
 
 		}
 	}

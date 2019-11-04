@@ -1,4 +1,4 @@
-ARG tag=2.2
+ARG tag=3.0
 FROM mcr.microsoft.com/dotnet/core/runtime:${tag} AS base
 WORKDIR /app
 EXPOSE 8080
@@ -8,5 +8,5 @@ RUN ln -s  /var/run/secrets/kubernetes.io/serviceaccount/ca.crt /etc/ssl/certs/k
     && groupadd -g 1200 house \
     && useradd -m house -g house -u 1100 \
     && chown -R house:house /app
-USER house
+USER 1200
 ENTRYPOINT ["dotnet", "Sannel.House.Devices.dll"]

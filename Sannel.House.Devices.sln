@@ -29,11 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.Devices.Data.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.Devices.Tests", "src\Sannel.House.Devices.Tests\Sannel.House.Devices.Tests.csproj", "{8C2C4863-851A-4600-AC2A-52B1F17EEB91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.Devices.Data.Migrations.MySql", "src\Migrations\Sannel.House.Devices.Data.Migrations.MySql\Sannel.House.Devices.Data.Migrations.MySql.csproj", "{E9E98472-76FA-47F1-93FB-891563579B2B}"
-EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1B3AE4C4-80B2-408B-A13A-1AD3D9210BC1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.Devices.Client", "src\Sannel.House.Devices.Client\Sannel.House.Devices.Client.csproj", "{23871C57-D344-4A5A-B8DF-49DC628EC006}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.Devices.Data.Migrations.PostgreSQL", "src\Migrations\Sannel.House.Devices.Data.Migrations.PostgreSQL\Sannel.House.Devices.Data.Migrations.PostgreSQL.csproj", "{ABC58BA8-B6D0-4E2F-A242-4FED9F07D7CA}"
 EndProject
@@ -75,18 +71,10 @@ Global
 		{8C2C4863-851A-4600-AC2A-52B1F17EEB91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C2C4863-851A-4600-AC2A-52B1F17EEB91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C2C4863-851A-4600-AC2A-52B1F17EEB91}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E9E98472-76FA-47F1-93FB-891563579B2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E9E98472-76FA-47F1-93FB-891563579B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E9E98472-76FA-47F1-93FB-891563579B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E9E98472-76FA-47F1-93FB-891563579B2B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1B3AE4C4-80B2-408B-A13A-1AD3D9210BC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1B3AE4C4-80B2-408B-A13A-1AD3D9210BC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B3AE4C4-80B2-408B-A13A-1AD3D9210BC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B3AE4C4-80B2-408B-A13A-1AD3D9210BC1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{23871C57-D344-4A5A-B8DF-49DC628EC006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23871C57-D344-4A5A-B8DF-49DC628EC006}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23871C57-D344-4A5A-B8DF-49DC628EC006}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23871C57-D344-4A5A-B8DF-49DC628EC006}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ABC58BA8-B6D0-4E2F-A242-4FED9F07D7CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ABC58BA8-B6D0-4E2F-A242-4FED9F07D7CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABC58BA8-B6D0-4E2F-A242-4FED9F07D7CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -98,7 +86,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C37E2B16-6DE1-4BEB-91A2-7EC59F07FFBA} = {EDB22547-363D-41E7-98A1-81D5949652D6}
 		{93A84DEF-4E5A-401B-AF1E-1A948DC09DAC} = {EDB22547-363D-41E7-98A1-81D5949652D6}
-		{E9E98472-76FA-47F1-93FB-891563579B2B} = {EDB22547-363D-41E7-98A1-81D5949652D6}
 		{ABC58BA8-B6D0-4E2F-A242-4FED9F07D7CA} = {EDB22547-363D-41E7-98A1-81D5949652D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

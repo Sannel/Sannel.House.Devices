@@ -16,24 +16,47 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Sannel.House.Devices
 {
-	public class Program
+	/// <summary>
+	/// 
+	/// </summary>
+	public static class Program
 	{
-		public static void Main(string[] args)
-		{
-			CreateWebHostBuilder(args).Build().Run();
-		}
+		/// <summary>
+		/// Defines the entry point of the application.
+		/// </summary>
+		/// <param name="args">The arguments.</param>
+		public static void Main(string[] args) 
+			=> CreateHostBuilder(args).Build().Run();
 
-		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-			WebHost.CreateDefaultBuilder(args)
-				.ConfigureAppConfiguration(c =>
-				{ 
-					c.AddJsonFile(Path.Combine("app_config", "appsettings.json"), true, true);
-					c.AddYamlFile(Path.Combine("app_config", "appsettings.yml"), true, true);
-				})
-				.UseStartup<Startup>();
+		/// <summary>
+		/// Creates the host builder.
+		/// </summary>
+		/// <param name="args">The arguments.</param>
+		/// <returns></returns>
+		public static IHostBuilder CreateHostBuilder(string[] args) =>
+			Host.CreateDefaultBuilder(args)
+				.ConfigureWebHostDefaults(o =>
+				{
+					o.ConfigureAppConfiguration(b =>
+					{
+						b.AddJsonFile(Path.Combine("app_config", "appsettings.json"), true, true);
+						b.AddYamlFile(Path.Combine("app_config", "appsettings.yml"), true, true);
+						var shared = Path.Combine("app_config", "shared");
+						if(Directory.Exists(shared))
+						{
+							foreach(var f in Directory.GetFiles(Path.Combine(shared), "*.yaml"))
+							{
+								b.AddYamlFile(f, true, true);
+							}
+						}
+						b.AddEnvironmentVariables();
+					});
+					o.UseStartup<Startup>();
+				});
 	}
 }
