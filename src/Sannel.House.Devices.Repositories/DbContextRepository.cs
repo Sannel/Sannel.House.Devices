@@ -280,17 +280,20 @@ namespace Sannel.House.Devices.Repositories
 		/// </returns>
 		public async Task<Device> RemoveAlternateMacAddressAsync(long macAddress)
 		{
-			var altId = await context.AlternateDeviceIds.Include(i => i.Device)
-				.AsNoTracking().FirstOrDefaultAsync(i => i.MacAddress == macAddress);
+			var altId = await context.AlternateDeviceIds
+				.AsNoTracking()
+				.FirstOrDefaultAsync(i => i.MacAddress == macAddress);
 			if (altId == null)
 			{
 				return null;
 			}
 
+			var device = await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == altId.DeviceId);
+
 			context.AlternateDeviceIds.Remove(altId);
 			await context.SaveChangesAsync();
 
-			return altId.Device;
+			return device;
 		}
 
 		/// <summary>
@@ -302,17 +305,19 @@ namespace Sannel.House.Devices.Repositories
 		/// </returns>
 		public async Task<Device> RemoveAlternateUuidAsync(Guid uuid)
 		{
-			var altId = await context.AlternateDeviceIds.Include(i => i.Device)
+			var altId = await context.AlternateDeviceIds
 				.AsNoTracking().FirstOrDefaultAsync(i => i.Uuid == uuid);
 			if (altId == null)
 			{
 				return null;
 			}
 
+			var device = await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == altId.DeviceId);
+
 			context.AlternateDeviceIds.Remove(altId);
 			await context.SaveChangesAsync();
 
-			return altId.Device;
+			return device;
 		}
 
 		/// <summary>
@@ -355,17 +360,19 @@ namespace Sannel.House.Devices.Repositories
 		public async Task<Device> RemoveAlternateManufactureIdAsync(string manufacture, string manufactureId)
 		{
 
-			var altId = await context.AlternateDeviceIds.Include(i => i.Device)
+			var altId = await context.AlternateDeviceIds
 				.AsNoTracking().FirstOrDefaultAsync(i => i.Manufacture == manufacture && i.ManufactureId == manufactureId);
 			if (altId == null)
 			{
 				return null;
 			}
 
+			var device = await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == altId.DeviceId);
+
 			context.AlternateDeviceIds.Remove(altId);
 			await context.SaveChangesAsync();
 
-			return altId.Device;
+			return device;
 		}
 	}
 }
