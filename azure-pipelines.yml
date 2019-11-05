@@ -13,7 +13,7 @@ variables:
   mainConfigPath: src/$(projectFolder)/app_config
   tagVersion: 3.0
   tagCodeName: buster
-  hasTests: false
+  hasTests: true
   disableLinux: false
   disableArm64: false
   disableWindows: false
