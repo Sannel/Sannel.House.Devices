@@ -75,7 +75,15 @@ namespace Sannel.House.Devices
 		/// </summary>
 		/// <param name="services">The services.</param>
 		public void ConfigureServices(IServiceCollection services)
-		{ 
+		{
+			var connectionString = Configuration.GetWithReplacement("Db:ConnectionString");
+			if (string.IsNullOrWhiteSpace(connectionString))
+			{
+#pragma warning disable CA2208 // Instantiate argument exceptions correctly
+				throw new ArgumentNullException("Db:ConnectionString", "Db:ConnectionString is required");
+#pragma warning restore CA2208 // Instantiate argument exceptions correctly
+			}
+
 			services.AddDbContextPool<DevicesDbContext>(o =>
 			{
 				switch (Configuration["Db:Provider"])
@@ -86,15 +94,15 @@ namespace Sannel.House.Devices
 
 					case "sqlserver":
 					case "SqlServer":
-						o.ConfigureSqlServer(Configuration["Db:ConnectionString"]);
+						o.ConfigureSqlServer(connectionString);
 						break;
 					case "PostgreSQL":
 					case "postgresql":
-						o.ConfigurePostgreSQL(Configuration["Db:ConnectionString"]);
+						o.ConfigurePostgreSQL(connectionString);
 						break;
 					case "sqlite":
 					default:
-						o.ConfigureSqlite(Configuration["Db:ConnectionString"]);
+						o.ConfigureSqlite(connectionString);
 						break;
 				}
 			});
