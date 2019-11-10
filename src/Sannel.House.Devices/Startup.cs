@@ -118,8 +118,15 @@ namespace Sannel.House.Devices
 						{
 							o.Authority = this.Configuration["Authentication:AuthorityUrl"];
 							o.ApiName = this.Configuration["Authentication:ApiName"];
-							o.ApiSecret = this.Configuration["Authentication:ApiSecret"];
+
+							var apiSecret = this.Configuration["Authentication:ApiSecret"];
+							if (!string.IsNullOrWhiteSpace(apiSecret))
+							{
+								o.ApiSecret = apiSecret;
+							}
+
 							o.SupportedTokens = SupportedTokens.Both;
+
 							if (Configuration.GetValue<bool?>("Authentication:DisableRequireHttpsMetadata") == true)
 							{
 								o.RequireHttpsMetadata = false;
