@@ -41,6 +41,7 @@ using System.Net.Http;
 using NSwag.AspNetCore;
 using Microsoft.Extensions.Hosting;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Sannel.House.Devices
 {
@@ -109,6 +110,8 @@ namespace Sannel.House.Devices
 
 			services.AddScoped<IDeviceRepository, DbContextRepository>();
 
+			services.AddControllers();
+
 
 			services.AddAuthentication(Configuration["Authentication:Schema"])
 					.AddIdentityServerAuthentication(Configuration["Authentication:Schema"], o =>
@@ -123,11 +126,9 @@ namespace Sannel.House.Devices
 							}
 						});
 
-			services.AddSwaggerDocument();
-			services.AddOpenApiDocument();
+			/*services.AddSwaggerDocument();
+			services.AddOpenApiDocument();*/
 
-			services.AddAuthorization();
-			services.AddControllers();
 
 			services.AddHealthChecks()
 				.AddDbHealthCheck<DevicesDbContext>("DbHealthCheck", async (context) =>
@@ -163,13 +164,14 @@ namespace Sannel.House.Devices
 			}
 
 			db.Database.Migrate();
+			app.UseRouting();
+
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 			}
 
 			app.UseHealthChecks("/health");
-			app.UseRouting();
 
 
 			app.UseAuthentication();
