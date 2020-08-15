@@ -1,11 +1,11 @@
 
 # base
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 WORKDIR /app
 EXPOSE 8080
 
 #build the software
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /src
 COPY [".nuget/nuget.config", ".nuget/nuget.config"]
 COPY ["Directory.Build.props", "./"]
@@ -17,6 +17,7 @@ COPY ["src/Sannel.House.Devices.Models/Sannel.House.Devices.Models.csproj", "src
 COPY ["src/Sannel.House.Devices.Data/Sannel.House.Devices.Data.csproj", "src/Sannel.House.Devices.Data/"]
 COPY ["src/Migrations/Sannel.House.Devices.Data.Migrations.Sqlite/Sannel.House.Devices.Data.Migrations.Sqlite.csproj", "src/Migrations/Sannel.House.Devices.Data.Migrations.Sqlite/"]
 COPY ["src/Sannel.House.Devices.Repositories/Sannel.House.Devices.Repositories.csproj", "src/Sannel.House.Devices.Repositories/"]
+COPY ["src/Sannel.House.Devices.Services/Sannel.House.Devices.Services.csproj", "src/Sannel.House.Devices.Services/"]
 COPY ["src/Migrations/Sannel.House.Devices.Data.Migrations.SqlServer/Sannel.House.Devices.Data.Migrations.SqlServer.csproj", "src/Migrations/Sannel.House.Devices.Data.Migrations.SqlServer/"]
 RUN dotnet restore --configfile .nuget/nuget.config "src/Sannel.House.Devices/Sannel.House.Devices.csproj"
 COPY . .

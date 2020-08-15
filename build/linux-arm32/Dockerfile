@@ -1,4 +1,4 @@
-ARG tag=3.0
+ARG tag=3.1
 FROM mcr.microsoft.com/dotnet/core/runtime:${tag} AS base
 WORKDIR /app
 EXPOSE 8080

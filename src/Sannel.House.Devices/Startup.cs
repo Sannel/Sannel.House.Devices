@@ -13,8 +13,9 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
-using Sannel.House.Data;
-using Sannel.House.Web;
+using Sannel.House.Base.Models;
+using Sannel.House.Base.Data;
+using Sannel.House.Base.Web;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -42,6 +43,9 @@ using NSwag.AspNetCore;
 using Microsoft.Extensions.Hosting;
 using System.Globalization;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading;
+using Sannel.House.Devices.Services;
+using MQTTnet.Client.Options;
 
 namespace Sannel.House.Devices
 {
@@ -109,6 +113,8 @@ namespace Sannel.House.Devices
 			});
 
 			services.AddScoped<IDeviceRepository, DbContextRepository>();
+			services.AddScoped<IDeviceService, DeviceService>();
+
 
 			services.AddControllers();
 
@@ -133,9 +139,11 @@ namespace Sannel.House.Devices
 							}
 						});
 
-			/*services.AddSwaggerDocument();
-			services.AddOpenApiDocument();*/
+			services.AddOpenApiDocument();
 
+			services.AddMqttPublishService(Configuration["MQTT:Server"], 
+										Configuration["MQTT:DefaultTopic"], 
+										Configuration.GetValue<int?>("MQTT:Port"));
 
 			services.AddHealthChecks()
 				.AddDbHealthCheck<DevicesDbContext>("DbHealthCheck", async (context) =>
@@ -184,14 +192,13 @@ namespace Sannel.House.Devices
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			//app.UseSwaggerUi3();
-			//app.UseOpenApi();
+			app.UseOpenApi();
+			app.UseReDoc();
 
 			app.UseEndpoints(i =>
 			{
 				i.MapControllers();
 			});
-
 		}
 	}
 }

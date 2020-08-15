@@ -10,10 +10,10 @@
    limitations under the License.*/
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using Sannel.House.Base.Models;
 using Sannel.House.Devices.Controllers;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
-using Sannel.House.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,16 +29,16 @@ namespace Sannel.House.Devices.Tests.Controllers
 		[Fact]
 		public void ConstructorArgumentsTest()
 		{
-			Assert.Throws<ArgumentNullException>("repository",
+			Assert.Throws<ArgumentNullException>("service",
 				() => new AlternateIdController(null, null));
 			Assert.Throws<ArgumentNullException>("logger",
-				() => new AlternateIdController(new Mock<IDeviceRepository>().Object, null));
+				() => new AlternateIdController(new Mock<IDeviceService>().Object, null));
 		}
 
 		[Fact]
 		public async Task GetAlternateIdsTest()
 		{
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new AlternateIdController(repo.Object, CreateLogger<AlternateIdController>()))
 			{
 				var result = await controller.Get(-1);
@@ -126,7 +126,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		public async Task PostMacAddressTest()
 		{
 
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new AlternateIdController(repo.Object, CreateLogger<AlternateIdController>()))
 			{
 				var result = await controller.Post(-1, -1);
@@ -193,7 +193,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		public async Task PostUuidTest()
 		{
 
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new AlternateIdController(repo.Object, CreateLogger<AlternateIdController>()))
 			{
 				var result = await controller.Post(Guid.Empty, -1);
@@ -262,7 +262,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		public async Task PostManufactureIdTest()
 		{
 
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new AlternateIdController(repo.Object, CreateLogger<AlternateIdController>()))
 			{
 				var result = await controller.Post("", null, -1);
@@ -341,7 +341,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		public async Task DeleteMacAddressAsync()
 		{
 
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new AlternateIdController(repo.Object, CreateLogger<AlternateIdController>()))
 			{
 				var result = await controller.Delete(-1);
@@ -388,7 +388,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		public async Task DeleteUuidAsync()
 		{
 
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new AlternateIdController(repo.Object, CreateLogger<AlternateIdController>()))
 			{
 				var result = await controller.Delete(Guid.Empty);
@@ -437,7 +437,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		public async Task DeleteManufactureIdAsync()
 		{
 
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new AlternateIdController(repo.Object, CreateLogger<AlternateIdController>()))
 			{
 				var result = await controller.Delete("","Photon");

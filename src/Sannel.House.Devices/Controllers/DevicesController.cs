@@ -19,8 +19,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
-using Sannel.House.Models;
-using Sannel.House.Web;
+using Sannel.House.Base.Models;
+using Sannel.House.Base.Web;
 
 namespace Sannel.House.Devices.Controllers
 {
@@ -28,11 +28,11 @@ namespace Sannel.House.Devices.Controllers
 	[ApiController]
 	public class DevicesController : Controller
 	{
-		private IDeviceRepository repo;
+		private IDeviceService service;
 		private ILogger logger;
-		public DevicesController(IDeviceRepository repository, ILogger<DevicesController> logger)
+		public DevicesController(IDeviceService service, ILogger<DevicesController> logger)
 		{
-			repo = repository ?? throw new ArgumentNullException(nameof(repository));
+			this.service = service ?? throw new ArgumentNullException(nameof(service));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
@@ -84,7 +84,7 @@ namespace Sannel.House.Devices.Controllers
 
 			logger.LogDebug("GetPaged pageIndex: {0} pageSize {1}", pageIndex, pageSize);
 
-			return Ok(new PagedResponseModel<Device>("Paged Results", await repo.GetDevicesListAsync(pageIndex, pageSize)));
+			return Ok(new PagedResponseModel<Device>("Paged Results", await service.GetDevicesListAsync(pageIndex, pageSize)));
 		}
 
 		/// <summary>
@@ -105,7 +105,7 @@ namespace Sannel.House.Devices.Controllers
 				return BadRequest(new ErrorResponseModel("Invalid Device Id", nameof(deviceId), "Device Id must be greater then or equal to 0"));
 			}
 
-			var device = await repo.GetDeviceByIdAsync(deviceId);
+			var device = await service.GetDeviceByIdAsync(deviceId);
 			if(device == null)
 			{
 				logger.LogDebug("Device with id {0} not found", deviceId);
@@ -135,7 +135,7 @@ namespace Sannel.House.Devices.Controllers
 				return BadRequest(new ErrorResponseModel("Invalid Mac Address", nameof(macAddress), "Mac Address must be greater then or equal to 0"));
 			}
 
-			var device = await repo.GetDeviceByMacAddressAsync(macAddress);
+			var device = await service.GetDeviceByMacAddressAsync(macAddress);
 			if(device == null)
 			{
 				logger.LogDebug("Device with macAddress {0} not found", macAddress);
@@ -165,7 +165,7 @@ namespace Sannel.House.Devices.Controllers
 				return BadRequest(new ErrorResponseModel("Invalid Uuid", nameof(uuid), $"Uuid cannot be Empty {Guid.Empty}"));
 			}
 
-			var device = await repo.GetDeviceByUuidAsync(uuid);
+			var device = await service.GetDeviceByUuidAsync(uuid);
 			if(device == null)
 			{
 				logger.LogDebug("Device with Uuid {0} not found", uuid);
@@ -196,7 +196,7 @@ namespace Sannel.House.Devices.Controllers
 				return BadRequest(new ErrorResponseModel("ManufactureID is Empty","manufactureId", "ManufactureId must not be null or whitespace"));
 			}
 
-			var device = await repo.GetDeviceByManufactureIdAsync(manufacture, manufactureId);
+			var device = await service.GetDeviceByManufactureIdAsync(manufacture, manufactureId);
 			if(device == null)
 			{
 				logger.LogDebug("Device with Manufacture/ManufactureId {0}/{1} not found", manufacture, manufactureId);
@@ -229,7 +229,7 @@ namespace Sannel.House.Devices.Controllers
 			{
 				logger.LogDebug("Post: adding new device '{0}'", device.Name);
 				device.DeviceId = 0;
-				var d = await repo.AddDeviceAsync(device);
+				var d = await service.AddDeviceAsync(device);
 				return Ok(new ResponseModel<int>("The Device Id", d.DeviceId));
 			}
 			else
@@ -267,7 +267,7 @@ namespace Sannel.House.Devices.Controllers
 			{
 				try
 				{
-					var d = await repo.UpdateDeviceAsync(device); 
+					var d = await service.UpdateDeviceAsync(device); 
 
 					if(d == null)
 					{
