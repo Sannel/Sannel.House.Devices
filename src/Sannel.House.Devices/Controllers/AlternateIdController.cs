@@ -17,32 +17,36 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Sannel.House.Web;
-using Sannel.House.Models;
+using Sannel.House.Base.Web;
+using Sannel.House.Base.Models;
 using System.Net;
 
 namespace Sannel.House.Devices.Controllers
 {
+	/// <summary>
+	/// Controller dealing with Alternate Id
+	/// </summary>
+	/// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
 	[Route("api/[controller]")]
 	[ApiController]
 	public class AlternateIdController : Controller
 	{
-		private IDeviceRepository repo;
+		private IDeviceService service;
 		private ILogger logger;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AlternateIdController" /> class.
 		/// </summary>
-		/// <param name="repository">The repository.</param>
+		/// <param name="service">The repository.</param>
 		/// <param name="logger">The logger.</param>
 		/// <exception cref="ArgumentNullException">
 		/// repository
 		/// or
 		/// logger
 		/// </exception>
-		public AlternateIdController(IDeviceRepository repository, ILogger<AlternateIdController> logger)
+		public AlternateIdController(IDeviceService service, ILogger<AlternateIdController> logger)
 		{
-			this.repo = repository ?? throw new ArgumentNullException(nameof(repository));
+			this.service = service ?? throw new ArgumentNullException(nameof(service));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
@@ -64,7 +68,7 @@ namespace Sannel.House.Devices.Controllers
 				return BadRequest(new ErrorResponseModel("Invalid DeviceId", "deviceId", "Device Id must be greater then or equal to 0"));
 			}
 
-			var list = await repo.GetAlternateIdsForDeviceAsync(deviceId);
+			var list = await service.GetAlternateIdsForDeviceAsync(deviceId);
 
 			if(list == null)
 			{
@@ -102,7 +106,7 @@ namespace Sannel.House.Devices.Controllers
 
 			try
 			{
-				var device = await repo.AddAlternateMacAddressAsync(deviceId, macAddress);
+				var device = await service.AddAlternateMacAddressAsync(deviceId, macAddress);
 				if(device == null)
 				{
 					logger.LogDebug("No device found with id {0}", deviceId);
@@ -145,7 +149,7 @@ namespace Sannel.House.Devices.Controllers
 
 			try
 			{
-				var device = await repo.AddAlternateUuidAsync(deviceId, uuid);
+				var device = await service.AddAlternateUuidAsync(deviceId, uuid);
 				if(device == null)
 				{
 					logger.LogDebug("No device found with id {0}", deviceId);
@@ -161,6 +165,13 @@ namespace Sannel.House.Devices.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Posts the specified manufacture.
+		/// </summary>
+		/// <param name="manufacture">The manufacture.</param>
+		/// <param name="manufactureId">The manufacture identifier.</param>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <returns></returns>
 		[HttpPost("manufactureid/{manufacture}/{manufactureId}/{deviceId}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
 		[ProducesResponseType(200)]
@@ -188,7 +199,7 @@ namespace Sannel.House.Devices.Controllers
 
 			try
 			{
-				var device = await repo.AddAlternateManufactureIdAsync(deviceId, manufacture, manufactureId);
+				var device = await service.AddAlternateManufactureIdAsync(deviceId, manufacture, manufactureId);
 				if(device == null)
 				{
 					logger.LogDebug("No device found with id {0}", deviceId);
@@ -222,7 +233,7 @@ namespace Sannel.House.Devices.Controllers
 				return BadRequest(new ErrorResponseModel("Invalid Mac Address","macAddress", "Invalid MacAddress it must be greater then or equal to 0"));
 			}
 
-			var device = await repo.RemoveAlternateMacAddressAsync(macAddress);
+			var device = await service.RemoveAlternateMacAddressAsync(macAddress);
 			if(device == null)
 			{
 				logger.LogDebug("No Mac Address found with id {0}", macAddress);
@@ -250,7 +261,7 @@ namespace Sannel.House.Devices.Controllers
 				return BadRequest(new ErrorResponseModel("Uuid is Empty","uuid", "Uuid must be a valid Guid and not Guid.Empty"));
 			}
 
-			var device = await repo.RemoveAlternateUuidAsync(uuid);
+			var device = await service.RemoveAlternateUuidAsync(uuid);
 			if(device == null)
 			{
 				logger.LogDebug("Uuid not found {0}", uuid);
@@ -260,6 +271,12 @@ namespace Sannel.House.Devices.Controllers
 			return Ok(new ResponseModel<Device>("Device", device));
 		}
 
+		/// <summary>
+		/// Deletes the specified manufacture.
+		/// </summary>
+		/// <param name="manufacture">The manufacture.</param>
+		/// <param name="manufactureId">The manufacture identifier.</param>
+		/// <returns></returns>
 		[HttpDelete("manufactureid/{manufacture}/{manufactureId}")]
 		[Authorize(Roles = "DeviceWrite,Admin")]
 		[ProducesResponseType(200)]
@@ -279,7 +296,7 @@ namespace Sannel.House.Devices.Controllers
 				return BadRequest(new ErrorResponseModel("ManufactureID is Empty","manufactureId", "ManufactureId must not be null or whitespace"));
 			}
 
-			var device = await repo.RemoveAlternateManufactureIdAsync(manufacture, manufactureId);
+			var device = await service.RemoveAlternateManufactureIdAsync(manufacture, manufactureId);
 			if(device == null)
 			{
 				logger.LogDebug("ManufactureId not found {0}/{1}", manufacture, manufactureId);

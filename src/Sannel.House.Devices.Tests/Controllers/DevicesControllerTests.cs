@@ -14,7 +14,7 @@ using Sannel.House.Devices.Controllers;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
 using Sannel.House.Devices.Tests.Repositories;
-using Sannel.House.Models;
+using Sannel.House.Base.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -30,16 +30,16 @@ namespace Sannel.House.Devices.Tests.Controllers
 		[Fact]
 		public void ConstructorArgumentsTest()
 		{
-			Assert.Throws<ArgumentNullException>("repository",
+			Assert.Throws<ArgumentNullException>("service",
 				() => new DevicesController(null, null));
 			Assert.Throws<ArgumentNullException>("logger",
-				() => new DevicesController(new Mock<IDeviceRepository>().Object, null));
+				() => new DevicesController(new Mock<IDeviceService>().Object, null));
 		}
 		
 		[Fact]
 		public async Task GetPageTest()
 		{
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
 			{
 				repo.Setup(i => i.GetDevicesListAsync(0, 25))
@@ -65,7 +65,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		[Fact]
 		public async Task GetPagedTest2()
 		{
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
 			{
 
@@ -104,7 +104,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		[Fact]
 		public async Task GetPagedTest3()
 		{
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
 			{
 				repo.Setup(i => i.GetDevicesListAsync(5, 3))
@@ -151,7 +151,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		[Fact]
 		public async Task GetDeviceByIdAsynctest()
 		{
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
 			{
 
@@ -204,7 +204,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		[Fact]
 		public async Task GetDeviceByAlternateIdMacAddressAsynctest()
 		{
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
 			{
 
@@ -256,7 +256,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		[Fact]
 		public async Task GetDeviceByAlternateIdUuidAsynctest()
 		{
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
 			{
 
@@ -312,7 +312,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		[Fact]
 		public async Task GetDeviceByAlternateIdManufactureIdAsynctest()
 		{
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
 			{
 				var result = await controller.GetByManufactureId("","Photon");
@@ -375,7 +375,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		[Fact]
 		public async Task PostTest()
 		{
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
 			{
 
@@ -428,7 +428,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 		[Fact]
 		public async Task PutTest()
 		{
-			var repo = new Mock<IDeviceRepository>();
+			var repo = new Mock<IDeviceService>();
 			using (var controller = new DevicesController(repo.Object, CreateLogger<DevicesController>()))
 			{
 

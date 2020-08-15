@@ -1,4 +1,4 @@
-/* Copyright 2019 Sannel Software, L.L.C.
+/* Copyright 2019-2020 Sannel Software, L.L.C.
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -25,6 +25,7 @@ namespace Sannel.House.Devices.Repositories
 	public class DbContextRepository : IDeviceRepository
 	{
 		private DevicesDbContext context;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DbContextRepository"/> class.
 		/// </summary>
@@ -117,7 +118,9 @@ namespace Sannel.House.Devices.Repositories
 
 			var id = result.Entity.DeviceId;
 
-			return await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == id);
+			var dbDevice = await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == id);
+
+			return dbDevice;
 		}
 
 		/// <summary>
@@ -327,7 +330,7 @@ namespace Sannel.House.Devices.Repositories
 		/// <returns></returns>
 		public async Task<IEnumerable<AlternateDeviceId>> GetAlternateIdsForDeviceAsync(int deviceId)
 		{
-			if(await context.Devices.CountAsync() == 0)
+			if(!await context.Devices.AnyAsync())
 			{
 				return null;
 			}

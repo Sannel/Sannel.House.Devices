@@ -3,14 +3,15 @@ Db:
   Provider: sqlite
   ConnectionString: Data Source=app_data/data.db
 Authentication:
-  AuthorityUrl: http://192.168.200.2:8080
+  AuthorityUrl: http://users.localtest.me:8181
   Schema: houseapi
   ApiName: houseapi
-  ApiSecret: GatewayPassword
+  ApiSecret: "@KiHRt7Uj0zssPlg2YvffMsUEd"
   DisableRequireHttpsMetadata: true
-Cert:
-  Install: false
-  Crt: app_config/Sannel Software - Dev - CA.crt
+MQTT:
+  Server: mqtt.localtest.me
+  DefaultTopic: local/house/devices
+  Port: 1883
 Logging:
   LogLevel:
     Default: Debug

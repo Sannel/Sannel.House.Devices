@@ -16,7 +16,7 @@ using System.Net.Http;
 using Xunit;
 using Moq;
 using Microsoft.AspNetCore.Http;
-using Sannel.House.Client;
+using Sannel.House.Base.Client;
 //using Sannel.House.Devices.Client;
 
 //namespace Sannel.House.Devices.Tests.Client

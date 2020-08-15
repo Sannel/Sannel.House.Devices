@@ -1,4 +1,4 @@
-/* Copyright 2019-2020 Sannel Software, L.L.C.
+/* Copyright 2020-2020 Sannel Software, L.L.C.
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -10,14 +10,13 @@
    limitations under the License.*/
 using Sannel.House.Devices.Models;
 using System;
-using System.Data;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Sannel.House.Devices.Interfaces
 {
-	public interface IDeviceRepository
+	public interface IDeviceService
 	{
 		/// <summary>
 		/// Gets the devices list asynchronous.
