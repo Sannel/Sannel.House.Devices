@@ -186,8 +186,7 @@ namespace Sannel.House.Devices
 				app.UseDeveloperExceptionPage();
 			}
 
-			app.UseHealthChecks("/health");
-
+			app.UseHouseHealthChecks("/health");
 
 			app.UseAuthentication();
 			app.UseAuthorization();
