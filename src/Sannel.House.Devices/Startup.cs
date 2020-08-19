@@ -191,6 +191,8 @@ namespace Sannel.House.Devices
 			app.UseAuthentication();
 			app.UseAuthorization();
 
+			app.UseHouseRobotsTxt();
+
 			app.UseOpenApi();
 			app.UseReDoc();
 
