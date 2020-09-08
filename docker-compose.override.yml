@@ -1,6 +1,0 @@
-version: '3.4'
-
-services:
-  devices.localtest.me:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development

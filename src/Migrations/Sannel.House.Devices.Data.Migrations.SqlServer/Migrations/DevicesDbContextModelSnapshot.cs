@@ -15,7 +15,7 @@ namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "3.1.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -23,19 +23,26 @@ namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
                 {
                     b.Property<int>("AlternateId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTimeOffset>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("DeviceId");
+                    b.Property<int>("DeviceId")
+                        .HasColumnType("int");
 
-                    b.Property<long?>("MacAddress");
+                    b.Property<long?>("MacAddress")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("Manufacture");
+                    b.Property<string>("Manufacture")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ManufactureId");
+                    b.Property<string>("ManufactureId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid?>("Uuid");
+                    b.Property<Guid?>("Uuid")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("AlternateId");
 
@@ -60,21 +67,30 @@ namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
                 {
                     b.Property<int>("DeviceId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTimeOffset>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("DisplayOrder");
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsReadOnly");
+                    b.Property<bool>("IsReadOnly")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
+
+                    b.Property<bool>("Verified")
+                        .HasColumnType("bit");
 
                     b.HasKey("DeviceId");
 
@@ -88,7 +104,8 @@ namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
                     b.HasOne("Sannel.House.Devices.Models.Device", "Device")
                         .WithMany()
                         .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

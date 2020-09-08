@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sannel.House.Devices.Data;
@@ -9,9 +10,10 @@ using Sannel.House.Devices.Data;
 namespace Sannel.House.Devices.Data.Migrations.PostgreSQL.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    partial class DevicesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200908010107_Added Verified Column")]
+    partial class AddedVerifiedColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

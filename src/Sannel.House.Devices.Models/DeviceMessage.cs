@@ -19,6 +19,8 @@ namespace Sannel.House.Devices.Models
 
 		public DateTimeOffset DateCreated { get; set; }
 
+		public bool Verified { get; set; }
+
 		public IList<AlternateIdMessage> AlternateIds { get; set; }
 	}
 }

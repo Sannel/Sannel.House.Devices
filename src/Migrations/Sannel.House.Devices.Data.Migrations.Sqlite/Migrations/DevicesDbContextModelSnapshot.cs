@@ -14,24 +14,31 @@ namespace Sannel.House.Devices.Data.Migrations.Sqlite.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+                .HasAnnotation("ProductVersion", "3.1.7");
 
             modelBuilder.Entity("Sannel.House.Devices.Models.AlternateDeviceId", b =>
                 {
                     b.Property<int>("AlternateId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("DeviceId");
+                    b.Property<int>("DeviceId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<long?>("MacAddress");
+                    b.Property<long?>("MacAddress")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Manufacture");
+                    b.Property<string>("Manufacture")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("ManufactureId");
+                    b.Property<string>("ManufactureId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("Uuid");
+                    b.Property<Guid?>("Uuid")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("AlternateId");
 
@@ -52,21 +59,30 @@ namespace Sannel.House.Devices.Data.Migrations.Sqlite.Migrations
             modelBuilder.Entity("Sannel.House.Devices.Models.Device", b =>
                 {
                     b.Property<int>("DeviceId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset>("DateCreated");
+                    b.Property<DateTimeOffset>("DateCreated")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("DisplayOrder");
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsReadOnly");
+                    b.Property<bool>("IsReadOnly")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(256);
+
+                    b.Property<bool>("Verified")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("DeviceId");
 
@@ -80,7 +96,8 @@ namespace Sannel.House.Devices.Data.Migrations.Sqlite.Migrations
                     b.HasOne("Sannel.House.Devices.Models.Device", "Device")
                         .WithMany()
                         .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

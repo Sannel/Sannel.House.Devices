@@ -73,5 +73,13 @@ namespace Sannel.House.Devices.Models
 		/// Gets or sets if this device is readonly
 		/// </summary>
 		public bool IsReadOnly { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Device"/> is verified.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if verified; otherwise, <c>false</c>.
+		/// </value>
+		public bool Verified { get; set; }
 	}
 }

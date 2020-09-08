@@ -58,8 +58,8 @@ Db:
     - DeviceCreate
     - DeviceRead
     - DeviceWrite
-    - LogEntryRead
-    - LogEntryWrite
+    - SensorStoreRead
+    - SensorStoreWrite
     Users:
       admin@asp.net:
         Password: "@Password1"
@@ -67,8 +67,8 @@ Db:
         - DeviceCreate
         - DeviceWrite
         - DeviceRead
-        - LogEntryRead
-        - LogEntryWrite
+        - SensorStoreRead
+        - SensorStoreWrite
 Logging:
   LogLevel:
     Default: Debug

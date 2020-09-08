@@ -118,7 +118,6 @@ namespace Sannel.House.Devices
 
 			services.AddControllers();
 
-
 			services.AddAuthentication(Configuration["Authentication:Schema"])
 					.AddIdentityServerAuthentication(Configuration["Authentication:Schema"], o =>
 						{
@@ -148,7 +147,7 @@ namespace Sannel.House.Devices
 			services.AddHealthChecks()
 				.AddDbHealthCheck<DevicesDbContext>("DbHealthCheck", async (context) =>
 				{
-					await context.Devices.Take(1).CountAsync();
+					await context.Devices.AnyAsync();
 				});
 		}
 
@@ -186,8 +185,6 @@ namespace Sannel.House.Devices
 				app.UseDeveloperExceptionPage();
 			}
 
-			app.UseHouseHealthChecks("/health");
-
 			app.UseAuthentication();
 			app.UseAuthorization();
 
@@ -199,6 +196,7 @@ namespace Sannel.House.Devices
 			app.UseEndpoints(i =>
 			{
 				i.MapControllers();
+				i.MapHouseHealthChecks("/health");
 			});
 		}
 	}

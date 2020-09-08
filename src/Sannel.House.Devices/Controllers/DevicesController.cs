@@ -24,12 +24,26 @@ using Sannel.House.Base.Web;
 
 namespace Sannel.House.Devices.Controllers
 {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
 	[Route("api/[controller]")]
 	[ApiController]
 	public class DevicesController : Controller
 	{
 		private IDeviceService service;
 		private ILogger logger;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DevicesController"/> class.
+		/// </summary>
+		/// <param name="service">The service.</param>
+		/// <param name="logger">The logger.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// service
+		/// or
+		/// logger
+		/// </exception>
 		public DevicesController(IDeviceService service, ILogger<DevicesController> logger)
 		{
 			this.service = service ?? throw new ArgumentNullException(nameof(service));
@@ -177,6 +191,12 @@ namespace Sannel.House.Devices.Controllers
 			return Ok(new ResponseModel<Device>("The Device", device));
 		}
 
+		/// <summary>
+		/// Gets the device by manufacture identifier.
+		/// </summary>
+		/// <param name="manufacture">The manufacture.</param>
+		/// <param name="manufactureId">The manufacture identifier.</param>
+		/// <returns></returns>
 		[HttpGet("GetByManufactureId/{manufacture}/{manufactureId}")]
 		[Authorize(Roles = "DeviceRead,Admin")]
 		[ProducesResponseType(200)]

@@ -40,7 +40,8 @@ namespace Sannel.House.Devices.Services
 			var message = new DeviceMessage()
 			{
 				DeviceId = device.DeviceId,
-				DateCreated = device.DateCreated
+				DateCreated = device.DateCreated,
+				Verified = device.Verified
 			};
 
 			var alternatIds = await repository.GetAlternateIdsForDeviceAsync(device.DeviceId);

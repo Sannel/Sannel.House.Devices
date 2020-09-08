@@ -46,9 +46,9 @@
     <PackageReference Include="MQTTnet" Version="3.0.12" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.7.0" />
-    <PackageReference Include="Sannel.House.Base.Data" Version="0.9.420-beta" />
-    <PackageReference Include="Sannel.House.Base.Models" Version="0.9.415-beta" />
-    <PackageReference Include="Sannel.House.Base.Web" Version="0.9.466-beta" />
+    <PackageReference Include="Sannel.House.Base.Data" Version="0.9.524-beta" />
+    <PackageReference Include="Sannel.House.Base.Models" Version="0.9.521-beta" />
+    <PackageReference Include="Sannel.House.Base.Web" Version="0.9.527-beta" />
     <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.1" />
   </ItemGroup>
 

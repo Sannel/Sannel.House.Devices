@@ -9,7 +9,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Sannel.House.Base.Models" Version="0.9.415-beta" />
+    <PackageReference Include="Sannel.House.Base.Models" Version="0.9.521-beta" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 

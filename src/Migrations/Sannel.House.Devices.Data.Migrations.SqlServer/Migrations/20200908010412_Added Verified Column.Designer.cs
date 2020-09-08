@@ -2,60 +2,65 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sannel.House.Devices.Data;
 
-namespace Sannel.House.Devices.Data.Migrations.PostgreSQL.Migrations
+namespace Sannel.House.Devices.Data.Migrations.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    partial class DevicesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200908010412_Added Verified Column")]
+    partial class AddedVerifiedColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.7")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Sannel.House.Devices.Models.AlternateDeviceId", b =>
                 {
                     b.Property<int>("AlternateId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTimeOffset>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("DeviceId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<long?>("MacAddress")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Manufacture")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ManufactureId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid?>("Uuid")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("AlternateId");
 
                     b.HasIndex("DeviceId");
 
                     b.HasIndex("MacAddress")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[MacAddress] IS NOT NULL");
 
                     b.HasIndex("Uuid")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Uuid] IS NOT NULL");
 
                     b.HasIndex("Manufacture", "ManufactureId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Manufacture] IS NOT NULL AND [ManufactureId] IS NOT NULL");
 
                     b.ToTable("AlternateDeviceIds");
                 });
@@ -64,30 +69,30 @@ namespace Sannel.House.Devices.Data.Migrations.PostgreSQL.Migrations
                 {
                     b.Property<int>("DeviceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTimeOffset>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("character varying(2000)")
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<int>("DisplayOrder")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsReadOnly")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<bool>("Verified")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.HasKey("DeviceId");
 

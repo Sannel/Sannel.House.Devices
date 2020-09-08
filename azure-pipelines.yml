@@ -5,66 +5,75 @@ trigger:
 variables:
   sdk_version: 3.1.x
   dockerRepositoryRoot: sannel
-  dockerRepositoryName: house.devices
   dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
-  imageName: $(dockerRepositoryRoot)/$(dockerRepositoryName):$(dockerTagBase)
+  imageName: house.devices
+  listenerImageName: house.devices.listener
+  imageTag: $(Build.SourceBranchName)-$(Build.BuildId)
   projectFolder: Sannel.House.Devices
-  mainProjectPath: src/$(projectFolder)/$(projectFolder).csproj
-  mainConfigPath: src/$(projectFolder)/app_config
+  listenerProjectFolder: Sannel.House.Devices.Listener
   tagVersion: 3.1
   tagCodeName: buster
   hasTests: true
-  disableLinux: false
-  disableArm64: false
-  disableWindows: false
-  disableOSX: false
+  Major: 0
+  Minor: 9
 
-name: $(date:yyyy.MM.dd)$(rev:.rr)
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: Sannel/Sannel.House.BuildScripts
+      endpoint: Sannel
 
 jobs:
-- template: build/tasks/linux-arm.yaml
+- template: tasks/docker/linux-arm.yaml@templates
   parameters:
     arch: arm32
     archLong: arm32v7
     ridSuffix: arm
     qemuStatic: qemu-arm-static
+    project: $(projectFolder)
+    imageName: $(imageName)
+    jobName: devices
 
-- template: build/tasks/linux-arm.yaml
+#- template: tasks/docker/linux-arm.yaml@templates
+#  parameters:
+#    arch: arm32
+#    archLong: arm32v7
+#    ridSuffix: arm
+#    qemuStatic: qemu-arm-static
+#    project: $(listenerProjectFolder)
+#    imageName: $(listenerImageName)
+#    dockerRepositoryName: $(listenerDockerRepositoryName)
+#    jobName: deviceslistener
+
+- template: tasks/docker/linux-arm.yaml@templates
   parameters:
     arch: arm64
     archLong: arm64v8
+    project: $(projectFolder)
+    imageName: $(imageName)
+    dockerRepositoryName: $(dockerRepositoryName)
+    jobName: devices
 
-- template: build/tasks/linux.yaml
+#- template: tasks/docker/linux-arm.yaml@templates
+#  parameters:
+#    arch: arm64
+#    archLong: arm64v8
+#    project: $(listenerProjectFolder)
+#    imageName: $(listenerImageName)
+#    dockerRepositoryName: $(listenerDockerRepositoryName)
+#    jobName: deviceslistener
 
-#- template: build/tasks/windows.yaml
+- template: tasks/docker/linux-x64.yaml@templates
+  parameters:
+    project: $(projectFolder)
+    imageName: $(imageName)
+    dockerRepositoryName: $(dockerRepositoryName)
+    jobName: devices
+
+#- template: tasks/docker/linux-x64.yaml@templates
 #  parameters:
-#    pool:
-#      vmImage: 'windows-2019'
-#    release: '1803'
-#    arch: 'x64'
-#
-#- template: build/tasks/windows.yaml
-#  parameters:
-#    pool:
-#      vmImage: 'windows-2019'
-#    release: '1809'
-#    arch: 'x64'
-#
-#- template: build/tasks/windows.yaml
-#  parameters:
-#    pool: 'WindowsLatest'
-#    release: '1903'
-#    arch: 'x64'
-#
-#- template: build/tasks/windows.yaml
-#  parameters:
-#    pool: 'WindowsLatest'
-#    release: '1909'
-#    arch: 'x64'
-#
-#- template: build/tasks/windows.yaml
-#  parameters:
-#    pool:
-#      vmImage: 'windows-2019'
-#    release: '1809'
-#    arch: 'arm'
+#    project: $(listenerProjectFolder)
+#    imageName: $(listenerImageName)
+#    dockerRepositoryName: $(listenerDockerRepositoryName)
+#    jobName: deviceslistener

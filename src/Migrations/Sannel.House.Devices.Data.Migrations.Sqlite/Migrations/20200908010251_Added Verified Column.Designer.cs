@@ -2,47 +2,45 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sannel.House.Devices.Data;
 
-namespace Sannel.House.Devices.Data.Migrations.PostgreSQL.Migrations
+namespace Sannel.House.Devices.Data.Migrations.Sqlite.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    partial class DevicesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200908010251_Added Verified Column")]
+    partial class AddedVerifiedColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.7")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "3.1.7");
 
             modelBuilder.Entity("Sannel.House.Devices.Models.AlternateDeviceId", b =>
                 {
                     b.Property<int>("AlternateId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTimeOffset>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("DeviceId")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<long?>("MacAddress")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Manufacture")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ManufactureId")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("Uuid")
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("AlternateId");
 
@@ -64,30 +62,29 @@ namespace Sannel.House.Devices.Data.Migrations.PostgreSQL.Migrations
                 {
                     b.Property<int>("DeviceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTimeOffset>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("character varying(2000)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(2000);
 
                     b.Property<int>("DisplayOrder")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsReadOnly")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
                     b.Property<bool>("Verified")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("DeviceId");
 

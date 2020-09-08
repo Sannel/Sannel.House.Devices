@@ -1,26 +1,60 @@
-version: '3.4'
+version: '3.6'
 
 services:
-  devices.localtest.me:
+  gateway:
+    image: sannel/house.gateway:beta
+    networks:
+      housenet:
+        aliases:
+          - "gateway.localtest.me"
+    ports:
+      - "8180:8080"
+#      - "8443:443"
+    volumes:
+    - "./RunData/gateway/app_config/:/app/app_config/"
+    - "./RunData/gateway/app_data:/app/app_data/"
+    depends_on:
+      - users
+
+  users:
+    image: sannel/house.users:beta
+    networks: 
+      housenet:
+        aliases:
+          - "users.localtest.me"
+    ports:
+      - "8181:8181"
+    volumes:
+    - "./RunData/users/app_config/appsettings.yml:/app/app_config/appsettings.yml"
+    - "./RunData/users/app_data:/app/app_data/"
+
+  devices:
     image: sannel/devices
     build:
       context: .
       dockerfile: src/Sannel.House.Devices/Dockerfile
+    networks: 
+      housenet:
+        aliases:
+          - "devices.localtest.me"
     ports:
-    - "8180:8080"
+      - "8183:8080"
     volumes:
     - "./src/Sannel.House.Devices/app_config:/app/app_config"
     - "./src/Sannel.House.Devices/app_data:/app/app_data"
+    depends_on:
+    - users
+    - mqtt
 
-  mqtt.localtest.me:
+  mqtt:
     image: eclipse-mosquitto
     ports:
     - "8883:1883"
+    networks: 
+      housenet:
+        aliases:
+          - "mqtt.localtest.me"
 
-  users.localtest.me:
-    image: sannel/house.users:beta
-    ports:
-    - "8181:8181"
-    volumes:
-    - "./RunData/users/app_config/appsettings.yml:/app/app_config/appsettings.yml"
-    - "./RunData/users/app_data:/app/app_data/"
+
+networks:
+  housenet:

@@ -152,6 +152,7 @@ namespace Sannel.House.Devices.Repositories
 			d.Name = device.Name;
 			d.Description = device.Description;
 			d.DisplayOrder = device.DisplayOrder;
+			d.Verified = device.Verified;
 			await context.SaveChangesAsync();
 
 			return await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.DeviceId == d.DeviceId);
