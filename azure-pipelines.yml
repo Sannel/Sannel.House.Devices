@@ -6,7 +6,7 @@ variables:
   sdk_version: 3.1.x
   dockerRepositoryRoot: sannel
   dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
-  imageName: house.devices
+  mainImageName: house.devices
   listenerImageName: house.devices.listener
   imageTag: $(Build.SourceBranchName)-$(Build.BuildId)
   projectFolder: Sannel.House.Devices
@@ -32,7 +32,7 @@ jobs:
     ridSuffix: arm
     qemuStatic: qemu-arm-static
     project: $(projectFolder)
-    imageName: $(imageName)
+    imageName: $(mainImageName)
     jobName: devices
 
 #- template: tasks/docker/linux-arm.yaml@templates
@@ -51,7 +51,7 @@ jobs:
     arch: arm64
     archLong: arm64v8
     project: $(projectFolder)
-    imageName: $(imageName)
+    imageName: $(mainImageName)
     dockerRepositoryName: $(dockerRepositoryName)
     jobName: devices
 
@@ -67,7 +67,7 @@ jobs:
 - template: tasks/docker/linux-x64.yaml@templates
   parameters:
     project: $(projectFolder)
-    imageName: $(imageName)
+    imageName: $(mainImageName)
     dockerRepositoryName: $(dockerRepositoryName)
     jobName: devices
 
