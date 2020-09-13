@@ -35,16 +35,16 @@ jobs:
     imageName: $(mainImageName)
     jobName: devices
 
-#- template: tasks/docker/linux-arm.yaml@templates
-#  parameters:
-#    arch: arm32
-#    archLong: arm32v7
-#    ridSuffix: arm
-#    qemuStatic: qemu-arm-static
-#    project: $(listenerProjectFolder)
-#    imageName: $(listenerImageName)
-#    dockerRepositoryName: $(listenerDockerRepositoryName)
-#    jobName: deviceslistener
+- template: tasks/docker/linux-arm.yaml@templates
+  parameters:
+    arch: arm32
+    archLong: arm32v7
+    ridSuffix: arm
+    qemuStatic: qemu-arm-static
+    project: $(listenerProjectFolder)
+    imageName: $(listenerImageName)
+    dockerRepositoryName: $(listenerDockerRepositoryName)
+    jobName: deviceslistener
 
 - template: tasks/docker/linux-arm.yaml@templates
   parameters:
@@ -55,14 +55,14 @@ jobs:
     dockerRepositoryName: $(dockerRepositoryName)
     jobName: devices
 
-#- template: tasks/docker/linux-arm.yaml@templates
-#  parameters:
-#    arch: arm64
-#    archLong: arm64v8
-#    project: $(listenerProjectFolder)
-#    imageName: $(listenerImageName)
-#    dockerRepositoryName: $(listenerDockerRepositoryName)
-#    jobName: deviceslistener
+- template: tasks/docker/linux-arm.yaml@templates
+  parameters:
+    arch: arm64
+    archLong: arm64v8
+    project: $(listenerProjectFolder)
+    imageName: $(listenerImageName)
+    dockerRepositoryName: $(listenerDockerRepositoryName)
+    jobName: deviceslistener
 
 - template: tasks/docker/linux-x64.yaml@templates
   parameters:
@@ -71,9 +71,9 @@ jobs:
     dockerRepositoryName: $(dockerRepositoryName)
     jobName: devices
 
-#- template: tasks/docker/linux-x64.yaml@templates
-#  parameters:
-#    project: $(listenerProjectFolder)
-#    imageName: $(listenerImageName)
-#    dockerRepositoryName: $(listenerDockerRepositoryName)
-#    jobName: deviceslistener
+- template: tasks/docker/linux-x64.yaml@templates
+  parameters:
+    project: $(listenerProjectFolder)
+    imageName: $(listenerImageName)
+    dockerRepositoryName: $(listenerDockerRepositoryName)
+    jobName: deviceslistener
