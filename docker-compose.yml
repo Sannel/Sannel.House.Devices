@@ -46,6 +46,21 @@ services:
     - users
     - mqtt
 
+  devices_listener:
+    image: sannel/deviceslistener
+    build:
+      context: .
+      dockerfile: src/Sannel.House.Devices.Listener/Dockerfile
+    networks: 
+      housenet:
+        aliases:
+          - "deviceslistener.localtest.me"
+    volumes:
+    - "./src/Sannel.House.Devices.Listener/app_config:/app/app_config"
+    - "./src/Sannel.House.Devices/app_data:/app/app_data"
+    depends_on:
+    - mqtt
+
   mqtt:
     image: eclipse-mosquitto
     ports:

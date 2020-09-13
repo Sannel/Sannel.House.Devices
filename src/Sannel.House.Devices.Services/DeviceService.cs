@@ -10,6 +10,7 @@
    limitations under the License.*/
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Sannel.House.Base.Messages.Device;
 using Sannel.House.Base.MQTT.Interfaces;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
@@ -33,6 +34,14 @@ namespace Sannel.House.Devices.Services
 			this.mqttClient = mqttClient ?? throw new ArgumentNullException(nameof(mqttClient));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
+
+		/// <summary>
+		/// Publishes the device to the MQTT Service asynchronous.
+		/// </summary>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <returns></returns>
+		public Task PublishDeviceAsync(int deviceId)
+			=> sendDeviceUpdateAsync(deviceId);
 
 		private async Task sendDeviceUpdateAsync(int deviceId)
 		{

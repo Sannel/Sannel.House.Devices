@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Sannel.House.Devices.Data.Migrations.PostgresSQL
+namespace Sannel.House.Devices.Data
 {
 	public static class Extensions
 	{

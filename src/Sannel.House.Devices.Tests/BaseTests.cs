@@ -13,6 +13,7 @@ namespace Sannel.House.Devices.Tests
 {
 	public abstract class BaseTests : IDisposable
 	{
+		protected Random Random = new Random();
 		private ILoggerFactory loggerFactory;
 
 		/// <summary>

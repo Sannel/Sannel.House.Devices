@@ -13,12 +13,13 @@
   <ItemGroup>
     <PackageReference Include="altcover" Version="7.1.782" />
     <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.7" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.7" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.8" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="Moq" Version="4.14.5" />
     <PackageReference Include="Sannel.House.Base.Client" Version="0.9.428-beta" />
-    <PackageReference Include="Sannel.House.Base.Web" Version="0.9.527-beta" />
+    <PackageReference Include="Sannel.House.Base.Messages" Version="0.1.544-beta" />
+    <PackageReference Include="Sannel.House.Base.Web" Version="0.9.535-beta" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <PrivateAssets>all</PrivateAssets>
@@ -30,6 +31,7 @@
     <ProjectReference Include="..\Migrations\Sannel.House.Devices.Data.Migrations.Sqlite\Sannel.House.Devices.Data.Migrations.Sqlite.csproj" />
     <ProjectReference Include="..\Sannel.House.Devices.Data\Sannel.House.Devices.Data.csproj" />
     <ProjectReference Include="..\Sannel.House.Devices.Interfaces\Sannel.House.Devices.Interfaces.csproj" />
+    <ProjectReference Include="..\Sannel.House.Devices.Listener\Sannel.House.Devices.Listener.csproj" />
     <ProjectReference Include="..\Sannel.House.Devices.Models\Sannel.House.Devices.Models.csproj" />
     <ProjectReference Include="..\Sannel.House.Devices.Repositories\Sannel.House.Devices.Repositories.csproj" />
     <ProjectReference Include="..\Sannel.House.Devices\Sannel.House.Devices.csproj" />
