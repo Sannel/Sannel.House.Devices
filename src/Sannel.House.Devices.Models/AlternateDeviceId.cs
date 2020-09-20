@@ -1,4 +1,4 @@
-/* Copyright 2019 Sannel Software, L.L.C.
+/* Copyright 2019-2020 Sannel Software, L.L.C.
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -8,17 +8,14 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.*/
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-#if CLIENT
-namespace Sannel.House.Devices.Client
-#else
 namespace Sannel.House.Devices.Models
-#endif
 {
 	/// <summary>
 	/// UUID's or Mac Address for devices
@@ -49,7 +46,7 @@ namespace Sannel.House.Devices.Models
 		/// <value>
 		/// The device.
 		/// </value>
-		public Device Device { get; set; }
+		public Device? Device { get; set; }
 
 		/// <summary>
 		/// Gets or sets the date created.
@@ -81,14 +78,14 @@ namespace Sannel.House.Devices.Models
 		/// <value>
 		/// The manufacture.
 		/// </value>
-		public string Manufacture { get; set; }
+		public string? Manufacture { get; set; }
 		/// <summary>
 		/// Gets or sets the manufacture identifier.
 		/// </summary>
 		/// <value>
 		/// The manufacture identifier.
 		/// </value>
-		public string ManufactureId { get; set; }
+		public string? ManufactureId { get; set; }
 	}
 
 }
