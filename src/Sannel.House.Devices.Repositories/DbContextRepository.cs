@@ -112,7 +112,9 @@ namespace Sannel.House.Devices.Repositories
 			device.DeviceId = 0; // reset deviceId to 1 so its auto generated.
 
 
-			var displayOrder = await context.Devices.MaxAsync(i => i.DisplayOrder);
+			var displayOrder = (context.Devices.Any())
+								?await context.Devices.MaxAsync(i => i.DisplayOrder)
+								:0;
 			device.DisplayOrder = displayOrder + 1;
 			var result = await context.Devices.AddAsync(device);
 			await context.SaveChangesAsync();

@@ -4,7 +4,7 @@
 		<TargetFramework>net5.0</TargetFramework>
 
 		<IsPackable>false</IsPackable>
-		<Nullable>disable</Nullable>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,7 +20,8 @@
 		<PackageReference Include="Moq" Version="4.14.5" />
 		<PackageReference Include="Sannel.House.Base.Client" Version="0.9.428-beta" />
 		<PackageReference Include="Sannel.House.Base.Messages" Version="0.1.544-beta" />
-		<PackageReference Include="Sannel.House.Base.Web" Version="0.9.559-beta" />
+		<PackageReference Include="Sannel.House.Base.Web" Version="0.9.560-beta" />
+		<PackageReference Include="Sannel.House.Base.Tests" Version="0.9.561-beta" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
 			<PrivateAssets>all</PrivateAssets>

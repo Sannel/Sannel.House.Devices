@@ -39,7 +39,6 @@ namespace Sannel.House.Devices.Interfaces
 		/// <returns>
 		/// returns the device or null if no device is found with <paramref name="deviceId"/>
 		/// </returns>
-		[return: MaybeNull]
 		Task<Device?> GetDeviceByIdAsync(int deviceId);
 
 		/// <summary>
@@ -49,7 +48,6 @@ namespace Sannel.House.Devices.Interfaces
 		/// <returns>
 		/// returns the device or null if no device is found with the <paramref name="macAddress"/>
 		/// </returns>
-		[return: MaybeNull]
 		Task<Device?> GetDeviceByMacAddressAsync(long macAddress);
 
 		/// <summary>
@@ -59,7 +57,6 @@ namespace Sannel.House.Devices.Interfaces
 		/// <returns>
 		/// returns the device or null if no device is found with the <paramref name="uuid"/>
 		/// </returns>
-		[return: MaybeNull]
 		Task<Device?> GetDeviceByUuidAsync(Guid uuid);
 
 		/// <summary>
@@ -70,7 +67,6 @@ namespace Sannel.House.Devices.Interfaces
 		/// <returns>
 		/// returns the device or null if no device is found with the <paramref name="manufacture"/> <paramref name="manufactureId"/> combination
 		/// </returns>
-		[return: MaybeNull]
 		Task<Device?> GetDeviceByManufactureIdAsync([NotNull]string manufacture, [NotNull]string manufactureId);
 
 		/// <summary>
@@ -91,7 +87,6 @@ namespace Sannel.House.Devices.Interfaces
 		/// <returns>
 		/// returns the device or null if no device is found matching <paramref name="device"/>
 		/// </returns>
-		[return: MaybeNull]
 		Task<Device?> UpdateDeviceAsync([NotNull]Device device);
 
 		/// <summary>
@@ -103,7 +98,6 @@ namespace Sannel.House.Devices.Interfaces
 		/// The device or null if there is no device with <paramref name="deviceId" /> is found
 		/// </returns>
 		/// <exception cref="AlternateDeviceIdException">The alternate id is already connected to another device</exception>
-		[return: MaybeNull]
 		Task<Device?> AddAlternateMacAddressAsync(int deviceId, long macAddress);
 
 		/// <summary>
@@ -115,7 +109,6 @@ namespace Sannel.House.Devices.Interfaces
 		/// The device or null if there is no device with <paramref name="deviceId" /> is found
 		/// </returns>
 		/// <exception cref="AlternateDeviceIdException">The alternate id is already connected to another device</exception>
-		[return: MaybeNull]
 		Task<Device?> AddAlternateUuidAsync(int deviceId, Guid uuid);
 
 		/// <summary>
@@ -127,7 +120,6 @@ namespace Sannel.House.Devices.Interfaces
 		/// <returns>
 		/// The device or null if there is no devic with <paramref name="manufacture"/> <paramref name="manufactureId"/> combination is found
 		/// </returns>
-		[return: MaybeNull]
 		Task<Device?> AddAlternateManufactureIdAsync(int deviceId, [NotNull]string manufacture, [NotNull]string manufactureId);
 
 		/// <summary>
@@ -137,7 +129,6 @@ namespace Sannel.House.Devices.Interfaces
 		/// <returns>
 		/// The device or null if the <paramref name="macAddress"/> is not found
 		/// </returns>
-		[return: MaybeNull]
 		Task<Device?> RemoveAlternateMacAddressAsync(long macAddress);
 
 		/// <summary>
@@ -147,7 +138,6 @@ namespace Sannel.House.Devices.Interfaces
 		/// <returns>
 		/// The device or null if the <paramref name="uuid"/> is not found
 		/// </returns>
-		[return: MaybeNull]
 		Task<Device?> RemoveAlternateUuidAsync(Guid uuid);
 
 		/// <summary>
@@ -158,7 +148,6 @@ namespace Sannel.House.Devices.Interfaces
 		/// <returns>
 		/// The device or null if there is no device with the <paramref name="manufacture"/> <paramref name="manufactureId"/> combination
 		/// </returns>
-		[return: MaybeNull]
 		Task<Device?> RemoveAlternateManufactureIdAsync([NotNull]string manufacture, [NotNull]string manufactureId);
 
 		/// <summary>

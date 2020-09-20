@@ -260,7 +260,7 @@ namespace Sannel.House.Devices.Tests.Subscribers
 					getDeviceByUuidCalled++;
 					Assert.Equal(message.Uuid, uuid);
 				})
-				.ReturnsAsync((Device)null);
+				.ReturnsAsync((Device?)null);
 
 			var publishDeviceAsyncCalled = 0;
 			deviceService.Setup(i => i.PublishDeviceAsync(It.IsAny<int>()))
@@ -403,7 +403,7 @@ namespace Sannel.House.Devices.Tests.Subscribers
 					getDeviceByMacAddressCalled++;
 					Assert.Equal(message.MacAddress, macAddess);
 				})
-				.ReturnsAsync((Device)null);
+				.ReturnsAsync((Device?)null);
 
 			var publishDeviceAsyncCalled = 0;
 			deviceService.Setup(i => i.PublishDeviceAsync(It.IsAny<int>()))
@@ -550,7 +550,7 @@ namespace Sannel.House.Devices.Tests.Subscribers
 					Assert.Equal(message.Manufacture, manufacture);
 					Assert.Equal(message.ManufactureId, manufactureId);
 				})
-				.ReturnsAsync((Device)null);
+				.ReturnsAsync((Device?)null);
 
 			var publishDeviceAsyncCalled = 0;
 			deviceService.Setup(i => i.PublishDeviceAsync(It.IsAny<int>()))

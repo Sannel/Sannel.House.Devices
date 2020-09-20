@@ -27,7 +27,7 @@
 		<PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.1" />
 		<PackageReference Include="Sannel.House.Base.Messages" Version="0.1.544-beta" />
 		<PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.548-beta" />
-		<PackageReference Include="Sannel.House.Base.Web" Version="0.9.559-beta" />
+		<PackageReference Include="Sannel.House.Base.Web" Version="0.9.560-beta" />
 
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0-rc.1.20451.13" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0-rc.1.20451.13" />

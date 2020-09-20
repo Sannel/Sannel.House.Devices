@@ -8,6 +8,7 @@
 		<SignAssembly>false</SignAssembly>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<PackageId>Sannel.House.Device</PackageId>
+		<Copyright>Sannel Software, L.L.C. $([System.DateTime]::Now.ToString('yyyy'))</Copyright>
 		<AssemblyVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</AssemblyVersion>
 		<FileVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</FileVersion>
 		<Version>$(Major).$(Minor).$(Patch).$(BuildNumber)</Version>
@@ -51,7 +52,7 @@
 		<PackageReference Include="Sannel.House.Base.Messages" Version="0.1.544-beta" />
 		<PackageReference Include="Sannel.House.Base.Models" Version="0.9.547-beta" />
 		<PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.548-beta" />
-		<PackageReference Include="Sannel.House.Base.Web" Version="0.9.559-beta" />
+		<PackageReference Include="Sannel.House.Base.Web" Version="0.9.560-beta" />
 		<PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.1" />
 	</ItemGroup>
 
