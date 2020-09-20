@@ -3,7 +3,8 @@ trigger:
 - develop
 
 variables:
-  sdk_version: 3.1.x
+  sdk_version: 5.0.x
+  sdk_support_preview: true
   dockerRepositoryRoot: sannel
   dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
   mainImageName: house.devices
@@ -11,7 +12,7 @@ variables:
   imageTag: $(Build.SourceBranchName)-$(Build.BuildId)
   projectFolder: Sannel.House.Devices
   listenerProjectFolder: Sannel.House.Devices.Listener
-  tagVersion: 3.1
+  tagVersion: 5.0
   tagCodeName: buster
   hasTests: true
   Major: 0

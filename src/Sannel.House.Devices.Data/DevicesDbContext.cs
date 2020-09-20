@@ -23,12 +23,19 @@ namespace Sannel.House.Devices.Data
 
 		public DbSet<AlternateDeviceId> AlternateDeviceIds { get; set; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 		public DevicesDbContext([NotNull] DbContextOptions options) : base(options)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 		{
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			if(modelBuilder is null)
+			{
+				throw new ArgumentNullException(nameof(modelBuilder));
+			}
+
 			var altids = modelBuilder.Entity<AlternateDeviceId>();
 			altids.HasIndex(i => i.MacAddress).IsUnique();
 			altids.HasIndex(i => i.Uuid).IsUnique();

@@ -14,11 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-#if CLIENT
-namespace Sannel.House.Devices.Client
-#else
 namespace Sannel.House.Devices.Models
-#endif
 {
 	public class Device
 	{
@@ -40,7 +36,7 @@ namespace Sannel.House.Devices.Models
 		/// </value>
 		[MaxLength(256)]
 		[Required]
-		public string Name { get; set; }
+		public string Name { get; set; } = string.Empty;
 
 		/// <summary>
 		/// Gets or sets the description.
@@ -50,7 +46,7 @@ namespace Sannel.House.Devices.Models
 		/// </value>
 		[MaxLength(2000)]
 		[Required]
-		public string Description { get; set; }
+		public string Description { get; set; } = string.Empty;
 
 
 		/// <summary>

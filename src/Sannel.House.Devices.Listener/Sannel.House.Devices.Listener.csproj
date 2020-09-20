@@ -2,13 +2,14 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..</DockerfileContext>
 		<StartupObject>Sannel.House.Devices.Listener.Program</StartupObject>
 		<AssemblyVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</AssemblyVersion>
 		<FileVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</FileVersion>
 		<Version>$(Major).$(Minor).$(Patch).$(BuildNumber)</Version>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,24 +21,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-rc.1.20451.14" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
 		<PackageReference Include="MQTTnet" Version="3.0.12" />
 		<PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.1" />
 		<PackageReference Include="Sannel.House.Base.Messages" Version="0.1.544-beta" />
-		<PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.517-beta" />
-		<PackageReference Include="Sannel.House.Base.Web" Version="0.9.535-beta" />
+		<PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.548-beta" />
+		<PackageReference Include="Sannel.House.Base.Web" Version="0.9.559-beta" />
 
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.8" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="3.1.8" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.8" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.8" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.8" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.8" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
-		<PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
-		<PackageReference Include="System.Text.Json" Version="4.7.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0-rc.1.20451.13" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0-rc.1.20451.13" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="5.0.0-rc.1.20451.14" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0-rc.1.20451.14" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0-rc.1.20451.14" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0-rc.1.20451.14" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0-rc.1.20451.14" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0-rc1" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0-rc.1.20451.14" />
+		<PackageReference Include="System.Text.Json" Version="5.0.0-rc.1.20451.14" />
 	</ItemGroup>
 
 	<ItemGroup>
