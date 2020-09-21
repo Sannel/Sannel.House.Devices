@@ -165,7 +165,7 @@ namespace Sannel.House.Devices
 			provider.CheckAndInstallTrustedCertificate();
 
 			var p = Configuration["Db:Provider"];
-			var db = provider.GetService<DevicesDbContext>();
+			var db = provider.GetService<DevicesDbContext>() ?? throw new Exception("DevicesDbContext is not set in service provider");
 
 			if (string.Compare(p, "mysql", true, CultureInfo.InvariantCulture) == 0
 					|| string.Compare(p, "postgresql", true, CultureInfo.InvariantCulture) == 0
@@ -188,8 +188,6 @@ namespace Sannel.House.Devices
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			app.UseHouseRobotsTxt();
-
 			app.UseOpenApi();
 			app.UseReDoc();
 
@@ -197,6 +195,7 @@ namespace Sannel.House.Devices
 			{
 				i.MapControllers();
 				i.MapHouseHealthChecks("/health");
+				i.MapHouseRobotsTxt();
 			});
 		}
 	}

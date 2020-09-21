@@ -11,36 +11,29 @@ using Xunit;
 
 namespace Sannel.House.Devices.Tests
 {
-	public abstract class BaseTests : IDisposable
+	public abstract class BaseTests : Sannel.House.Base.Tests.BaseTests<DevicesDbContext>
 	{
-		protected Random Random = new Random();
-		private ILoggerFactory loggerFactory;
-
-		/// <summary>
-		/// Creates the logger.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <returns></returns>
-		public ILogger<T> CreateLogger<T>()
-		{
-			var l = loggerFactory ?? new LoggerFactory();
-			return l.CreateLogger<T>();
-		}
-
 		/// <summary>
 		/// Asserts that Devices are equal
 		/// </summary>
 		/// <param name="expected">The expected.</param>
 		/// <param name="actual">The actual.</param>
-		protected void AssertEqual(Device expected, Device actual)
+		protected void AssertEqual(Device? expected, Device? actual)
 		{
-			if(expected == null)
+			if(expected is null)
 			{
 				Assert.Null(actual);
+				return;
 			}
 			else
 			{
 				Assert.NotNull(actual);
+			}
+
+			// fix compiler warning
+			if(actual is null)
+			{
+				throw new NullReferenceException("Not sure how we got here should not have been null at this point");
 			}
 
 			Assert.Equal(expected.DeviceId, actual.DeviceId);
@@ -51,34 +44,9 @@ namespace Sannel.House.Devices.Tests
 			Assert.Equal(expected.DisplayOrder, actual.DisplayOrder);
 		}
 
-		/// <summary>
-		/// Opens the connection be sure to dispose it.
-		/// </summary>
-		/// <returns></returns>
-		protected SqliteConnection OpenConnection()
-		{
-			var connection = new SqliteConnection("DataSource=:memory:");
-			connection.Open();
-			return connection;
-		}
+		public override DevicesDbContext CreateDbContext(DbContextOptions options) 
+			=> new DevicesDbContext(options);
 
-		/// <summary>
-		/// Gets the test dbcontext be sure to dispose it.
-		/// </summary>
-		/// <param name="connection">The connection.</param>
-		/// <returns></returns>
-		public DevicesDbContext GetTestDB(SqliteConnection connection)
-		{
-			var d = new DbContextOptionsBuilder();
-			d.ConfigureSqlite(connection);
-
-			var context = new DevicesDbContext(d.Options);
-			context.Database.Migrate();
-			return context;
-		}
-
-		public void Dispose()
-		{
-		}
+		public override Type MigrationAssemblyType => typeof(DevicesDesignTimeFactory);
 	}
 }

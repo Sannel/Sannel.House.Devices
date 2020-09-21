@@ -21,6 +21,7 @@ using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
 using Sannel.House.Base.Models;
 using Sannel.House.Base.Web;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Sannel.House.Devices.Controllers
 {
@@ -202,7 +203,7 @@ namespace Sannel.House.Devices.Controllers
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
-		public async Task<ActionResult<ResponseModel<Device>>> GetByManufactureId(string manufacture, string manufactureId)
+		public async Task<ActionResult<ResponseModel<Device>>> GetByManufactureId([NotNull]string manufacture, [NotNull]string manufactureId)
 		{
 			if(string.IsNullOrWhiteSpace(manufacture))
 			{

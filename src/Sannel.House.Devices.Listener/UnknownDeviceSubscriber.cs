@@ -69,7 +69,7 @@ namespace Sannel.House.Devices.Listener
 				obj = JsonSerializer.Deserialize<UnknownDeviceMessage>(message, new JsonSerializerOptions()
 				{
 					PropertyNameCaseInsensitive = true
-				});
+				}) ?? throw new NullReferenceException("Deserialization Resulted in null value");
 			}
 			catch(JsonException ex)
 			{

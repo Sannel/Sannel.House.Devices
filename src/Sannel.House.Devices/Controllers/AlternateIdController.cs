@@ -1,4 +1,4 @@
-/* Copyright 2019 Sannel Software, L.L.C.
+/* Copyright 2019-2020 Sannel Software, L.L.C.
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -8,6 +8,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.*/
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -20,6 +21,7 @@ using System.Threading.Tasks;
 using Sannel.House.Base.Web;
 using Sannel.House.Base.Models;
 using System.Net;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Sannel.House.Devices.Controllers
 {
@@ -31,8 +33,8 @@ namespace Sannel.House.Devices.Controllers
 	[ApiController]
 	public class AlternateIdController : Controller
 	{
-		private IDeviceService service;
-		private ILogger logger;
+		private readonly IDeviceService service;
+		private readonly ILogger logger;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AlternateIdController" /> class.
@@ -70,7 +72,7 @@ namespace Sannel.House.Devices.Controllers
 
 			var list = await service.GetAlternateIdsForDeviceAsync(deviceId);
 
-			if(list == null)
+			if(list == null || !list.Any())
 			{
 				logger.LogDebug("Device with Id {0} not found", deviceId);
 				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "device", "Device not found"));
@@ -177,7 +179,7 @@ namespace Sannel.House.Devices.Controllers
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
-		public async Task<ActionResult<ResponseModel<Device>>> Post(string manufacture, string manufactureId, int deviceId)
+		public async Task<ActionResult<ResponseModel<Device>>> Post([NotNull]string manufacture, [NotNull]string manufactureId, int deviceId)
 		{
 			if(string.IsNullOrWhiteSpace(manufacture))
 			{
@@ -282,7 +284,7 @@ namespace Sannel.House.Devices.Controllers
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
-		public async Task<ActionResult<ResponseModel<Device>>> Delete(string manufacture, string manufactureId)
+		public async Task<ActionResult<ResponseModel<Device>>> Delete([NotNull]string manufacture, [NotNull]string manufactureId)
 		{
 			if(string.IsNullOrWhiteSpace(manufacture))
 			{
