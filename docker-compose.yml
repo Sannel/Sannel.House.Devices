@@ -61,6 +61,22 @@ services:
     depends_on:
     - mqtt
 
+  devices_broadcaster:
+    image: sannel/devicesbroadcaster
+    build:
+      context: .
+      dockerfile: src/Sannel.House.Devices.Broadcaster/Dockerfile
+    networks: 
+    - housenet
+    volumes:
+    - "./src/Sannel.House.Devices.Broadcaster/app_config:/app/app_config"
+    - "./src/Sannel.House.Devices/app_data:/app/app_data"
+    depends_on:
+    - mqtt
+    - devices
+    - devices_listener
+
+
   mqtt:
     image: eclipse-mosquitto
     ports:

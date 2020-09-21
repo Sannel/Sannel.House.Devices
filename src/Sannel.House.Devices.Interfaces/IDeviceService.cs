@@ -136,5 +136,12 @@ namespace Sannel.House.Devices.Interfaces
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
 		Task PublishDeviceAsync(int deviceId);
+
+		/// <summary>
+		/// Publishes the device to the MQTT Service asynchronous.
+		/// </summary>
+		/// <param name="device">The device.</param>
+		/// <returns></returns>
+		Task PublishDeviceAsync(Device device);
 	}
 }

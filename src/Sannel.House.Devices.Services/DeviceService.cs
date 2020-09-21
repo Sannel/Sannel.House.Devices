@@ -45,7 +45,23 @@ namespace Sannel.House.Devices.Services
 
 		private async Task sendDeviceUpdateAsync(int deviceId)
 		{
-			var device = await repository.GetDeviceByIdAsync(deviceId);
+			var device = await repository.GetDeviceByIdAsync(deviceId).ConfigureAwait(false);
+
+			if(device is null)
+			{
+				return;
+			}
+
+			await sendDeviceUpdateAsync(device);
+		}
+
+		private async Task sendDeviceUpdateAsync(Device device)
+		{
+			if(device is null)
+			{
+				return;
+			}
+
 			var message = new DeviceMessage()
 			{
 				DeviceId = device.DeviceId,
@@ -260,6 +276,21 @@ namespace Sannel.House.Devices.Services
 			}
 
 			return result;
+		}
+
+		/// <summary>
+		/// Publishes the device to the MQTT Service asynchronous.
+		/// </summary>
+		/// <param name="device">The device.</param>
+		/// <exception cref="System.ArgumentNullException">device</exception>
+		public async Task PublishDeviceAsync(Device device)
+		{
+			if(device is null)
+			{
+				throw new ArgumentNullException(nameof(device));
+			}
+
+			await sendDeviceUpdateAsync(device);
 		}
 	}
 }
