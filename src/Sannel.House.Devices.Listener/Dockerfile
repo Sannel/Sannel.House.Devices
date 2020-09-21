@@ -23,6 +23,7 @@ RUN dotnet build "Sannel.House.Devices.Listener.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "Sannel.House.Devices.Listener.csproj" -c Release -o /app/publish
+COPY ["src/Sannel.House.Devices.Listener/app_data/.hold", "/app/publish/app_data/.hold"]
 
 FROM base AS final
 WORKDIR /app

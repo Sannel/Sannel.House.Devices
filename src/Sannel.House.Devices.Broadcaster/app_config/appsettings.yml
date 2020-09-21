@@ -1,0 +1,16 @@
+---
+PageSize: 100
+DelayMilliSeconds: 5000
+Db:
+  Provider: sqlite
+  ConnectionString: Data Source=app_data/data.db
+MQTT:
+  Server: mqtt.localtest.me
+  DefaultTopic: local/house/devices
+  Port: 1883
+
+Logging:
+  LogLevel:
+    Default: Debug
+    System: Error
+    Microsoft: Error

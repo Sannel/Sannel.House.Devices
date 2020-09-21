@@ -32,8 +32,18 @@ namespace Sannel.House.Devices.Listener
 {
 	public class Program
 	{
-		public static void Main(string[] args) 
-			=> CreateHostBuilder(args).Build().Run();
+		private const string runningFile = "running.txt";
+		public static void Main(string[] args)
+		{
+			File.WriteAllText(runningFile, "running");
+			AppDomain.CurrentDomain.ProcessExit += processExit;
+			CreateHostBuilder(args).Build().Run();
+		}
+
+		private static void processExit(object? sender, EventArgs e)
+		{
+			File.Delete(runningFile);
+		}
 
 		public static IHostBuilder CreateHostBuilder(string[] args) =>
 			Host.CreateDefaultBuilder(args)
