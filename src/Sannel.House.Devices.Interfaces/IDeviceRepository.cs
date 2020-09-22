@@ -30,6 +30,20 @@ namespace Sannel.House.Devices.Interfaces
 		Task<PagedResponseModel<Device>> GetDevicesListAsync(int pageIndex, int pageSize);
 
 		/// <summary>
+		/// Gets the count of devices asynchronous.
+		/// </summary>
+		/// <returns></returns>
+		Task<long> GetCountAsync();
+
+		/// <summary>
+		/// Gets a list of devices asynchronous.
+		/// </summary>
+		/// <param name="pageIndex">Index of the page.</param>
+		/// <param name="pageSize">Size of the page.</param>
+		/// <returns></returns>
+		Task<IList<Device>> GetListAsync(int pageIndex, int pageSize);
+
+		/// <summary>
 		/// Gets the device by identifier asynchronous.
 		/// </summary>
 		/// <param name="deviceId">The device identifier.</param>

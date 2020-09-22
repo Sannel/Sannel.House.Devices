@@ -7,7 +7,7 @@ Db:
 MQTT:
   Server: mqtt.localtest.me
   DefaultTopic: local/house/devices
-  Port: 8883
+  Port: 1883
 
 Logging:
   LogLevel:

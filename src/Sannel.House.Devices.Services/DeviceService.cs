@@ -316,5 +316,21 @@ namespace Sannel.House.Devices.Services
 
 			await sendDeviceUpdateAsync(device);
 		}
+
+		/// <summary>
+		/// Gets the count of devices asynchronous.
+		/// </summary>
+		/// <returns></returns>
+		public Task<long> GetCountAsync()
+			=> repository.GetCountAsync();
+
+		/// <summary>
+		/// Gets a list of devices asynchronous.
+		/// </summary>
+		/// <param name="pageIndex">Index of the page.</param>
+		/// <param name="pageSize">Size of the page.</param>
+		/// <returns></returns>
+		public Task<IList<Device>> GetListAsync(int pageIndex, int pageSize)
+			=> repository.GetListAsync(pageIndex, pageSize);
 	}
 }

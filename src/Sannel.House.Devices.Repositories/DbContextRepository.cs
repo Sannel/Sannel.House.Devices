@@ -58,6 +58,25 @@ namespace Sannel.House.Devices.Repositories
 		}
 
 
+		/// <summary>
+		/// Gets the count of devices asynchronous.
+		/// </summary>
+		/// <returns></returns>
+		public async Task<long> GetCountAsync() 
+			=> await context.Devices.LongCountAsync().ConfigureAwait(false);
+
+		/// <summary>
+		/// Gets a list of devices asynchronous.
+		/// </summary>
+		/// <param name="pageIndex">Index of the page.</param>
+		/// <param name="pageSize">Size of the page.</param>
+		/// <returns></returns>
+		public async Task<IList<Device>> GetListAsync(int pageIndex, int pageSize) 
+			=> await context.Devices.AsNoTracking()
+				.OrderBy(i => i.DisplayOrder)
+				.Skip(pageIndex * pageSize)
+				.Take(pageSize)
+				.ToListAsync();
 
 		/// <summary>
 		/// Gets the devices list asynchronous.

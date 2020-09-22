@@ -63,23 +63,22 @@ namespace Sannel.House.Devices.Broadcaster
 			await mqttService.StartAsync(default);
 
 			var pageIndex = 0;
-			PagedResponseModel<Device> result;
-			List<Device> data;
+			IList<Device> data;
+			var count = await deviceService.GetCountAsync();
 
 			var debugEnabled = logger.IsEnabled(LogLevel.Debug);
 
 			do
 			{
-				result = await deviceService.GetDevicesListAsync(pageIndex, pageSize);
-				data = result.Data.ToList();
-				if (data.Any())
+				data = await deviceService.GetListAsync(pageIndex, pageSize);
+				if (data.Count > 0)
 				{
 					if(debugEnabled)
 					{
-						logger.LogDebug("Result from Service TotalCount: {TotalCount} Page: {Page} PageSize: {PageSize}", result.TotalCount, result.Page, result.PageSize);
+						logger.LogDebug("Result from Service TotalCount: {TotalCount} Page: {Page} PageSize: {PageSize}", count, pageIndex, pageSize);
 					}
 
-					foreach (var device in result.Data)
+					foreach (var device in data)
 					{
 						if(debugEnabled)
 						{
@@ -99,10 +98,10 @@ namespace Sannel.House.Devices.Broadcaster
 				}
 				else
 				{
-					logger.LogInformation("No more devices. TotalDevices {TotalDevices}", result.TotalCount);
+					logger.LogInformation("No more devices. TotalDevices {TotalDevices}", count);
 				}
 				pageIndex++;
-			} while (data.Any());
+			} while (data.Count > 0);
 
 			await mqttService.StopAsync(default);
 			logger.LogInformation("Done Sending Devices");
