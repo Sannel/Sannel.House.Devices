@@ -22,6 +22,7 @@ using Sannel.House.Devices.Models;
 using Sannel.House.Devices.Repositories;
 using Sannel.House.Devices.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -63,13 +64,15 @@ namespace Sannel.House.Devices.Broadcaster
 
 			var pageIndex = 0;
 			PagedResponseModel<Device> result;
+			List<Device> data;
 
 			var debugEnabled = logger.IsEnabled(LogLevel.Debug);
 
 			do
 			{
 				result = await deviceService.GetDevicesListAsync(pageIndex, pageSize);
-				if (result.Data.Any())
+				data = result.Data.ToList();
+				if (data.Any())
 				{
 					if(debugEnabled)
 					{
@@ -99,7 +102,7 @@ namespace Sannel.House.Devices.Broadcaster
 					logger.LogInformation("No more devices. TotalDevices {TotalDevices}", result.TotalCount);
 				}
 				pageIndex++;
-			} while (result.Data.Any());
+			} while (data.Any());
 
 			await mqttService.StopAsync(default);
 			logger.LogInformation("Done Sending Devices");
