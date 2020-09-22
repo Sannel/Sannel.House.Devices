@@ -14,9 +14,11 @@ variables:
   dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
   mainImageName: house.devices
   listenerImageName: house.devices.listener
+  broadcasterImageName: house.devices.broadcaster
   imageTag: $(Build.SourceBranchName)-$(Build.BuildId)
   projectFolder: Sannel.House.Devices
   listenerProjectFolder: Sannel.House.Devices.Listener
+  broadcasterProjectFolder: Sannel.House.Devices.Broadcaster
   tagVersion: 5.0
   tagCodeName: buster
   hasTests: true
@@ -49,8 +51,17 @@ jobs:
     qemuStatic: qemu-arm-static
     project: $(listenerProjectFolder)
     imageName: $(listenerImageName)
-    dockerRepositoryName: $(listenerDockerRepositoryName)
     jobName: deviceslistener
+
+- template: tasks/docker/linux-arm.yaml@templates
+  parameters:
+    arch: arm32
+    archLong: arm32v7
+    ridSuffix: arm
+    qemuStatic: qemu-arm-static
+    project: $(broadcasterProjectFolder)
+    imageName: $(broadcasterImageName)
+    jobName: devicesbroadcaster
 
 - template: tasks/docker/linux-arm.yaml@templates
   parameters:
@@ -58,7 +69,6 @@ jobs:
     archLong: arm64v8
     project: $(projectFolder)
     imageName: $(mainImageName)
-    dockerRepositoryName: $(dockerRepositoryName)
     jobName: devices
 
 - template: tasks/docker/linux-arm.yaml@templates
@@ -67,19 +77,30 @@ jobs:
     archLong: arm64v8
     project: $(listenerProjectFolder)
     imageName: $(listenerImageName)
-    dockerRepositoryName: $(listenerDockerRepositoryName)
     jobName: deviceslistener
+
+- template: tasks/docker/linux-arm.yaml@templates
+  parameters:
+    arch: arm64
+    archLong: arm64v8
+    project: $(broadcasterProjectFolder)
+    imageName: $(broadcasterImageName)
+    jobName: devicesbroadcaster
 
 - template: tasks/docker/linux-x64.yaml@templates
   parameters:
     project: $(projectFolder)
     imageName: $(mainImageName)
-    dockerRepositoryName: $(dockerRepositoryName)
     jobName: devices
 
 - template: tasks/docker/linux-x64.yaml@templates
   parameters:
     project: $(listenerProjectFolder)
     imageName: $(listenerImageName)
-    dockerRepositoryName: $(listenerDockerRepositoryName)
     jobName: deviceslistener
+
+- template: tasks/docker/linux-x64.yaml@templates
+  parameters:
+    project: $(broadcasterProjectFolder)
+    imageName: $(broadcasterImageName)
+    jobName: devicesbroadcaster
