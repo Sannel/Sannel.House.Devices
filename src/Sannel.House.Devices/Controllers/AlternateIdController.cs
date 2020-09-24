@@ -96,14 +96,14 @@ namespace Sannel.House.Devices.Controllers
 		{
 			if(macAddress < 0)
 			{
-				logger.LogError("Invalid macAddress passed {0}", macAddress);
+				logger.LogError("Invalid macAddress passed {macAddress}", macAddress);
 				return BadRequest(new ErrorResponseModel("Invalid Mac Address", "macAddress", "Invalid MacAddress it must be greater then or equal to 0"));
 			}
 
-			if(deviceId < 0)
+			if(deviceId <= 0)
 			{
-				logger.LogError("Invalid device id({0}) passed in.", deviceId);
-				return BadRequest(new ErrorResponseModel("Invalid Device Id", "deviceId", "Device Id must be greater then or equal to 0"));
+				logger.LogError("Invalid device id({deviceId}) passed in.", deviceId);
+				return BadRequest(new ErrorResponseModel("Invalid Device Id", "deviceId", "Device Id must be greater then 0"));
 			}
 
 			try
@@ -111,7 +111,7 @@ namespace Sannel.House.Devices.Controllers
 				var device = await service.AddAlternateMacAddressAsync(deviceId, macAddress);
 				if(device == null)
 				{
-					logger.LogDebug("No device found with id {0}", deviceId);
+					logger.LogDebug("No device found with id {deviceId}", deviceId);
 					return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "notFound", "No device found with that id"));
 				}
 
@@ -145,7 +145,7 @@ namespace Sannel.House.Devices.Controllers
 
 			if(deviceId < 0)
 			{
-				logger.LogError("Invalid device id({0}) passed in.", deviceId);
+				logger.LogError("Invalid device id({deviceId}) passed in.", deviceId);
 				return BadRequest(new ErrorResponseModel("Invalid Device Id", "deviceId", "Device Id must be greater then or equal to 0"));
 			}
 
@@ -154,7 +154,7 @@ namespace Sannel.House.Devices.Controllers
 				var device = await service.AddAlternateUuidAsync(deviceId, uuid);
 				if(device == null)
 				{
-					logger.LogDebug("No device found with id {0}", deviceId);
+					logger.LogDebug("No device found with id {deviceId}", deviceId);
 					return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "notFound", "No device found with that id"));
 				}
 
@@ -195,7 +195,7 @@ namespace Sannel.House.Devices.Controllers
 
 			if(deviceId < 0)
 			{
-				logger.LogError("Invalid device id({0}) passed in.", deviceId);
+				logger.LogError("Invalid device id({deviceId}) passed in.", deviceId);
 				return BadRequest(new ErrorResponseModel("Invalid Device Id", "deviceId", "Device Id must be greater then or equal to 0"));
 			}
 
@@ -204,7 +204,7 @@ namespace Sannel.House.Devices.Controllers
 				var device = await service.AddAlternateManufactureIdAsync(deviceId, manufacture, manufactureId);
 				if(device == null)
 				{
-					logger.LogDebug("No device found with id {0}", deviceId);
+					logger.LogDebug("No device found with id {deviceId}", deviceId);
 					return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "notFound", "No device found with that id"));
 				}
 
@@ -229,16 +229,16 @@ namespace Sannel.House.Devices.Controllers
 		[ProducesResponseType(404)]
 		public async Task<ActionResult<ResponseModel<Device>>> Delete(long macAddress)
 		{
-			if(macAddress < 0)
+			if(macAddress <= 0)
 			{
-				logger.LogError("Invalid macAddress passed {0}", macAddress);
+				logger.LogError("Invalid macAddress passed {macAddress}", macAddress);
 				return BadRequest(new ErrorResponseModel("Invalid Mac Address","macAddress", "Invalid MacAddress it must be greater then or equal to 0"));
 			}
 
 			var device = await service.RemoveAlternateMacAddressAsync(macAddress);
 			if(device == null)
 			{
-				logger.LogDebug("No Mac Address found with id {0}", macAddress);
+				logger.LogDebug("No Mac Address found with id {macAddress}", macAddress);
 				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound,"Mac Address Not Found","macAddress", "Mac Address not found"));
 			}
 
@@ -266,7 +266,7 @@ namespace Sannel.House.Devices.Controllers
 			var device = await service.RemoveAlternateUuidAsync(uuid);
 			if(device == null)
 			{
-				logger.LogDebug("Uuid not found {0}", uuid);
+				logger.LogDebug("Uuid not found {uuid}", uuid);
 				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound,"Uuid Not Found","uuid", "Uuid not found"));
 			}
 
@@ -301,7 +301,7 @@ namespace Sannel.House.Devices.Controllers
 			var device = await service.RemoveAlternateManufactureIdAsync(manufacture, manufactureId);
 			if(device == null)
 			{
-				logger.LogDebug("ManufactureId not found {0}/{1}", manufacture, manufactureId);
+				logger.LogDebug("ManufactureId not found {manufacture}/{manufactureId}", manufacture, manufactureId);
 				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound,"ManufactureId Not Found","manufactureid", "Manufacture/ManufactureId not found"));
 			}
 

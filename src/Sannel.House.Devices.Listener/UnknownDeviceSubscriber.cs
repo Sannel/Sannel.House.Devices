@@ -103,6 +103,11 @@ namespace Sannel.House.Devices.Listener
 				{
 					await service.PublishDeviceAsync(device.DeviceId);
 				}
+				if(obj.MacAddress <= 0)
+				{
+					logger.LogInformation("Invalid Mac Address sent {MacAddress}", obj.MacAddress);
+					return;
+				}
 				else
 				{
 					device = await createDeviceAsync(service);
@@ -126,6 +131,11 @@ namespace Sannel.House.Devices.Listener
 				if(device != null)
 				{
 					await service.PublishDeviceAsync(device.DeviceId);
+				}
+				if(obj.Uuid == Guid.Empty)
+				{
+					logger.LogInformation("Invalid Uuid sent {Uuid}", obj.Uuid);
+					return;
 				}
 				else
 				{

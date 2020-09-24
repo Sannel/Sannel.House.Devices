@@ -88,16 +88,16 @@ namespace Sannel.House.Devices.Controllers
 		{
 			if(pageIndex < 0)
 			{
-				logger.LogError("GetPaged pageIndex invalid {0}", pageIndex);
+				logger.LogError("GetPaged pageIndex invalid {pageIndex}", pageIndex);
 				return BadRequest(new ErrorResponseModel("Invalid Page Index", nameof(pageIndex), "Page Index must be 0 or greater"));
 			}
 			if(pageSize < 2)
 			{
-				logger.LogError("GetPaged pageSize invalid {0}", pageSize);
+				logger.LogError("GetPaged pageSize invalid {pageSize}", pageSize);
 				return BadRequest(new ErrorResponseModel("Invalid Page Size", nameof(pageSize), "Page Size must be greater then 2"));
 			}
 
-			logger.LogDebug("GetPaged pageIndex: {0} pageSize {1}", pageIndex, pageSize);
+			logger.LogDebug("GetPaged pageIndex: {pageIndex} pageSize {pageSize}", pageIndex, pageSize);
 
 			return Ok(new PagedResponseModel<Device>("Paged Results", await service.GetDevicesListAsync(pageIndex, pageSize)));
 		}
@@ -116,18 +116,18 @@ namespace Sannel.House.Devices.Controllers
 		{
 			if(deviceId < 0)
 			{
-				logger.LogError("Get: Invalid deviceId {0}", deviceId);
+				logger.LogError("Get: Invalid deviceId {deviceId}", deviceId);
 				return BadRequest(new ErrorResponseModel("Invalid Device Id", nameof(deviceId), "Device Id must be greater then or equal to 0"));
 			}
 
 			var device = await service.GetDeviceByIdAsync(deviceId);
 			if(device == null)
 			{
-				logger.LogDebug("Device with id {0} not found", deviceId);
+				logger.LogDebug("Device with id {deviceId} not found", deviceId);
 				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "device", "Device Not Found"));
 			}
 
-			logger.LogDebug("Device with id {0} was found", deviceId);
+			logger.LogDebug("Device with id {deviceId} was found", deviceId);
 
 			return Ok(new ResponseModel<Device>("The Device", device));
 		}
@@ -146,18 +146,18 @@ namespace Sannel.House.Devices.Controllers
 		{
 			if(macAddress < 0)
 			{
-				logger.LogError("Get: Invalid macAddress {0}", macAddress);
+				logger.LogError("Get: Invalid macAddress {macAddress}", macAddress);
 				return BadRequest(new ErrorResponseModel("Invalid Mac Address", nameof(macAddress), "Mac Address must be greater then or equal to 0"));
 			}
 
 			var device = await service.GetDeviceByMacAddressAsync(macAddress);
 			if(device == null)
 			{
-				logger.LogDebug("Device with macAddress {0} not found", macAddress);
+				logger.LogDebug("Device with macAddress {macAddress} not found", macAddress);
 				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "device", "Device Not Found"));
 			}
 
-			logger.LogDebug("Device with macAddress {0} was found", macAddress);
+			logger.LogDebug("Device with macAddress {macAddress} was found", macAddress);
 
 			return Ok(new ResponseModel<Device>("The Device", device));
 		}
@@ -176,18 +176,18 @@ namespace Sannel.House.Devices.Controllers
 		{
 			if(Guid.Empty == uuid)
 			{
-				logger.LogError("Get: Invalid Uuid {0}", uuid);
+				logger.LogError("Get: Invalid Uuid {uuid}", uuid);
 				return BadRequest(new ErrorResponseModel("Invalid Uuid", nameof(uuid), $"Uuid cannot be Empty {Guid.Empty}"));
 			}
 
 			var device = await service.GetDeviceByUuidAsync(uuid);
 			if(device == null)
 			{
-				logger.LogDebug("Device with Uuid {0} not found", uuid);
+				logger.LogDebug("Device with Uuid {uuid} not found", uuid);
 				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "device", "Device Not Found"));
 			}
 
-			logger.LogDebug("Device with Uuid {0} was found", uuid);
+			logger.LogDebug("Device with Uuid {uuid} was found", uuid);
 
 			return Ok(new ResponseModel<Device>("The Device", device));
 		}
@@ -220,11 +220,11 @@ namespace Sannel.House.Devices.Controllers
 			var device = await service.GetDeviceByManufactureIdAsync(manufacture, manufactureId);
 			if(device == null)
 			{
-				logger.LogDebug("Device with Manufacture/ManufactureId {0}/{1} not found", manufacture, manufactureId);
+				logger.LogDebug("Device with Manufacture/ManufactureId {manufacture}/{manufactureId} not found", manufacture, manufactureId);
 				return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "device", "Device Not Found"));
 			}
 
-			logger.LogDebug("Device with Manufacture/ManufactureId {0}/{1} was found", manufacture, manufactureId);
+			logger.LogDebug("Device with Manufacture/ManufactureId {manufacture}/{manufactureId} was found", manufacture, manufactureId);
 
 			return Ok(new ResponseModel<Device>("The Device", device));
 		}
@@ -248,7 +248,7 @@ namespace Sannel.House.Devices.Controllers
 
 			if(ModelState.IsValid)
 			{
-				logger.LogDebug("Post: adding new device '{0}'", device.Name);
+				logger.LogDebug("Post: adding new device '{name}'", device.Name);
 				device.DeviceId = 0;
 				var d = await service.AddDeviceAsync(device);
 				return Ok(new ResponseModel<int>("The Device Id", d.DeviceId));
@@ -280,7 +280,7 @@ namespace Sannel.House.Devices.Controllers
 
 			if(device.DeviceId < 0)
 			{
-				logger.LogError("Put: Invalid deviceId {0}", device.DeviceId);
+				logger.LogError("Put: Invalid deviceId {deviceId}", device.DeviceId);
 				return BadRequest(new ErrorResponseModel("Invalid Device Id", nameof(device.DeviceId), "Device Id must be 0 or greater"));
 			}
 
@@ -292,16 +292,16 @@ namespace Sannel.House.Devices.Controllers
 
 					if(d == null)
 					{
-						logger.LogDebug("Put: Device {0} was not found", device.DeviceId);
+						logger.LogDebug("Put: Device {deviceId} was not found", device.DeviceId);
 						return NotFound(new ErrorResponseModel(HttpStatusCode.NotFound, "Device Not Found", "notfound", "Device not found to update"));
 					}
 
-					logger.LogDebug("Put: Updated device {0}", device.DeviceId);
+					logger.LogDebug("Put: Updated device {deviceId}", device.DeviceId);
 					return Ok(new ResponseModel<int>("Device Id",d.DeviceId));
 				}
 				catch(ReadOnlyException roe)
 				{
-					logger.LogError(roe, "Put: Device {0} is read-only", device.DeviceId);
+					logger.LogError(roe, "Put: Device {deviceId} is read-only", device.DeviceId);
 					return BadRequest(new ErrorResponseModel("Device is Read-only", "readonly", "Device is read-only and cannot be updated."));
 				}
 			}
