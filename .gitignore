@@ -331,3 +331,4 @@ ASALocalRun/
 .vscode/
 app_config/
 app_data/
+/src/Sannel.House.Devices.Listener/running.txt

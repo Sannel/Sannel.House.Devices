@@ -10,6 +10,7 @@
    limitations under the License.*/
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Sannel.House.Base.Messages.Device;
@@ -27,12 +28,12 @@ namespace Sannel.House.Devices.Listener
 {
 	public class UnknownDeviceSubscriber : IMqttTopicSubscriber
 	{
-		private readonly IDeviceService service;
+		private readonly IServiceProvider provider;
 		private readonly ILogger logger;
 
-		public UnknownDeviceSubscriber(IDeviceService service, IConfiguration configuration, ILogger<UnknownDeviceSubscriber> logger)
+		public UnknownDeviceSubscriber(IServiceProvider provider, IConfiguration configuration, ILogger<UnknownDeviceSubscriber> logger)
 		{
-			this.service = service ?? throw new ArgumentNullException(nameof(service));
+			this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			Topic = (configuration ?? throw new ArgumentNullException(nameof(configuration)))["MQTT:UnknownDeviceTopic"];
 		}
@@ -43,7 +44,7 @@ namespace Sannel.House.Devices.Listener
 			private set;
 		}
 
-		private async Task<Device> createDeviceAsync()
+		private async Task<Device> createDeviceAsync(IDeviceService service)
 		{
 			var device = new Device()
 			{
@@ -63,6 +64,17 @@ namespace Sannel.House.Devices.Listener
 
 		internal async Task MessageAsync(string topic, string message)
 		{
+			using var scope = provider.CreateScope();
+			var service = scope.ServiceProvider.GetService<IDeviceService>();
+
+			if(service is null)
+			{
+				logger.LogError("Unable to get service IDeviceService. Unable to process topic {topic} with message {message}",
+					topic,
+					message);
+				return;
+			}
+
 			UnknownDeviceMessage obj;
 			try
 			{
@@ -93,7 +105,7 @@ namespace Sannel.House.Devices.Listener
 				}
 				else
 				{
-					device = await createDeviceAsync();
+					device = await createDeviceAsync(service);
 
 					if(device?.DeviceId > default(int))
 					{
@@ -117,7 +129,7 @@ namespace Sannel.House.Devices.Listener
 				}
 				else
 				{
-					device = await createDeviceAsync();
+					device = await createDeviceAsync(service);
 					if(device?.DeviceId > default(int))
 					{
 						await service.AddAlternateUuidAsync(device.DeviceId, obj.Uuid.Value);
@@ -142,7 +154,7 @@ namespace Sannel.House.Devices.Listener
 				}
 				else
 				{
-					device = await createDeviceAsync();
+					device = await createDeviceAsync(service);
 					if(device?.DeviceId > default(int))
 					{
 						await service.AddAlternateManufactureIdAsync(device.DeviceId,
