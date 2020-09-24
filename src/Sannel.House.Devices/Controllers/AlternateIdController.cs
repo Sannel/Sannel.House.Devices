@@ -97,7 +97,7 @@ namespace Sannel.House.Devices.Controllers
 			if(macAddress < 0)
 			{
 				logger.LogError("Invalid macAddress passed {macAddress}", macAddress);
-				return BadRequest(new ErrorResponseModel("Invalid Mac Address", "macAddress", "Invalid MacAddress it must be greater then or equal to 0"));
+				return BadRequest(new ErrorResponseModel("Invalid Mac Address", "macAddress", "Invalid MacAddress it must be greater then 0"));
 			}
 
 			if(deviceId <= 0)

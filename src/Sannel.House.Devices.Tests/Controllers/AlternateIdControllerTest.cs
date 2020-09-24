@@ -133,7 +133,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 			Assert.Single(error.Errors);
 			var err = error.Errors.First();
 			Assert.Equal("macAddress", err.Key);
-			Assert.Equal("Invalid MacAddress it must be greater then or equal to 0", err.Value.First());
+			Assert.Equal("Invalid MacAddress it must be greater then 0", err.Value.First());
 
 			result = await controller.Post(0xD5A6E4539A1F, -1);
 			bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
@@ -142,7 +142,7 @@ namespace Sannel.House.Devices.Tests.Controllers
 			Assert.Single(error.Errors);
 			err = error.Errors.First();
 			Assert.Equal("deviceId", err.Key);
-			Assert.Equal("Device Id must be greater then or equal to 0", err.Value.First());
+			Assert.Equal("Device Id must be greater then 0", err.Value.First());
 
 			repo.Setup(i => i.AddAlternateMacAddressAsync(20, 0xD5A6E4539A1F)).ThrowsAsync(new AlternateDeviceIdException("Device already connected"));
 

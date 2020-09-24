@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Listener;
@@ -19,7 +20,10 @@ namespace Sannel.House.Devices.Tests.Subscribers
 			var deviceService = new Mock<IDeviceService>();
 			var config = new Mock<IConfiguration>();
 
-			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(deviceService.Object,
+			var builder = new ServiceCollection();
+			builder.AddSingleton(deviceService.Object);
+
+			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(builder.BuildServiceProvider(),
 				config.Object,
 				CreateLogger<UnknownDeviceSubscriber>());
 
@@ -98,7 +102,10 @@ namespace Sannel.House.Devices.Tests.Subscribers
 			var deviceService = new Mock<IDeviceService>();
 			var config = new Mock<IConfiguration>();
 
-			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(deviceService.Object,
+			var builder = new ServiceCollection();
+			builder.AddSingleton(deviceService.Object);
+
+			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(builder.BuildServiceProvider(),
 				config.Object,
 				CreateLogger<UnknownDeviceSubscriber>());
 
@@ -177,7 +184,10 @@ namespace Sannel.House.Devices.Tests.Subscribers
 			var deviceService = new Mock<IDeviceService>();
 			var config = new Mock<IConfiguration>();
 
-			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(deviceService.Object,
+			var builder = new ServiceCollection();
+			builder.AddSingleton(deviceService.Object);
+
+			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(builder.BuildServiceProvider(),
 				config.Object,
 				CreateLogger<UnknownDeviceSubscriber>());
 
@@ -242,7 +252,10 @@ namespace Sannel.House.Devices.Tests.Subscribers
 			var deviceService = new Mock<IDeviceService>();
 			var config = new Mock<IConfiguration>();
 
-			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(deviceService.Object,
+			var builder = new ServiceCollection();
+			builder.AddSingleton(deviceService.Object);
+
+			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(builder.BuildServiceProvider(),
 				config.Object,
 				CreateLogger<UnknownDeviceSubscriber>());
 
@@ -320,7 +333,10 @@ namespace Sannel.House.Devices.Tests.Subscribers
 			var deviceService = new Mock<IDeviceService>();
 			var config = new Mock<IConfiguration>();
 
-			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(deviceService.Object,
+			var builder = new ServiceCollection();
+			builder.AddSingleton(deviceService.Object);
+
+			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(builder.BuildServiceProvider(),
 				config.Object,
 				CreateLogger<UnknownDeviceSubscriber>());
 
@@ -385,7 +401,10 @@ namespace Sannel.House.Devices.Tests.Subscribers
 			var deviceService = new Mock<IDeviceService>();
 			var config = new Mock<IConfiguration>();
 
-			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(deviceService.Object,
+			var builder = new ServiceCollection();
+			builder.AddSingleton(deviceService.Object);
+
+			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(builder.BuildServiceProvider(),
 				config.Object,
 				CreateLogger<UnknownDeviceSubscriber>());
 
@@ -463,7 +482,10 @@ namespace Sannel.House.Devices.Tests.Subscribers
 			var deviceService = new Mock<IDeviceService>();
 			var config = new Mock<IConfiguration>();
 
-			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(deviceService.Object,
+			var builder = new ServiceCollection();
+			builder.AddSingleton(deviceService.Object);
+
+			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(builder.BuildServiceProvider(),
 				config.Object,
 				CreateLogger<UnknownDeviceSubscriber>());
 
@@ -530,7 +552,10 @@ namespace Sannel.House.Devices.Tests.Subscribers
 			var deviceService = new Mock<IDeviceService>();
 			var config = new Mock<IConfiguration>();
 
-			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(deviceService.Object,
+			var builder = new ServiceCollection();
+			builder.AddSingleton(deviceService.Object);
+
+			var unknownDeviceSubscriber = new UnknownDeviceSubscriber(builder.BuildServiceProvider(),
 				config.Object,
 				CreateLogger<UnknownDeviceSubscriber>());
 
