@@ -140,9 +140,7 @@ namespace Sannel.House.Devices
 
 			services.AddOpenApiDocument();
 
-			services.AddMqttPublishService(Configuration["MQTT:Server"], 
-										Configuration["MQTT:DefaultTopic"], 
-										Configuration.GetValue<int?>("MQTT:Port"));
+			services.AddMqttService(Configuration);
 
 			services.AddHealthChecks()
 				.AddDbHealthCheck<DevicesDbContext>("DbHealthCheck", async (context) =>

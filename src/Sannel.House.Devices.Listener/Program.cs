@@ -98,9 +98,7 @@ namespace Sannel.House.Devices.Listener
 
 			services.AddTransient<IMqttTopicSubscriber, UnknownDeviceSubscriber>();
 
-			services.AddMqttService(configuration["MQTT:Server"],
-				configuration["MQTT:DefaultTopic"],
-				configuration.GetValue<int?>("MQTT:Port"));
+			services.AddMqttService(configuration);
 		}
 
 	}

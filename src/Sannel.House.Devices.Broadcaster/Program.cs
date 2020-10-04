@@ -163,9 +163,7 @@ namespace Sannel.House.Devices.Broadcaster
 			services.AddScoped<IDeviceRepository, DbContextRepository>();
 			services.AddScoped<IDeviceService, DeviceService>();
 
-			services.AddMqttPublishService(configuration["MQTT:Server"], 
-										configuration["MQTT:DefaultTopic"], 
-										configuration.GetValue<int?>("MQTT:Port"));
+			services.AddMqttService(configuration);
 
 			return services.BuildServiceProvider();
 		}

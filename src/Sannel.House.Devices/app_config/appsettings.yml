@@ -12,6 +12,11 @@ MQTT:
   Server: mqtt.localtest.me
   DefaultTopic: local/house/devices
   Port: 1883
+  EnableSSL: False
+#  Username: testuser
+#  Password: Password
+#  CertSubject: CN=test.com
+#  CertIssuer: "CN=Let's Encrypt Authority X3, O=Let's Encrypt, C=US"
 Logging:
   LogLevel:
     Default: Debug
