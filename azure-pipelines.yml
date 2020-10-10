@@ -91,19 +91,19 @@ jobs:
     imageName: $(broadcasterImageName)
     jobName: devicesbroadcaster
 
-- template: tasks/docker/linux-x64.yaml@templates
+- template: tasks/docker/linux-x64-alpine.yaml@templates
   parameters:
     project: $(projectFolder)
     imageName: $(mainImageName)
     jobName: devices
 
-- template: tasks/docker/linux-x64.yaml@templates
+- template: tasks/docker/linux-x64-alpine.yaml@templates
   parameters:
     project: $(listenerProjectFolder)
     imageName: $(listenerImageName)
     jobName: deviceslistener
 
-- template: tasks/docker/linux-x64.yaml@templates
+- template: tasks/docker/linux-x64-alpine.yaml@templates
   parameters:
     project: $(broadcasterProjectFolder)
     imageName: $(broadcasterImageName)
