@@ -13,6 +13,7 @@ variables:
   dockerRepositoryRoot: sannel
   dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
   mainImageName: house.devices
+  repositoryName: Sannel.House.Devices
   listenerImageName: house.devices.listener
   broadcasterImageName: house.devices.broadcaster
   imageTag: $(Build.SourceBranchName)-$(Build.BuildId)
@@ -46,6 +47,7 @@ jobs:
     project: $(projectFolder)
     imageName: $(mainImageName)
     jobName: devices
+    repositoryName: $(repositoryName)
 
 - template: tasks/docker/linux-arm.yaml@templates
   parameters:
@@ -56,6 +58,7 @@ jobs:
     project: $(listenerProjectFolder)
     imageName: $(listenerImageName)
     jobName: deviceslistener
+    repositoryName: $(repositoryName)
 
 - template: tasks/docker/linux-arm.yaml@templates
   parameters:
@@ -66,6 +69,7 @@ jobs:
     project: $(broadcasterProjectFolder)
     imageName: $(broadcasterImageName)
     jobName: devicesbroadcaster
+    repositoryName: $(repositoryName)
 
 - template: tasks/docker/linux-arm.yaml@templates
   parameters:
@@ -74,6 +78,7 @@ jobs:
     project: $(projectFolder)
     imageName: $(mainImageName)
     jobName: devices
+    repositoryName: $(repositoryName)
 
 - template: tasks/docker/linux-arm.yaml@templates
   parameters:
@@ -82,6 +87,7 @@ jobs:
     project: $(listenerProjectFolder)
     imageName: $(listenerImageName)
     jobName: deviceslistener
+    repositoryName: $(repositoryName)
 
 - template: tasks/docker/linux-arm.yaml@templates
   parameters:
@@ -90,21 +96,25 @@ jobs:
     project: $(broadcasterProjectFolder)
     imageName: $(broadcasterImageName)
     jobName: devicesbroadcaster
+    repositoryName: $(repositoryName)
 
 - template: tasks/docker/linux-x64-alpine.yaml@templates
   parameters:
     project: $(projectFolder)
     imageName: $(mainImageName)
     jobName: devices
+    repositoryName: $(repositoryName)
 
 - template: tasks/docker/linux-x64-alpine.yaml@templates
   parameters:
     project: $(listenerProjectFolder)
     imageName: $(listenerImageName)
     jobName: deviceslistener
+    repositoryName: $(repositoryName)
 
 - template: tasks/docker/linux-x64-alpine.yaml@templates
   parameters:
     project: $(broadcasterProjectFolder)
     imageName: $(broadcasterImageName)
     jobName: devicesbroadcaster
+    repositoryName: $(repositoryName)
