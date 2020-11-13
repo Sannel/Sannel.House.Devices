@@ -8,7 +8,7 @@
 	<ItemGroup>
 		<PackageReference Include="Sannel.House.Base.Messages" Version="0.1.544-beta" />
 		<PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.592-beta" />
-		<PackageReference Include="System.Text.Json" Version="5.0.0-rc.1.20451.14" />
+		<PackageReference Include="System.Text.Json" Version="5.0.*" />
 	</ItemGroup>
 
 	<ItemGroup>
