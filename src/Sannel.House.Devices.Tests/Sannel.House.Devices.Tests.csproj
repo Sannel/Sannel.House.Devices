@@ -12,12 +12,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="altcover" Version="7.1.782" />
+		<PackageReference Include="altcover" Version="7.1.795" />
 		<PackageReference Include="JetBrains.Annotations" Version="2020.1.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0-rc.1.20451.13" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0-rc.1.20451.14" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0-preview-20200812-03" />
-		<PackageReference Include="Moq" Version="4.14.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.*" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.*" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
+		<PackageReference Include="Moq" Version="4.15.1" />
 		<PackageReference Include="Sannel.House.Base.Client" Version="0.9.428-beta" />
 		<PackageReference Include="Sannel.House.Base.Messages" Version="0.1.544-beta" />
 		<PackageReference Include="Sannel.House.Base.Web" Version="0.9.573-beta" />

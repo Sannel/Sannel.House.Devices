@@ -6,12 +6,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
+		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Sannel.House.Base.Models" Version="0.9.547-beta" />
-		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0-rc.1.20451.14" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.*" />
 	</ItemGroup>
 
 </Project>
