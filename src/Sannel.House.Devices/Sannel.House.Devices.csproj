@@ -46,8 +46,8 @@
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Kubernetes.Tools.Targets" Version="1.1.0" />
 		<PackageReference Include="MQTTnet" Version="3.0.13" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0-rc2" />
-		<PackageReference Include="NSwag.AspNetCore" Version="13.9.1" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.*" />
+		<PackageReference Include="NSwag.AspNetCore" Version="13.9.2" />
 		<PackageReference Include="Sannel.House.Base.Data" Version="0.9.556-beta" />
 		<PackageReference Include="Sannel.House.Base.Messages" Version="0.1.544-beta" />
 		<PackageReference Include="Sannel.House.Base.Models" Version="0.9.547-beta" />
