@@ -6,8 +6,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Sannel.House.Base.Messages" Version="0.1.544-beta" />
-		<PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.592-beta" />
+		<PackageReference Include="Sannel.House.Base.Messages" Version="1.0.0-beta.63871" />
+		<PackageReference Include="Sannel.House.Base.MQTT" Version="1.0.0-beta.4927" />
 		<PackageReference Include="System.Text.Json" Version="5.0.*" />
 	</ItemGroup>
 

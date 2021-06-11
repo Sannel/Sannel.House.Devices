@@ -1,33 +1,6 @@
 version: '3.6'
 
 services:
-  gateway:
-    image: sannel/house.gateway:beta
-    networks:
-      housenet:
-        aliases:
-          - "gateway.localtest.me"
-    ports:
-      - "8180:8080"
-#      - "8443:443"
-    volumes:
-    - "./RunData/gateway/app_config/:/app/app_config/"
-    - "./RunData/gateway/app_data:/app/app_data/"
-    depends_on:
-      - users
-
-  users:
-    image: sannel/house.users:beta
-    networks: 
-      housenet:
-        aliases:
-          - "users.localtest.me"
-    ports:
-      - "8181:8181"
-    volumes:
-    - "./RunData/users/app_config/appsettings.yml:/app/app_config/appsettings.yml"
-    - "./RunData/users/app_data:/app/app_data/"
-
   devices:
     image: sannel/devices
     build:
@@ -43,7 +16,6 @@ services:
     - "./src/Sannel.House.Devices/app_config:/app/app_config"
     - "./src/Sannel.House.Devices/app_data:/app/app_data"
     depends_on:
-    - users
     - mqtt
 
   devices_listener:

@@ -1,4 +1,4 @@
-/* Copyright 2019 Sannel Software, L.L.C.
+/* Copyright 2019-2021 Sannel Software, L.L.C.
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -8,44 +8,24 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.*/
+
 using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.IO;
-using System.Linq;
-using Sannel.House.Base.Models;
 using Sannel.House.Base.Data;
 using Sannel.House.Base.Web;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Sannel.House.Devices.Data;
-using Sannel.House.Devices.Data.Migrations.Sqlite;
-using Sannel.House.Devices.Data.Migrations.SqlServer;
-using Sannel.House.Devices.Data.Migrations.PostgresSQL;
 using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Repositories;
-using System.Net;
-using System.Net.Security;
-using System.Net.Http;
-using NSwag.AspNetCore;
 using Microsoft.Extensions.Hosting;
 using System.Globalization;
 using Microsoft.AspNetCore.Authorization;
-using System.Threading;
 using Sannel.House.Devices.Services;
-using MQTTnet.Client.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Sannel.House.Devices
 {
@@ -118,25 +98,36 @@ namespace Sannel.House.Devices
 
 			services.AddControllers();
 
-			services.AddAuthentication(Configuration["Authentication:Schema"])
-					.AddIdentityServerAuthentication(Configuration["Authentication:Schema"], o =>
-						{
-							o.Authority = this.Configuration["Authentication:AuthorityUrl"];
-							o.ApiName = this.Configuration["Authentication:ApiName"];
+			services.AddAuthentication(options =>
+			{
+				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			}).AddJwtBearer(options =>
+			{
+				options.Authority = Configuration.GetValue<string>("Authentication:Authority");
+				options.Audience = Configuration.GetValue<string>("Authentication:Audience");
+			});
 
-							var apiSecret = this.Configuration["Authentication:ApiSecret"];
-							if (!string.IsNullOrWhiteSpace(apiSecret))
-							{
-								o.ApiSecret = apiSecret;
-							}
-
-							o.SupportedTokens = SupportedTokens.Both;
-
-							if (Configuration.GetValue<bool?>("Authentication:DisableRequireHttpsMetadata") == true)
-							{
-								o.RequireHttpsMetadata = false;
-							}
-						});
+			services.AddAuthorization(options =>
+			{
+				var permissionClaim = Configuration["Authentication:PermissionClaim"];
+				options.AddPolicy("ListDevice", b =>
+				{
+					b.AddScopeRequirement("list:device");
+				});
+				options.AddPolicy("ReadDevice", b =>
+				{
+					b.AddScopeRequirement("read:device");
+				});
+				options.AddPolicy("WriteDevice", b =>
+				{
+					b.AddScopeRequirement("write:device");
+				});
+				options.AddPolicy("CreateDevice", b =>
+				{
+					b.AddScopeRequirement("create:device");
+				});
+			});
 
 			services.AddOpenApiDocument();
 
@@ -145,7 +136,7 @@ namespace Sannel.House.Devices
 			services.AddHealthChecks()
 				.AddDbHealthCheck<DevicesDbContext>("DbHealthCheck", async (context) =>
 				{
-					await context.Devices.AnyAsync();
+					await context.Devices.AnyAsync().ConfigureAwait(false);
 				});
 		}
 

@@ -46,6 +46,7 @@ namespace Sannel.House.Devices
 					{
 						b.AddJsonFile(Path.Combine("app_config", "appsettings.json"), true, true);
 						b.AddYamlFile(Path.Combine("app_config", "appsettings.yml"), true, true);
+						b.AddYamlFile(Path.Combine("app_config", "appsettings.local.yml"), true, true);
 						var shared = Path.Combine("app_config", "shared");
 						if(Directory.Exists(shared))
 						{

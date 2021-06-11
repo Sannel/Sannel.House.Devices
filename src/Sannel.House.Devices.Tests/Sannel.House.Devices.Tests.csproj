@@ -19,8 +19,8 @@
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
 		<PackageReference Include="Moq" Version="4.15.1" />
 		<PackageReference Include="Sannel.House.Base.Client" Version="0.9.428-beta" />
-		<PackageReference Include="Sannel.House.Base.Messages" Version="0.1.544-beta" />
-		<PackageReference Include="Sannel.House.Base.Web" Version="0.9.573-beta" />
+		<PackageReference Include="Sannel.House.Base.Messages" Version="1.0.0-beta.63871" />
+		<PackageReference Include="Sannel.House.Base.Web" Version="1.0.687-beta" />
 		<PackageReference Include="Sannel.House.Base.Tests" Version="0.9.561-beta" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">

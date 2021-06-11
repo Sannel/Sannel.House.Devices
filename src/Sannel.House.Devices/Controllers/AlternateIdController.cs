@@ -1,4 +1,4 @@
-/* Copyright 2019-2020 Sannel Software, L.L.C.
+/* Copyright 2019-2021 Sannel Software, L.L.C.
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -31,6 +31,7 @@ namespace Sannel.House.Devices.Controllers
 	/// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class AlternateIdController : Controller
 	{
 		private readonly IDeviceService service;
@@ -58,10 +59,10 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
 		[HttpGet("{deviceId}")]
-		[Authorize(Roles = "DeviceRead,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
+		[Authorize(Policy = "ReadDevice")]
 		public async Task<ActionResult<ResponseModel<IEnumerable<AlternateDeviceId>>>> Get(int deviceId)
 		{
 			if(deviceId < 0)
@@ -88,10 +89,10 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
 		[HttpPost("mac/{macAddress}/{deviceId}")]
-		[Authorize(Roles = "DeviceWrite,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
+		[Authorize(Policy = "WriteDevice")]
 		public async Task<ActionResult<ResponseModel<Device>>> Post(long macAddress, int deviceId)
 		{
 			if(macAddress < 0)
@@ -131,10 +132,10 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
 		[HttpPost("uuid/{uuid}/{deviceId}")]
-		[Authorize(Roles = "DeviceWrite,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
+		[Authorize(Policy = "WriteDevice")]
 		public async Task<ActionResult<ResponseModel<Device>>> Post(Guid uuid, int deviceId)
 		{
 			if(uuid == Guid.Empty)
@@ -175,10 +176,10 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
 		[HttpPost("manufactureid/{manufacture}/{manufactureId}/{deviceId}")]
-		[Authorize(Roles = "DeviceWrite,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
+		[Authorize(Policy = "WriteDevice")]
 		public async Task<ActionResult<ResponseModel<Device>>> Post([NotNull]string manufacture, [NotNull]string manufactureId, int deviceId)
 		{
 			if(string.IsNullOrWhiteSpace(manufacture))
@@ -223,10 +224,10 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="macAddress">The mac address.</param>
 		/// <returns></returns>
 		[HttpDelete("mac/{macAddress}")]
-		[Authorize(Roles = "DeviceWrite,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
+		[Authorize(Policy = "WriteDevice")]
 		public async Task<ActionResult<ResponseModel<Device>>> Delete(long macAddress)
 		{
 			if(macAddress <= 0)
@@ -251,10 +252,10 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="uuid">The UUID.</param>
 		/// <returns></returns>
 		[HttpDelete("uuid/{uuid}")]
-		[Authorize(Roles = "DeviceWrite,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
+		[Authorize(Policy = "WriteDevice")]
 		public async Task<ActionResult<ResponseModel<Device>>> Delete(Guid uuid)
 		{
 			if(uuid == Guid.Empty)
@@ -280,10 +281,10 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="manufactureId">The manufacture identifier.</param>
 		/// <returns></returns>
 		[HttpDelete("manufactureid/{manufacture}/{manufactureId}")]
-		[Authorize(Roles = "DeviceWrite,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
+		[Authorize(Policy = "WriteDevice")]
 		public async Task<ActionResult<ResponseModel<Device>>> Delete([NotNull]string manufacture, [NotNull]string manufactureId)
 		{
 			if(string.IsNullOrWhiteSpace(manufacture))

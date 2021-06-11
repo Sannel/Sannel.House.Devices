@@ -5,6 +5,8 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
+COPY [".nuget/nuget.config", ".nuget/nuget.config"]
+COPY ["Directory.Build.props", "./"]
 COPY ["src/Sannel.House.Devices.Broadcaster/Sannel.House.Devices.Broadcaster.csproj", "src/Sannel.House.Devices.Broadcaster/"]
 COPY ["src/Sannel.House.Devices.Services/Sannel.House.Devices.Services.csproj", "src/Sannel.House.Devices.Services/"]
 COPY ["src/Sannel.House.Devices.Interfaces/Sannel.House.Devices.Interfaces.csproj", "src/Sannel.House.Devices.Interfaces/"]
@@ -14,7 +16,7 @@ COPY ["src/Sannel.House.Devices.Data/Sannel.House.Devices.Data.csproj", "src/San
 COPY ["src/Migrations/Sannel.House.Devices.Data.Migrations.PostgreSQL/Sannel.House.Devices.Data.Migrations.PostgreSQL.csproj", "src/Migrations/Sannel.House.Devices.Data.Migrations.PostgreSQL/"]
 COPY ["src/Sannel.House.Devices.Repositories/Sannel.House.Devices.Repositories.csproj", "src/Sannel.House.Devices.Repositories/"]
 COPY ["src/Migrations/Sannel.House.Devices.Data.Migrations.SqlServer/Sannel.House.Devices.Data.Migrations.SqlServer.csproj", "src/Migrations/Sannel.House.Devices.Data.Migrations.SqlServer/"]
-RUN dotnet restore "src/Sannel.House.Devices.Broadcaster/Sannel.House.Devices.Broadcaster.csproj"
+RUN dotnet restore --configfile .nuget/nuget.config "src/Sannel.House.Devices.Broadcaster/Sannel.House.Devices.Broadcaster.csproj"
 COPY . .
 WORKDIR "/src/src/Sannel.House.Devices.Broadcaster"
 RUN dotnet build "Sannel.House.Devices.Broadcaster.csproj" -c Release -o /app/build

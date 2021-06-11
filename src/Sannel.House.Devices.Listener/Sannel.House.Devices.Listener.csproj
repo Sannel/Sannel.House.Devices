@@ -25,9 +25,9 @@
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
 		<PackageReference Include="MQTTnet" Version="3.0.13" />
 		<PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.1" />
-		<PackageReference Include="Sannel.House.Base.Messages" Version="0.1.544-beta" />
-		<PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.592-beta" />
-		<PackageReference Include="Sannel.House.Base.Web" Version="0.9.573-beta" />
+		<PackageReference Include="Sannel.House.Base.Messages" Version="1.0.0-beta.63871" />
+		<PackageReference Include="Sannel.House.Base.MQTT" Version="1.0.0-beta.4927" />
+		<PackageReference Include="Sannel.House.Base.Web" Version="1.0.687-beta" />
 
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.*" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.*" />

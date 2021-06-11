@@ -1,4 +1,4 @@
-/* Copyright 2019 Sannel Software, L.L.C.
+/* Copyright 2019-2021 Sannel Software, L.L.C.
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -8,6 +8,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.*/
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,7 +22,10 @@ using Sannel.House.Devices.Interfaces;
 using Sannel.House.Devices.Models;
 using Sannel.House.Base.Models;
 using Sannel.House.Base.Web;
+using System.Security.Claims;
 using System.Diagnostics.CodeAnalysis;
+using System.Net.Http;
+using Microsoft.AspNetCore.Http;
 
 namespace Sannel.House.Devices.Controllers
 {
@@ -31,8 +35,17 @@ namespace Sannel.House.Devices.Controllers
 	/// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class DevicesController : Controller
 	{
+		/// <summary>
+		/// Scopes allowed to read device information
+		/// </summary>
+		public const string ReadScope = "read:device";
+		/// <summary>
+		/// Scopes allowed to list devices
+		/// </summary>
+		public const string ListScope = "list:device";
 		private IDeviceService service;
 		private ILogger logger;
 		/// <summary>
@@ -56,9 +69,9 @@ namespace Sannel.House.Devices.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("GetPaged")]
-		[Authorize(Roles = "DeviceRead,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
+		[Authorize(Policy = "ListDevice")]
 		public Task<ActionResult<PagedResponseModel<Device>>> GetPaged() 
 			=> GetPaged(0, 25);
 
@@ -68,9 +81,9 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="pageIndex">Index of the page.</param>
 		/// <returns></returns>
 		[HttpGet("GetPaged/{pageIndex}")]
-		[Authorize(Roles = "DeviceRead,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
+		[Authorize(Policy = "ListDevice")]
 		public Task<ActionResult<PagedResponseModel<Device>>> GetPaged(int pageIndex) 
 			=> GetPaged(pageIndex, 25);
 
@@ -81,12 +94,14 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="pageSize">Size of the page.</param>
 		/// <returns></returns>
 		[HttpGet("GetPaged/{pageIndex}/{pageSize}")]
-		[Authorize(Roles = "DeviceRead,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesDefaultResponseType]
+		[Authorize(Policy = "ListDevice")]
 		public async Task<ActionResult<PagedResponseModel<Device>>> GetPaged(int pageIndex, int pageSize)
 		{
-			if(pageIndex < 0)
+			if (pageIndex < 0)
 			{
 				logger.LogError("GetPaged pageIndex invalid {pageIndex}", pageIndex);
 				return BadRequest(new ErrorResponseModel("Invalid Page Index", nameof(pageIndex), "Page Index must be 0 or greater"));
@@ -99,7 +114,7 @@ namespace Sannel.House.Devices.Controllers
 
 			logger.LogDebug("GetPaged pageIndex: {pageIndex} pageSize {pageSize}", pageIndex, pageSize);
 
-			return Ok(new PagedResponseModel<Device>("Paged Results", await service.GetDevicesListAsync(pageIndex, pageSize)));
+			return Ok(new PagedResponseModel<Device>("Paged Results", await service.GetDevicesListAsync(pageIndex, pageSize).ConfigureAwait(false)));
 		}
 
 		/// <summary>
@@ -108,10 +123,10 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
 		[HttpGet("{deviceId}")]
-		[Authorize(Roles = "DeviceRead,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
+		[Authorize(Policy = "ReadDevice")]
 		public async Task<ActionResult<ResponseModel<Device>>> Get(int deviceId)
 		{
 			if(deviceId < 0)
@@ -138,10 +153,10 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="macAddress">The mac address.</param>
 		/// <returns></returns>
 		[HttpGet("GetByMac/{macAddress}")]
-		[Authorize(Roles = "DeviceRead,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
+		[Authorize(Policy = "ReadDevice")]
 		public async Task<ActionResult<ResponseModel<Device>>> GetByMacAddress(long macAddress)
 		{
 			if(macAddress < 0)
@@ -168,10 +183,10 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="uuid">The UUID.</param>
 		/// <returns></returns>
 		[HttpGet("GetByUuid/{uuid}")]
-		[Authorize(Roles = "DeviceRead,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
+		[Authorize(Policy = "ReadDevice")]
 		public async Task<ActionResult<ResponseModel<Device>>> GetByUuid(Guid uuid)
 		{
 			if(Guid.Empty == uuid)
@@ -199,10 +214,10 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="manufactureId">The manufacture identifier.</param>
 		/// <returns></returns>
 		[HttpGet("GetByManufactureId/{manufacture}/{manufactureId}")]
-		[Authorize(Roles = "DeviceRead,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
+		[Authorize(Policy = "ReadDevice")]
 		public async Task<ActionResult<ResponseModel<Device>>> GetByManufactureId([NotNull]string manufacture, [NotNull]string manufactureId)
 		{
 			if(string.IsNullOrWhiteSpace(manufacture))
@@ -235,9 +250,9 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="device">The device.</param>
 		/// <returns></returns>
 		[HttpPost]
-		[Authorize(Roles = "DeviceWrite,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
+		[Authorize(Policy = "CreateDevice")]
 		public async Task<ActionResult<ResponseModel<int>>> Post([FromBody]Device device)
 		{
 			if(device == null)
@@ -266,10 +281,10 @@ namespace Sannel.House.Devices.Controllers
 		/// <param name="device">The device.</param>
 		/// <returns></returns>
 		[HttpPut]
-		[Authorize(Roles = "DeviceWrite,Admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
+		[Authorize(Policy = "WriteDevice")]
 		public async Task<ActionResult<ResponseModel<int>>> Put([FromBody]Device device)
 		{
 			if(device == null)
